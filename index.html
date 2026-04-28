@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mathieu Chappaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #F8F6F1;
+      --dark:      #0E0E1A;
+      --text:      #1A1A2E;
+      --muted:     #6B6B7B;
+      --border:    rgba(14,14,26,0.1);
+      --onu:       #0055B3;
+      --ing:       #FF4535;
+      --cinema:    #F5A300;
+      --dev:       #00C875;
+      --nav-h:     70px;
+      --ff-d:      'Syne', sans-serif;
+      --ff-b:      'Plus Jakarta Sans', sans-serif;
+      --current:   #FF4535;
+      --cursor-col:#0E0E1A;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:var(--ff-b); cursor:none; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+    body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9000; }
+
+    /* CURSOR — uses --cursor-col so it can be changed per page */
+    .c-dot  { position:fixed; width:10px; height:10px; background:var(--cursor-col); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform .2s, background .3s; mix-blend-mode:multiply; }
+    .c-ring { position:fixed; width:38px; height:38px; border:1.5px solid var(--cursor-col); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); mix-blend-mode:multiply; transition:border-color .3s; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; height:var(--nav-h); display:flex; align-items:center; justify-content:space-between; padding:0 52px; background:rgba(248,246,241,.88); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); z-index:1000; }
+    .nav-logo { font-family:var(--ff-d); font-size:20px; font-weight:800; letter-spacing:-.5px; color:var(--dark); display:flex; align-items:center; gap:6px; text-decoration:none; cursor:pointer; }
+    .nav-logo-dot { width:9px; height:9px; border-radius:50%; background:var(--current); transition:background .4s; }
+    .nav-links { display:flex; gap:4px; list-style:none; }
+    .nav-links a { font-size:12.5px; font-weight:500; letter-spacing:.6px; text-transform:uppercase; color:var(--muted); padding:8px 15px; border-radius:100px; cursor:pointer; transition:all .25s; text-decoration:none; }
+    .nav-links a:hover { color:var(--dark); background:rgba(14,14,26,.07); }
+    .nav-links a.active { color:var(--dark); background:rgba(14,14,26,.08); }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:8px; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:var(--dark); border-radius:2px; transition:.3s; }
+    .mobile-drawer { display:none; position:fixed; top:var(--nav-h); left:0; right:0; background:var(--bg); border-bottom:1px solid var(--border); z-index:999; flex-direction:column; padding:16px; }
+    .mobile-drawer.open { display:flex; }
+    .mobile-drawer a { font-size:15px; font-weight:600; color:var(--text); padding:14px 16px; border-radius:12px; text-decoration:none; transition:background .2s; cursor:pointer; }
+    .mobile-drawer a:hover { background:rgba(14,14,26,.06); }
+
+    /* Remove blur on ONU texts pages (PC + mobile) */
+    body[data-page^="texte-"] nav { backdrop-filter:none; background:rgba(248,246,241,.96); }
+
+    /* PAGE SYSTEM */
+    .page { display:none; min-height:100vh; padding-top:var(--nav-h); }
+    .page.active { display:block; animation:pageIn .5s cubic-bezier(.16,1,.3,1); }
+    @keyframes pageIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+    /* HERO */
+    .hero { min-height:calc(100vh - var(--nav-h)); padding:52px 52px 48px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+    .hero-kicker { font-size:12px; font-weight:600; letter-spacing:3.5px; text-transform:uppercase; color:var(--muted); margin-bottom:28px; opacity:0; animation:revealUp .6s ease forwards .2s; }
+    .hero-name { font-family:var(--ff-d); font-weight:800; letter-spacing:-5px; line-height:.88; }
+    .hero-name .ln { display:block; overflow:hidden; }
+    .hero-name .ln span { display:block; font-size:clamp(72px,12.5vw,196px); opacity:0; transform:translateY(90px); }
+    .hero-name .ln:nth-child(1) span { animation:slideUp .85s cubic-bezier(.16,1,.3,1) forwards .3s; }
+    .hero-name .ln:nth-child(2) span { animation:slideUp .85s cubic-bezier(.16,1,.3,1) forwards .48s; color:transparent; -webkit-text-stroke:2.5px var(--dark); }
+    .hero-bottom { margin-top:36px; display:flex; align-items:flex-end; justify-content:space-between; gap:24px; opacity:0; animation:revealUp .7s ease forwards .85s; }
+    .hero-tagline { font-family:var(--ff-d); font-size:clamp(18px,2.2vw,28px); font-weight:600; color:var(--dark); letter-spacing:-.5px; max-width:440px; line-height:1.25; }
+    .hero-scroll { position:absolute; right:52px; bottom:44px; display:flex; flex-direction:column; align-items:center; gap:10px; opacity:0; animation:revealUp .6s ease forwards 1.2s; }
+    .hero-scroll span { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); writing-mode:vertical-rl; }
+    .hero-scroll-line { width:1px; height:52px; background:linear-gradient(to bottom, var(--muted), transparent); }
+    .hero-blob { position:absolute; right:-180px; top:50%; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle, rgba(245,163,0,.14) 0%, transparent 70%); transform:translateY(-50%); pointer-events:none; }
+
+    /* DOMAINS */
+    .section-domains { padding:80px 52px; }
+    .section-head { display:flex; align-items:baseline; gap:18px; margin-bottom:44px; }
+    .s-num { font-family:var(--ff-d); font-size:12px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+    .s-title { font-family:var(--ff-d); font-size:clamp(28px,3.5vw,48px); font-weight:800; letter-spacing:-1.5px; color:var(--dark); }
+    .domains-grid { display:grid; grid-template-columns:1.35fr 1fr 1fr 1.35fr; grid-template-rows:370px 260px; gap:14px; }
+    .dcard { border-radius:22px; padding:32px 36px; overflow:hidden; position:relative; cursor:pointer; display:flex; flex-direction:column; transition:transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s; }
+    .dcard:hover { transform:scale(.975) translateY(-6px); box-shadow:0 28px 60px rgba(0,0,0,.12); }
+    .dcard::before { content:''; position:absolute; inset:0; background:linear-gradient(145deg, rgba(255,255,255,.18) 0%, transparent 55%); pointer-events:none; }
+    .dcard.ing { background:var(--ing); grid-column:1; grid-row:1/3; }
+    .dcard.cin { background:var(--cinema); grid-column:2/4; grid-row:1; }
+    .dcard.dev { background:var(--dev); grid-column:2/4; grid-row:2; }
+    .dcard.onu { background:var(--onu); grid-column:4; grid-row:1/3; }
+    .dcard-idx { font-family:var(--ff-d); font-size:11px; font-weight:700; letter-spacing:2px; color:rgba(255,255,255,.45); margin-bottom:auto; }
+    .dcard-body { display:flex; flex-direction:column; }
+    .dcard-ico { font-size:38px; line-height:1; margin-bottom:14px; }
+    .dcard-title { font-family:var(--ff-d); font-size:26px; font-weight:800; color:#fff; letter-spacing:-.5px; line-height:1.1; margin-bottom:10px; }
+    .dcard-desc { font-size:13.5px; line-height:1.65; color:rgba(255,255,255,.7); max-width:300px; margin-bottom:22px; }
+    .dcard-cta { display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#fff; border-bottom:1.5px solid rgba(255,255,255,.35); padding-bottom:4px; transition:gap .25s; }
+    .dcard:hover .dcard-cta { gap:16px; }
+
+    /* ABOUT — photo agrandie */
+    .section-about { padding:100px 52px; display:grid; grid-template-columns:auto 1.1fr; gap:72px; align-items:center; }
+    .about-photo-wrap { position:relative; flex-shrink:0; }
+    .about-photo {
+      width:480px; height:620px;
+      border-radius:28px;
+      background:linear-gradient(160deg, rgba(255,69,53,.07) 0%, rgba(0,85,179,.07) 50%, rgba(245,163,0,.07) 100%);
+      border:1.5px solid var(--border);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      font-size:72px; gap:12px; overflow:hidden; position:relative;
+    }
+    .about-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+    .about-photo-hint { font-size:12px; color:var(--muted); font-style:italic; }
+    .about-pills { position:absolute; right:-20px; top:36px; display:flex; flex-direction:column; gap:10px; }
+    .pill { background:var(--dark); color:#fff; padding:11px 18px; border-radius:100px; font-size:13px; font-weight:500; white-space:nowrap; display:flex; align-items:center; gap:8px; box-shadow:0 6px 20px rgba(14,14,26,.18); }
+    .pill strong { font-family:var(--ff-d); font-size:16px; font-weight:800; }
+    .about-label { font-size:11px; font-weight:700; letter-spacing:3.5px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
+    .about-heading { font-family:var(--ff-d); font-size:clamp(34px,3.8vw,52px); font-weight:800; letter-spacing:-2px; line-height:1.02; color:var(--dark); margin-bottom:22px; }
+    .about-heading em { font-style:italic; color:var(--ing); }
+    .about-body { font-size:15.5px; line-height:1.85; color:var(--muted); margin-bottom:30px; }
+    .tags-row { display:flex; flex-wrap:wrap; gap:9px; }
+    .tag { padding:7px 15px; border-radius:100px; border:1.5px solid var(--border); font-size:13px; font-weight:500; color:var(--text); cursor:default; transition:all .25s; }
+    .tag:hover { border-color:var(--dark); background:var(--dark); color:#fff; }
+
+    /* CONTACT */
+    .section-contact { margin:20px 52px 80px; background:var(--dark); border-radius:30px; padding:76px 72px; display:flex; align-items:center; justify-content:space-between; gap:48px; position:relative; overflow:hidden; }
+    .contact-glow1 { position:absolute; right:-100px; top:-120px; width:420px; height:420px; border-radius:50%; background:radial-gradient(circle, var(--onu), transparent 70%); opacity:.28; pointer-events:none; }
+    .contact-glow2 { position:absolute; left:180px; bottom:-100px; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, var(--cinema), transparent 70%); opacity:.2; pointer-events:none; }
+    .contact-copy { position:relative; z-index:1; }
+    .contact-copy h2 { font-family:var(--ff-d); font-size:clamp(40px,5.5vw,76px); font-weight:800; letter-spacing:-3px; color:#fff; line-height:.92; margin-bottom:18px; }
+    .contact-copy p { font-size:15.5px; color:rgba(255,255,255,.5); max-width:360px; line-height:1.75; }
+    .contact-btn-wrap { flex-shrink:0; z-index:1; }
+    .contact-btn { display:inline-flex; align-items:center; gap:14px; background:#fff; color:var(--dark); padding:18px 30px; border-radius:100px; font-family:var(--ff-d); font-size:17px; font-weight:700; letter-spacing:-.3px; text-decoration:none; transition:all .3s; box-shadow:0 8px 32px rgba(0,0,0,.2); }
+    .contact-btn:hover { background:var(--dev); transform:scale(1.04); }
+    .contact-btn-icon { width:34px; height:34px; background:var(--dark); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+
+    /* FOOTER */
+    footer { padding:28px 52px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    footer p { font-size:13px; color:var(--muted); }
+
+    /* INNER PAGES */
+    [data-accent="onu"]     { --pa: var(--onu); }
+    [data-accent="ing"]     { --pa: var(--ing); }
+    [data-accent="cinema"]  { --pa: var(--cinema); }
+    [data-accent="dev"]     { --pa: var(--dev); }
+    [data-accent="hopaway"] { --pa: #00C875; }
+    [data-accent="opinion"] { --pa: var(--dev); }
+    [data-accent="texte"]   { --pa: var(--onu); }
+    .inner-hero { padding:56px 52px 72px; position:relative; overflow:hidden; border-bottom:1px solid var(--border); }
+    .breadcrumb { font-size:13px; color:var(--muted); display:flex; align-items:center; gap:8px; margin-bottom:28px; }
+    .breadcrumb span { cursor:pointer; transition:color .2s; }
+    .breadcrumb span:hover { color:var(--dark); }
+    .breadcrumb .sep { opacity:.4; }
+    .page-big-title { font-family:var(--ff-d); font-weight:800; font-size:clamp(56px,9.5vw,136px); letter-spacing:-4px; line-height:.88; color:var(--dark); }
+    .page-big-title .a { color:var(--pa); }
+    .accent-bar { width:56px; height:5px; border-radius:100px; background:var(--pa); margin:26px 0; }
+    .page-sub { font-size:17px; color:var(--muted); max-width:580px; line-height:1.75; }
+    .texte-sub {
+      font-size:15px;
+      color:var(--muted);
+      max-width:760px;
+      line-height:1.8;
+      letter-spacing:.1px;
+    }
+    .texte-sub-video-wrap {
+      margin-top:18px;
+      max-width:560px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      background:#111;
+      box-shadow:0 18px 45px rgba(14,14,26,.18);
+      transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s;
+    }
+    .texte-sub-video-wrap:hover {
+      transform:translateY(-4px);
+      box-shadow:0 26px 58px rgba(14,14,26,.26);
+    }
+    .texte-sub-video {
+      display:block;
+      width:100%;
+      height:auto;
+      aspect-ratio:16/9;
+      background:#000;
+      cursor:pointer;
+    }
+    .inner-hero-deco { position:absolute; right:-80px; top:-80px; width:360px; height:360px; border-radius:50%; background:radial-gradient(circle, var(--pa), transparent 70%); opacity:.12; pointer-events:none; }
+    .inner-content { padding:76px 52px; }
+
+    /* CARDS */
+    .cards2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:40px; }
+    .cblock { background:#fff; border:1px solid var(--border); border-radius:22px; padding:36px; }
+    .cblock.accent { background:var(--pa); border-color:var(--pa); }
+    .cblock h3 { font-family:var(--ff-d); font-size:20px; font-weight:700; color:var(--dark); letter-spacing:-.3px; margin-bottom:14px; }
+    .cblock.accent h3 { color:#fff; }
+    .cblock p { font-size:15px; line-height:1.8; color:var(--muted); }
+    .cblock.accent p { color:rgba(255,255,255,.72); }
+    .cblock.span2 { grid-column:1/3; }
+
+    /* TIMELINE */
+    .timeline { padding-left:28px; position:relative; }
+    .timeline::before { content:''; position:absolute; left:0; top:10px; bottom:0; width:2px; background:var(--border); }
+    .tl-item { position:relative; margin-bottom:32px; }
+    .tl-item::before { content:''; position:absolute; left:-32px; top:10px; width:10px; height:10px; border-radius:50%; background:var(--pa); border:2px solid var(--bg); }
+    .tl-date { font-size:11px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--pa); margin-bottom:5px; }
+    .tl-title { font-family:var(--ff-d); font-size:18px; font-weight:700; color:var(--dark); letter-spacing:-.3px; margin-bottom:7px; }
+    .tl-desc { font-size:14px; line-height:1.72; color:var(--muted); }
+
+    /* SKILLS */
+    .skills-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .skill-tile { text-align:center; padding:28px 20px; background:var(--bg); border-radius:18px; border:1px solid var(--border); transition:transform .3s, box-shadow .3s; }
+    .skill-tile:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(0,0,0,.07); }
+    .skill-tile .ico { font-size:34px; margin-bottom:12px; }
+    .skill-tile p { font-family:var(--ff-d); font-size:14px; font-weight:700; color:var(--dark); }
+
+    /* PROJECT CARDS */
+    .projects-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:48px; }
+    .proj-card { border-radius:24px; overflow:hidden; background:#fff; border:1px solid var(--border); display:flex; flex-direction:column; cursor:pointer; transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s; }
+    .proj-card:hover { transform:translateY(-10px); box-shadow:0 32px 64px rgba(0,0,0,.1); }
+    .proj-card:hover .proj-img { transform:scale(1.06); }
+    .proj-card:hover .proj-arrow { transform:translateX(5px); }
+    .proj-visual { width:100%; height:220px; overflow:hidden; position:relative; flex-shrink:0; }
+    .proj-img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s cubic-bezier(.16,1,.3,1); }
+    .proj-visual.c-green { background:linear-gradient(135deg,#00C87522,#005C3522); }
+    .proj-visual-ico { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:56px; }
+    .proj-badge { position:absolute; top:14px; left:14px; background:var(--dark); color:#fff; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:5px 12px; border-radius:100px; }
+    .proj-badge.award { background:var(--cinema); color:var(--dark); }
+    .proj-body { padding:24px 26px 26px; display:flex; flex-direction:column; flex:1; gap:10px; }
+    .proj-num { font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--dev); }
+    .proj-body h3 { font-family:var(--ff-d); font-size:19px; font-weight:800; color:var(--dark); letter-spacing:-.4px; line-height:1.15; }
+    .proj-body p { font-size:13.5px; color:var(--muted); line-height:1.7; flex:1; }
+    .proj-footer { display:flex; align-items:center; justify-content:space-between; margin-top:6px; padding-top:16px; border-top:1px solid var(--border); }
+    .proj-tag { display:inline-flex; align-items:center; gap:6px; padding:6px 13px; border-radius:100px; background:rgba(0,200,117,.12); color:#009B5C; font-size:11px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; text-decoration:none; }
+    .proj-arrow { font-size:18px; color:var(--muted); transition:transform .3s, color .3s; font-family:var(--ff-d); font-weight:700; }
+    .proj-card:hover .proj-arrow { color:var(--dark); }
+
+    /* ONU GALLERY */
+    .onu-gallery { display:grid; grid-template-columns:1.6fr 1fr 1fr; grid-template-rows:260px 200px; gap:14px; margin-top:32px; }
+    .onu-photo { border-radius:20px; overflow:hidden; position:relative; display:flex; align-items:flex-end; transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s; }
+    .onu-photo:hover { transform:scale(.975) translateY(-5px); box-shadow:0 24px 52px rgba(0,0,0,.13); }
+    .onu-photo.span-col { grid-column:1; grid-row:1/3; }
+    .onu-photo.top-r1 { grid-column:2; grid-row:1; }
+    .onu-photo.top-r2 { grid-column:3; grid-row:1; }
+    .onu-photo.bot-r1 { grid-column:2; grid-row:2; }
+    .onu-photo.bot-r2 { grid-column:3; grid-row:2; }
+    .onu-photo-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.45) 100%); z-index:1; }
+
+    /* ONU — PRIX ET DISTINCTIONS */
+    .onu-award-wrap { margin-top:28px; margin-bottom:68px; max-width:980px; margin-left:auto; margin-right:auto; }
+    .onu-award-card { cursor:pointer; background:#fff; border:1px solid var(--border); border-radius:24px; padding:18px; transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s; box-shadow:0 10px 34px rgba(14,14,26,.08); }
+    .onu-award-card:hover { transform:translateY(-6px); box-shadow:0 24px 56px rgba(14,14,26,.14); }
+    .onu-award-image-wrap { position:relative; border-radius:18px; overflow:hidden; aspect-ratio:16/9; background:linear-gradient(130deg,#f4f7ff,#dfe8ff); }
+    .onu-award-image { width:100%; height:100%; object-fit:cover; display:block; }
+    .onu-award-image-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(14,14,26,.42) 0%, rgba(14,14,26,.08) 55%, rgba(14,14,26,0) 100%); }
+    .onu-award-zoom-hint { position:absolute; right:16px; bottom:16px; background:rgba(255,255,255,.92); color:var(--dark); font-size:10px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase; padding:8px 12px; border-radius:100px; }
+    .onu-award-caption { margin-top:16px; display:flex; flex-direction:column; gap:7px; }
+    .onu-award-caption strong { font-family:var(--ff-d); font-size:18px; font-weight:800; color:var(--dark); letter-spacing:-.4px; }
+    .onu-award-caption span { font-size:12px; letter-spacing:1.3px; text-transform:uppercase; color:var(--onu); font-weight:700; }
+
+    .award-lightbox { position:fixed; inset:0; z-index:10020; display:grid; grid-template-columns:minmax(0,1fr) minmax(320px,440px); opacity:0; pointer-events:none; transition:opacity .26s ease; }
+    .award-lightbox.open { opacity:1; pointer-events:auto; }
+    .award-lightbox-backdrop { position:absolute; inset:0; background:rgba(9,12,22,.78); backdrop-filter:blur(3px); }
+    .award-lightbox-media { position:relative; z-index:1; display:flex; align-items:center; justify-content:center; padding:34px; }
+    .award-lightbox-media img { width:min(92vw,1200px); max-height:88vh; object-fit:contain; border-radius:20px; box-shadow:0 35px 80px rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.16); }
+    .award-lightbox-panel { position:relative; z-index:1; height:100%; background:linear-gradient(180deg,#ffffff 0%,#f8fafe 100%); border-left:1px solid rgba(0,85,179,.13); padding:34px 30px; overflow-y:auto; box-shadow:-10px 0 46px rgba(14,14,26,.15); }
+    .award-lightbox-label { font-size:10px; font-weight:700; letter-spacing:2.2px; text-transform:uppercase; color:var(--onu); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .award-lightbox-label::before { content:''; width:4px; height:4px; border-radius:50%; background:var(--onu); display:block; }
+    .award-lightbox-title { font-family:var(--ff-d); font-size:28px; font-weight:800; letter-spacing:-.8px; color:var(--dark); line-height:1.08; margin-bottom:14px; }
+    .award-lightbox-meta { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:20px; }
+    .award-lightbox-text { font-size:14px; line-height:1.8; color:var(--muted); }
+    .award-lightbox-close { position:absolute; top:16px; right:16px; width:38px; height:38px; border-radius:50%; border:1px solid var(--border); background:#fff; color:var(--dark); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; transition:transform .2s ease, box-shadow .2s ease; }
+    .award-lightbox-close:hover { transform:scale(1.06); box-shadow:0 6px 20px rgba(14,14,26,.15); }
+
+    /* CINEMA */
+    .films-list { display:flex; flex-direction:column; gap:14px; }
+    .film-row { background:var(--dark); border-radius:18px; padding:24px 28px; display:flex; align-items:center; gap:20px; transition:transform .3s; }
+    .film-row:hover { transform:translateX(8px); }
+    .film-thumb { width:52px; height:70px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:22px; }
+    .film-thumb.c1 { background:linear-gradient(135deg,#F5A300,#FF4535); }
+    .film-thumb.c2 { background:linear-gradient(135deg,#0055B3,#00C875); }
+    .film-thumb.c3 { background:linear-gradient(135deg,#FF4535,#F5A300); }
+    .film-info h4 { font-family:var(--ff-d); font-size:16px; font-weight:700; color:#fff; margin-bottom:5px; }
+    .film-info p { font-size:13px; color:rgba(255,255,255,.5); line-height:1.6; }
+
+    /* CHANNEL BUTTONS */
+    .yt-channel-wrap { margin-top:44px; margin-bottom:20px; }
+    .yt-channel-btn { display:inline-flex; align-items:center; gap:18px; background:var(--dark); border-radius:22px; padding:22px 32px; text-decoration:none; transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s; position:relative; overflow:hidden; width:100%; }
+    .yt-channel-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(100deg, rgba(245,163,0,.12) 0%, transparent 60%); pointer-events:none; }
+    .yt-channel-btn:hover { transform:translateY(-5px) scale(1.01); box-shadow:0 24px 52px rgba(14,14,26,.22); }
+    .yt-channel-btn:hover .yt-arrow { transform:translateX(6px); }
+    .yt-icon-wrap { width:56px; height:56px; border-radius:16px; flex-shrink:0; background:#FF0000; display:flex; align-items:center; justify-content:center; }
+    .yt-icon-wrap svg { width:26px; height:26px; fill:#fff; }
+    .yt-icon-wrap img { width:26px; height:26px; object-fit:contain; }
+    .yt-channel-info { flex:1; }
+    .yt-channel-info p { font-size:11px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:5px; }
+    .yt-channel-info h3 { font-family:var(--ff-d); font-size:20px; font-weight:800; color:#fff; letter-spacing:-.3px; }
+    .yt-channel-sub { font-size:13px; color:rgba(255,255,255,.45); margin-top:3px; }
+    .yt-arrow { font-size:20px; color:var(--cinema); transition:transform .3s; flex-shrink:0; font-family:var(--ff-d); font-weight:700; }
+
+    /* FEATURED VIDEO */
+    .featured-video-wrap { display:grid; grid-template-columns:1.3fr 1fr; gap:28px; align-items:center; }
+    .video-thumbnail { position:relative; border-radius:20px; overflow:hidden; aspect-ratio:16/9; cursor:pointer; display:block; text-decoration:none; background:var(--dark); box-shadow:0 16px 48px rgba(14,14,26,.18); transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s; }
+    .video-thumbnail:hover { transform:scale(1.025) translateY(-4px); box-shadow:0 28px 64px rgba(14,14,26,.28); }
+    .video-thumbnail:hover .play-btn { transform:translate(-50%,-50%) scale(1.12); }
+    .video-thumbnail:hover .thumb-overlay { opacity:.5; }
+    .thumb-bg { position:absolute; inset:0; background:linear-gradient(135deg,#1a0a00,#3d1f00,#7a3d00,#F5A300); }
+    .thumb-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(0,0,0,.55) 100%); transition:opacity .3s; }
+    .play-btn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:62px; height:62px; border-radius:50%; background:rgba(255,255,255,.95); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; transition:transform .35s cubic-bezier(.16,1,.3,1); box-shadow:0 8px 28px rgba(0,0,0,.3); }
+    .play-btn svg { width:22px; height:22px; fill:var(--dark); margin-left:3px; }
+    .video-duration { position:absolute; bottom:14px; right:14px; background:rgba(0,0,0,.75); color:#fff; font-size:11px; font-weight:600; padding:4px 9px; border-radius:7px; letter-spacing:.5px; }
+    .video-info { display:flex; flex-direction:column; gap:16px; }
+    .video-tag { display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--cinema); }
+    .video-tag-dot { width:6px; height:6px; border-radius:50%; background:var(--cinema); flex-shrink:0; }
+    .video-title { font-family:var(--ff-d); font-size:clamp(22px,2.8vw,34px); font-weight:800; letter-spacing:-1px; color:var(--dark); line-height:1.1; }
+    .video-desc { font-size:15px; line-height:1.8; color:var(--muted); }
+    .video-watch-btn { display:inline-flex; align-items:center; gap:10px; background:var(--cinema); color:var(--dark); padding:14px 26px; border-radius:100px; font-family:var(--ff-d); font-size:14px; font-weight:700; text-decoration:none; width:fit-content; transition:transform .3s, box-shadow .3s; box-shadow:0 6px 22px rgba(245,163,0,.3); }
+    .video-watch-btn:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(245,163,0,.4); }
+    .video-watch-btn svg { width:16px; height:16px; fill:var(--dark); }
+
+    /* PROJECT PAGE */
+    .proj-hero-meta { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+    .proj-meta-tag { padding:6px 14px; border-radius:100px; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; }
+    .proj-meta-tag.type  { background:rgba(0,200,117,.15); color:#009B5C; }
+    .proj-meta-tag.award { background:rgba(245,163,0,.15); color:#B57800; }
+    .proj-meta-tag.year  { background:var(--border); color:var(--muted); }
+    .proj-main-visual { width:100%; height:420px; border-radius:28px; overflow:hidden; position:relative; margin-bottom:52px; background:linear-gradient(135deg,#001a00,#003d1a,#00C875); border:1px solid var(--border); }
+    .proj-main-visual img { width:100%; height:100%; object-fit:cover; display:block; }
+    .proj-screens { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin:40px 0; }
+    .proj-screen { border-radius:18px; overflow:hidden; aspect-ratio:16/9; position:relative; background:linear-gradient(135deg,#001a00,#003d1a); border:1px solid var(--border); }
+    .proj-screen img { width:100%; height:100%; object-fit:cover; display:block; }
+    .award-banner { background:linear-gradient(100deg, #0E0E1A 0%, #1a2600 100%); border-radius:22px; padding:32px 40px; display:flex; align-items:center; gap:24px; margin:40px 0; position:relative; overflow:hidden; }
+    .award-banner::before { content:''; position:absolute; inset:0; background:linear-gradient(100deg, rgba(0,200,117,.08), transparent); pointer-events:none; }
+    .award-ico { font-size:48px; flex-shrink:0; }
+    .award-text h4 { font-family:var(--ff-d); font-size:18px; font-weight:800; color:#fff; letter-spacing:-.3px; margin-bottom:6px; }
+    .award-text p { font-size:14px; color:rgba(255,255,255,.5); line-height:1.6; }
+    .award-badge { margin-left:auto; flex-shrink:0; background:var(--dev); color:var(--dark); font-family:var(--ff-d); font-size:12px; font-weight:800; padding:10px 20px; border-radius:100px; letter-spacing:.5px; }
+    .back-btn { display:inline-flex; align-items:center; gap:10px; background:var(--dark); color:#fff; padding:13px 24px; border-radius:100px; font-family:var(--ff-d); font-size:13px; font-weight:700; text-decoration:none; cursor:pointer; margin-top:12px; transition:transform .3s, box-shadow .3s; box-shadow:0 4px 16px rgba(14,14,26,.15); }
+    .back-btn:hover { transform:translateX(-4px); box-shadow:0 8px 28px rgba(14,14,26,.2); }
+
+    /* MES TEXTES */
+    .textes-list { display:flex; flex-direction:column; gap:12px; margin-top:24px; margin-bottom:60px; }
+    .texte-item { background:#fff; border:1px solid var(--border); border-radius:18px; padding:22px 28px; display:flex; align-items:center; gap:20px; cursor:pointer; transition:transform .3s, box-shadow .3s; }
+    .texte-item:hover { transform:translateX(8px); box-shadow:0 8px 28px rgba(0,0,0,.06); }
+    .texte-item-num { font-family:var(--ff-d); font-size:28px; font-weight:800; color:rgba(0,85,179,.18); letter-spacing:-1px; flex-shrink:0; width:44px; }
+    .texte-item-info { flex:1; }
+    .texte-item-info h4 { font-family:var(--ff-d); font-size:16px; font-weight:700; color:var(--dark); letter-spacing:-.2px; margin-bottom:5px; }
+    .texte-item-info p { font-size:13px; color:var(--muted); line-height:1.55; }
+    .texte-item-date { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--onu); flex-shrink:0; }
+    .texte-item-arrow { font-size:18px; color:var(--muted); font-family:var(--ff-d); font-weight:700; flex-shrink:0; transition:transform .3s, color .3s; }
+    .texte-item:hover .texte-item-arrow { transform:translateX(6px); color:var(--onu); }
+
+    /* ═══ GENIUS TEXT PAGE — panel agrandi + scroll ═══ */
+    .texte-page-layout {
+      display:grid;
+      grid-template-columns:1fr 500px;   /* panel élargi à 500px */
+      gap:52px; align-items:start;
+    }
+    .texte-panel-col {
+      position:sticky;
+      top:calc(var(--nav-h) + 28px);
+      /* hauteur max = viewport moins nav moins un peu de marge */
+      max-height:calc(100vh - var(--nav-h) - 56px);
+    }
+
+    /* Le panel lui-même est scrollable */
+    .texte-panel {
+      background:#fff; border-radius:22px; border:1px solid var(--border);
+      padding:28px;
+      max-height:calc(100vh - var(--nav-h) - 56px);
+      overflow-y:auto;
+      opacity:0; transform:translateY(6px);
+      transition:opacity .3s ease, transform .3s ease;
+      pointer-events:none;
+      /* scrollbar stylée */
+      scrollbar-width:thin;
+      scrollbar-color:rgba(0,85,179,.25) transparent;
+    }
+    .texte-panel::-webkit-scrollbar { width:5px; }
+    .texte-panel::-webkit-scrollbar-track { background:transparent; }
+    .texte-panel::-webkit-scrollbar-thumb { background:rgba(0,85,179,.25); border-radius:10px; }
+    .texte-panel::-webkit-scrollbar-thumb:hover { background:rgba(0,85,179,.5); }
+
+    .texte-panel.open { opacity:1; transform:translateY(0); pointer-events:all; }
+    .texte-panel-hint { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:32px 0; text-align:center; color:var(--muted); }
+    .texte-panel-hint .hint-ico { font-size:30px; opacity:.35; }
+    .texte-panel-hint p { font-size:13px; line-height:1.6; max-width:240px; }
+    .texte-panel-inner { display:none; }
+    .texte-panel.open .texte-panel-hint { display:none; }
+    .texte-panel.open .texte-panel-inner { display:block; }
+
+    .texte-panel-label { font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--onu); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+    .texte-panel-label::before { content:''; display:block; width:4px; height:4px; border-radius:50%; background:var(--onu); }
+    .texte-panel-title { font-family:var(--ff-d); font-size:16px; font-weight:700; color:var(--dark); letter-spacing:-.3px; margin-bottom:12px; line-height:1.2; }
+
+    /* image dans le panel */
+    .texte-panel-img {
+      display:none; width:100%; border-radius:12px; margin-bottom:14px;
+      object-fit:cover; max-height:200px;
+    }
+
+    .texte-panel-text { font-size:14px; line-height:1.8; color:var(--muted); }
+    .texte-panel-close { margin-top:20px; padding-top:16px; border-top:1px solid var(--border); font-size:12px; color:var(--muted); cursor:pointer; transition:color .2s; display:inline-flex; align-items:center; gap:6px; font-weight:500; }
+    .texte-panel-close:hover { color:var(--dark); }
+
+    /* annotable lines */
+    .annotable { cursor:pointer; padding:10px 16px; margin:4px -16px; border-radius:12px; transition:background .2s; position:relative; border-left:3px solid transparent; }
+    .annotable:hover { background:rgba(0,85,179,.05); border-left-color:rgba(0,85,179,.3); }
+    .annotable.active { background:rgba(0,85,179,.08); border-left-color:var(--onu); }
+    .texte-body { font-size:16px; line-height:1.95; color:var(--text); }
+
+    /* Mobile annotation overlay (drawer) */
+    .panel-overlay {
+      position:fixed; inset:0;
+      background:rgba(14,14,26,.42);
+      opacity:0; pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:9996;
+    }
+    body.panel-open .panel-overlay { opacity:1; pointer-events:auto; }
+
+    /* REVEAL */
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* KEYFRAMES */
+    @keyframes revealUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes slideUp  { from{opacity:0;transform:translateY(90px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.45;transform:scale(.7)} }
+    @keyframes cycleRoles { 0%,24%{transform:translateY(0)} 25%,49%{transform:translateY(-20px)} 50%,74%{transform:translateY(-40px)} 75%,99%{transform:translateY(-60px)} }
+
+    /* RESPONSIVE */
+    @media (max-width:1200px) {
+      .texte-page-layout { grid-template-columns:1fr 400px; }
+    }
+    @media (max-width:1100px) {
+      .domains-grid { grid-template-columns:1fr 1fr; grid-template-rows:auto; }
+      .dcard.ing,.dcard.cin,.dcard.dev,.dcard.onu { grid-column:auto; grid-row:auto; }
+      .dcard { min-height:320px; }
+      .projects-grid { grid-template-columns:1fr 1fr; }
+      .texte-page-layout { grid-template-columns:1fr 340px; gap:32px; }
+    }
+    @media (max-width:980px) {
+      .section-about { grid-template-columns:1fr; }
+      .about-photo { width:100%; max-width:480px; height:500px; }
+      .about-pills { display:none; }
+      .proj-screens { grid-template-columns:1fr 1fr; }
+      .texte-page-layout { grid-template-columns:1fr; }
+      /* Mobile Genius-like drawer */
+      .texte-panel-col {
+        position:fixed;
+        top:var(--nav-h);
+        right:0;
+        height:calc(100vh - var(--nav-h));
+        width:min(92vw, 420px);
+        max-height:none;
+        z-index:9997;
+        pointer-events:none;
+      }
+      .texte-panel {
+        height:100%;
+        max-height:none;
+        overflow-y:auto;
+        border-radius:18px 0 0 18px;
+        transform:translateX(110%);
+        opacity:1;
+        pointer-events:auto;
+        transition:transform .28s cubic-bezier(.16,1,.3,1);
+      }
+      .texte-panel.open { transform:translateX(0); }
+      .texte-panel-hint { padding:24px 0; }
+      .texte-panel-text { font-size:14px; line-height:1.75; }
+      .texte-body { font-size:15.5px; line-height:1.9; }
+      .annotable { padding:12px 14px; margin:6px -14px; border-radius:14px; }
+    }
+    @media (max-width:860px) {
+      nav { padding:0 24px; }
+      .nav-links { display:none; }
+      .nav-hamburger { display:flex; }
+      .hero { padding:40px 24px; }
+      .hero-blob,.hero-scroll { display:none; }
+      .hero-bottom { flex-direction:column; align-items:flex-start; gap:16px; }
+      .section-domains,.inner-content { padding:60px 24px; }
+      .inner-hero { padding:40px 24px 56px; }
+      .section-about { padding:60px 24px; }
+      .section-contact { margin:20px 24px 60px; padding:48px 32px; flex-direction:column; }
+      footer { padding:24px; flex-direction:column; gap:14px; text-align:center; }
+      .domains-grid,.projects-grid { grid-template-columns:1fr; }
+      .dcard.ing,.dcard.cin,.dcard.dev,.dcard.onu { grid-column:1; grid-row:auto; }
+      .cards2 { grid-template-columns:1fr; }
+      .cblock.span2 { grid-column:1; }
+      .skills-row { grid-template-columns:1fr 1fr; }
+      .onu-gallery { grid-template-columns:1fr 1fr; grid-template-rows:auto; }
+      .onu-photo { min-height:160px; }
+      .onu-photo.span-col,.onu-photo.top-r1,.onu-photo.top-r2,.onu-photo.bot-r1,.onu-photo.bot-r2 { grid-column:auto; grid-row:auto; }
+      .featured-video-wrap { grid-template-columns:1fr; }
+      .proj-screens { grid-template-columns:1fr; }
+      .award-banner { flex-wrap:wrap; }
+      .award-badge { margin-left:0; }
+      .proj-main-visual { height:260px; }
+      .texte-item { flex-wrap:wrap; gap:12px; }
+      .texte-item-date { display:none; }
+      .award-lightbox { grid-template-columns:1fr; }
+      .award-lightbox-media { padding:22px 18px 8px; align-items:flex-start; }
+      .award-lightbox-media img { width:100%; max-height:52vh; border-radius:16px; }
+      .award-lightbox-panel { border-left:none; border-top:1px solid rgba(0,85,179,.12); height:auto; max-height:46vh; padding:28px 22px 24px; }
+      .award-lightbox-title { font-size:24px; }
+    }
+    @media (max-width:520px) {
+      .hero-name .ln span { letter-spacing:-3px; }
+      .contact-btn { font-size:14px; padding:16px 22px; }
+      .skills-row { grid-template-columns:1fr; }
+      .onu-gallery { grid-template-columns:1fr; }
+      .onu-award-card { padding:13px; border-radius:18px; }
+      .onu-award-image-wrap { border-radius:14px; }
+      .onu-award-caption strong { font-size:16px; }
+      .onu-award-caption span { font-size:10px; letter-spacing:1.6px; }
+      .award-lightbox-media { padding:16px 14px 6px; }
+      .award-lightbox-panel { padding:24px 16px 18px; max-height:50vh; }
+      .award-lightbox-title { font-size:21px; }
+      .award-lightbox-text { font-size:13.5px; line-height:1.7; }
+    }
+
+    /* Disable custom cursor on touch devices */
+    @media (hover: none), (pointer: coarse) {
+      body { cursor:auto; }
+      .c-dot, .c-ring { display:none !important; }
+    }
+  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "url": "https://mathieuchappaz.com",
+      "logo": "https://mathieuchappaz.com/Images/logo.png"
+    }
+    </script>
+</head>
+<body>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')"      id="nl-home">Accueil</a></li>
+      <li><a onclick="go('ingenieur')" id="nl-ing">Ingénieur</a></li>
+      <li><a onclick="go('cinema')"    id="nl-cin">Cinéma</a></li>
+      <li><a onclick="go('dev')"       id="nl-dev">Développement</a></li>
+      <li><a onclick="go('onu')"       id="nl-onu">ONU</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+  </nav>
+  <div class="mobile-drawer" id="mDrawer">
+    <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
+    <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
+    <a onclick="go('dev');toggleDrawer()">Développement</a>
+    <a onclick="go('onu');toggleDrawer()">Nations Unies</a>
+  </div>
+  <div class="panel-overlay" id="panelOverlay" onclick="closeAllPanels()"></div>
+  <div class="award-lightbox" id="awardLightbox">
+    <div class="award-lightbox-backdrop" onclick="closeAwardLightbox()"></div>
+    <div class="award-lightbox-media">
+      <img id="awardLightboxImg" src="" alt="Diplome et distinction">
+    </div>
+    <aside class="award-lightbox-panel">
+      <button class="award-lightbox-close" type="button" onclick="closeAwardLightbox()" aria-label="Fermer">✕</button>
+      <p class="award-lightbox-label">Prix et distinctions</p>
+      <h3 class="award-lightbox-title" id="awardLightboxTitle">Prix Coup de Coeur pour la Paix</h3>
+      <p class="award-lightbox-meta" id="awardLightboxMeta">Rotary · Avril 2026 · Geneve</p>
+      <p class="award-lightbox-text" id="awardLightboxText">Cette distinction m'a ete remise pour mon discours prononce lors de la Journee internationale de la conscience et de la paix. Elle recompense la force du message porte par la jeunesse sur les enjeux de paix, d'humanisme et d'art comme langage commun.</p>
+    </aside>
+  </div>
+
+  <!-- ════ ACCUEIL ════ -->
+  <div class="page" id="page-home">
+    <section class="hero">
+      <div class="hero-blob"></div>
+      <p class="hero-kicker">Portfolio &nbsp;·&nbsp; Mathieu Chappaz &nbsp;·&nbsp; 2026</p>
+      <h1 class="hero-name"><span class="ln"><span>Mathieu</span></span><span class="ln"><span>Chappaz</span></span></h1>
+      <div class="hero-bottom"><p class="hero-tagline">Trop de projets.<br>Pas assez de temps.</p></div>
+      <div class="hero-scroll"><span>Scroll</span><div class="hero-scroll-line"></div></div>
+    </section>
+    <section class="section-domains">
+      <div class="section-head"><h2 class="s-title">Mes grands axes</h2></div>
+      <div class="domains-grid">
+        <div class="dcard ing reveal" onclick="go('ingenieur')"><span class="dcard-idx">01</span><div class="dcard-body"><div class="dcard-ico">⚙️</div><h3 class="dcard-title">Ingénierie</h3><p class="dcard-desc">Étudiant en école d'ingénieur en informatique. Comprendre les systèmes pour mieux les transformer.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
+        <div class="dcard cin reveal" onclick="go('cinema')"><span class="dcard-idx">02</span><div class="dcard-body"><div class="dcard-ico">🎬</div><h3 class="dcard-title">Cinéma &amp; Art</h3><p class="dcard-desc">Une chaîne YouTube dédiée à l'analyse cinématographique et à la passion du 7e art.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
+        <div class="dcard dev reveal" onclick="go('dev')"><span class="dcard-idx">03</span><div class="dcard-body"><div class="dcard-ico">🎮</div><h3 class="dcard-title">Développement</h3><p class="dcard-desc">Du code comme matière première. Jeux vidéo, web, et tout ce qu'on peut construire avec une idée et un clavier.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
+        <div class="dcard onu reveal" onclick="go('onu')"><span class="dcard-idx">04</span><div class="dcard-body"><div class="dcard-ico">🌍</div><h3 class="dcard-title">Nations Unies</h3><p class="dcard-desc">Orateur et représentant de la jeunesse à l'ONU. Porter la voix des nouvelles générations sur la scène internationale.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
+      </div>
+    </section>
+    <section class="section-about">
+      <div class="about-photo-wrap reveal">
+        <div class="about-photo"><img src="Images/ONU/2026_3.jpeg" alt="Mathieu Chappaz"></div>
+        <div class="about-pills"><div class="pill"><strong>19</strong> ans</div><div class="pill">📍 Annecy</div></div>
+      </div>
+      <div class="about-text-wrap reveal">
+        <p class="about-label">À propos</p>
+        <h2 class="about-heading">Le monde comme<br><em>terrain de jeu.</em></h2>
+        <p class="about-body">À 19 ans, je refuse de me laisser enfermer dans une seule case. J'aime avoir mille casquettes différentes et je trouve que la curiosité est souvent vue comme un défaut alors que c'est une des plus belles qualités. Ce portfolio est le reflet de cette énergie, de cette envie de tout explorer, de tout comprendre, de tout créer.</p>
+      </div>
+    </section>
+    <section class="section-contact reveal">
+      <div class="contact-glow1"></div><div class="contact-glow2"></div>
+      <div class="contact-copy"><h2>On se<br>connecte ?</h2><p>Envie de collaborer, de discuter d'un projet, ou simplement d'échanger ? Ma boîte mail est ouverte.</p></div>
+      <div class="contact-btn-wrap"><a href="mailto:mathieu.chppz@gmail.com" class="contact-btn"><div class="contact-btn-icon">✉️</div>mathieu.chppz@gmail.com</a></div>
+    </section>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <!-- ════ INGÉNIEUR ════ -->
+  <div class="page" id="page-ingenieur" data-accent="ing">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span> Ingénierie</p><div class="page-big-title">École<br><span class="a">Ingénieur.</span></div><div class="accent-bar"></div><p class="page-sub">Étudiant en école d'ingénieur en informatique. Comprendre les systèmes complexes pour mieux les concevoir, les transformer et parfois les bousculer.</p></section>
+    <div class="inner-content">
+      <div class="cards2">
+        <div class="cblock reveal"><h3>La formation</h3><p>Le cursus ingénieur informatique me donne les bases solides pour comprendre les algorithmes, les architectures logicielles, les systèmes et les réseaux qui façonnent notre monde numérique.</p></div>
+        <div class="cblock accent reveal"><h3>Mon approche</h3><p>L'ingénierie pour moi n'est pas que technique, c'est une façon de penser. Décomposer les problèmes, trouver des solutions élégantes, itérer. Une philosophie que j'applique bien au-delà du code.</p></div>
+        <div class="cblock span2 reveal"><h3>Domaines d'intérêt</h3><div class="skills-row" style="margin-top:20px;"><div class="skill-tile"><div class="ico">💻</div><p>Dev logiciel</p></div><div class="skill-tile"><div class="ico">🤖</div><p>Intelligence artificielle</p></div><div class="skill-tile"><div class="ico">🌐</div><p>Systèmes &amp; réseaux</p></div><div class="skill-tile"><div class="ico">🔐</div><p>Cybersécurité</p></div><div class="skill-tile"><div class="ico">📐</div><p>Architecture logicielle</p></div><div class="skill-tile"><div class="ico">📊</div><p>Data &amp; algorithmique</p></div></div></div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <!-- ════ CINÉMA ════ -->
+  <div class="page" id="page-cinema" data-accent="cinema">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span> Cinéma &amp; Art</p><div class="page-big-title">7ème<br><span class="a">Art.</span></div><div class="accent-bar"></div><p class="page-sub">Le cinéma comme art total. Une chaîne YouTube dédiée à l'analyse, la critique et la passion du 7e art. Parce que les films méritent mieux que d'être un simple divertissement.</p></section>
+    <div class="inner-content">
+      <div class="cards2">
+        <div class="cblock accent reveal"><h3>La chaîne YouTube</h3><p>Ma chaîne est un espace de réflexion sur le cinéma : analyses de films, critiques approfondies, essais visuels. Un lieu où la passion rencontre la rigueur intellectuelle.</p></div>
+        <div class="cblock reveal"><h3>Ma vision du cinéma</h3><p>Le cinéma n'est pas qu'un divertissement, c'est un miroir de la société, un laboratoire d'émotions, un art qui synthétise tous les autres. C'est cette profondeur qui me fascine.</p></div>
+        <div class="cblock span2 reveal"><h3>Ce qui m'inspire</h3><div class="films-list" style="margin-top:20px;"><div class="film-row"><div class="film-thumb c1">🎞️</div><div class="film-info"><h4>Cinéma d'auteur</h4><p>Les films qui racontent quelque chose de vrai, avec une voix unique et un point de vue affirmé.</p></div></div><div class="film-row"><div class="film-thumb c2">🏆</div><div class="film-info"><h4>Grands classiques</h4><p>L'histoire du cinéma comme fondation indispensable. Comprendre d'où l'on vient pour mieux voir où l'on va.</p></div></div><div class="film-row"><div class="film-thumb c3">🌟</div><div class="film-info"><h4>Cinéma contemporain</h4><p>Suivre les nouvelles voix qui redéfinissent les codes et inventent le cinéma de demain.</p></div></div></div></div>
+      </div>
+      <div class="yt-channel-wrap reveal">
+        <a href="https://www.youtube.com/@mathieuchppz" target="_blank" rel="noopener" class="yt-channel-btn">
+          <div class="yt-icon-wrap"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div>
+          <div class="yt-channel-info"><p>Retrouve-moi sur</p><h3>Ma chaîne YouTube</h3><span class="yt-channel-sub">Analyses · Critiques · Essais cinématographiques</span></div>
+          <span class="yt-arrow">→</span>
+        </a>
+      </div>
+      <div class="yt-channel-wrap reveal" style="margin-top:0;">
+        <a href="https://letterboxd.com/Mathieuchppz/" target="_blank" rel="noopener" class="yt-channel-btn">
+          <div class="yt-icon-wrap" style="background:#00C030;"><img src="Images/CINEMA/Letterboxd_Logo.png" alt="Letterboxd" style="width:26px;height:26px;object-fit:contain;"></div>
+          <div class="yt-channel-info"><p>Rejoins-moi sur</p><h3>Mon compte Letterboxd</h3><span class="yt-channel-sub">Analyses · Critiques · Reviews</span></div>
+          <span class="yt-arrow">→</span>
+        </a>
+      </div>
+      <div class="section-head" style="margin-bottom:28px; margin-top:36px;"><span class="s-num">À la une</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Une vidéo phare</h2></div>
+      <div class="featured-video-wrap reveal">
+        <a class="video-thumbnail" href="https://youtu.be/2oAzwZr1Eak" target="_blank" rel="noopener">
+          <div class="thumb-bg" style="background-image:url('https://img.youtube.com/vi/2oAzwZr1Eak/maxresdefault.jpg'); background-size:cover; background-position:center;"></div>
+          <div class="thumb-overlay"></div>
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <span class="video-duration">11:39</span>
+        </a>
+        <div class="video-info">
+          <span class="video-tag"><span class="video-tag-dot"></span>Vidéo phare</span>
+          <h3 class="video-title">Le rôle du réalisateur</h3>
+          <p class="video-desc">Une analyse approfondie du rôle du réalisateur dans la création d'un film. En décortiquant les choix de mise en scène, de narration et de style, j'explore comment un réalisateur façonne l'expérience cinématographique.</p>
+          <a class="video-watch-btn" href="https://youtu.be/2oAzwZr1Eak" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Regarder la vidéo</a>
+        </div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <!-- ════ DEV ════ -->
+  <div class="page" id="page-dev" data-accent="dev">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span> Développement</p><div class="page-big-title">Code &amp;<br><span class="a">Création.</span></div><div class="accent-bar"></div><p class="page-sub">Jeux vidéo, web, expérimentations. Coder c'est construire des mondes à partir de rien. Ça ne se résume pas à des lignes de code.</p></section>
+    <div class="inner-content">
+      <div class="section-head" style="margin-bottom:32px;"><span class="s-num">Projets</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Mes créations</h2></div>
+      <div class="projects-grid">
+        <div class="proj-card reveal" onclick="go('proj-hopaway')">
+          <div class="proj-visual"><img class="proj-img" src="Images/DEV/Hopaway Island/Hopaway.gif" alt="Hopaway Island"><span class="proj-badge award">🏆 1er de l'Académie de Grenoble</span></div>
+          <div class="proj-body"><span class="proj-num">Jeu vidéo · 2024</span><h3>Hopaway Island</h3><p>Jeu indépendant et éducatif entièrement créé sur Godot. Premier de l'Académie de Grenoble aux Trophées NSI 2024.</p><div class="proj-footer"><span class="proj-tag">Godot</span><span class="proj-arrow">→</span></div></div>
+        </div>
+        <div class="proj-card reveal" onclick="go('proj-opinion')">
+          <div class="proj-visual"><img class="proj-img" src="Images/DEV/Opinion/Opinion.jpeg" alt="Opinion" style="object-fit:contain; padding:20px; background:#f0f9f4;"></div>
+          <div class="proj-body"><span class="proj-num">Application · 2025</span><h3>Opinion</h3><p>Application mobile pour classer ses opinions via des top 3, avec liste de souhaits collaborative et section Évènements.</p><div class="proj-footer"><span class="proj-tag">Mobile · UI</span><span class="proj-arrow">→</span></div></div>
+        </div>
+        <div class="proj-card reveal" style="opacity:.6; cursor:default;">
+          <div class="proj-visual c-green"><div class="proj-visual-ico">🚀</div><span class="proj-badge">Bientôt</span></div>
+          <div class="proj-body"><span class="proj-num">Prochain projet</span><h3>En cours…</h3><p>Un nouveau projet arrive bientôt. Reste connecté pour découvrir la prochaine création.</p><div class="proj-footer"><span class="proj-tag">À venir</span><span class="proj-arrow">⏳</span></div></div>
+        </div>
+      </div>
+      <div class="cards2">
+        <div class="cblock accent reveal"><h3>Stack &amp; outils</h3><p>Des langages et frameworks qui servent les projets, pas l'inverse. Toujours en apprentissage, toujours en exploration de nouvelles technologies.</p></div>
+        <div class="cblock reveal"><h3>Philosophie de dev</h3><p>Coder pour moi c'est un acte créatif avant d'être technique. L'important c'est l'expérience finale, ce que ressent l'utilisateur quand il joue ou navigue.</p></div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <!-- ════ HOPAWAY ════ -->
+  <div class="page" id="page-proj-hopaway" data-accent="hopaway">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span><span onclick="go('dev')">Développement</span><span class="sep">/</span> Hopaway Island</p><div class="proj-hero-meta"><span class="proj-meta-tag type">Jeu vidéo</span><span class="proj-meta-tag award">🏆 Trophées NSI 2024</span><span class="proj-meta-tag year">2024</span></div><div class="page-big-title">Hopaway<br><span class="a">Island.</span></div><div class="accent-bar"></div><p class="page-sub">Un jeu vidéo indépendant et éducatif entièrement conçu sur Godot. Premier de l'Académie de Grenoble au concours Les Trophées NSI 2024.</p></section>
+    <div class="inner-content">
+      <div class="proj-main-visual reveal"><img src="Images/DEV/Hopaway Island/Hopaway.gif" alt="Hopaway Island gameplay"></div>
+      <div class="award-banner reveal"><div class="award-ico">🏆</div><div class="award-text"><h4>1er de l'Académie de Grenoble</h4><p>Concours national Les Trophées NSI 2024 - catégorie Jeu vidéo éducatif</p></div><span class="award-badge">Prix National</span></div>
+      <div class="cards2">
+        <div class="cblock accent reveal"><h3>Le concept</h3><p>Hopaway Island est un jeu éducatif où le joueur doit résoudre des puzzles et relever des défis pour progresser sur l'île. L'objectif : rendre l'apprentissage accessible et fun à travers un univers coloré et intuitif.</p></div>
+        <div class="cblock reveal"><h3>Pourquoi ce projet ?</h3><p>Ce jeu est né d'une conviction : on apprend mieux en jouant. Conçu pour tous, enfants souhaitant apprendre en s'amusant ou adultes désireux de relever le challenge.</p></div>
+        <div class="cblock reveal"><h3>Stack technique</h3><p>Entièrement développé sur <strong>Godot Engine</strong> avec GDScript. Gestion des niveaux, système de score, animations et logique de puzzle codés from scratch en plusieurs mois.</p></div>
+        <div class="cblock reveal"><h3>Ce que j'ai appris</h3><p>Game design, architecture de code, gestion de projet et présentation devant un jury national. Un projet qui m'a autant appris techniquement qu'humainement.</p></div>
+      </div>
+      <div class="section-head" style="margin-bottom:24px;"><span class="s-num">Galerie</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Screenshots</h2></div>
+      <div class="proj-screens reveal">
+        <div class="proj-screen"><img src="Images/DEV/Hopaway Island/Level.png" alt="Level"></div>
+        <div class="proj-screen"><img src="Images/DEV/Hopaway Island/Map.png" alt="Map"></div>
+        <div class="proj-screen"><img src="Images/DEV/Hopaway Island/Success.png" alt="Success"></div>
+      </div>
+      <div class="yt-channel-wrap reveal">
+        <a href="https://mathieuchppz.itch.io/hopaway-island" target="_blank" rel="noopener" class="yt-channel-btn" style="background:linear-gradient(100deg,#0a1a0a,#0d2b0d);">
+          <div class="yt-icon-wrap" style="background:#9fb7ad;"><img src="Images/DEV/Itch.io_logo.png" alt="Itch.io" style="width:26px;height:26px;object-fit:contain;"></div>
+          <div class="yt-channel-info"><p>Hopaway Island est disponible sur</p><h3>Itch.io</h3><span class="yt-channel-sub">Mini-jeux · Éducatif · Aventure</span></div>
+          <span class="yt-arrow" style="color:#00C875;">→</span>
+        </a>
+      </div>
+      <div style="margin-top:16px;" class="reveal"><span class="back-btn" onclick="go('dev')">← Retour aux projets</span></div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <!-- ════ OPINION ════ -->
+  <div class="page" id="page-proj-opinion" data-accent="opinion">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span><span onclick="go('dev')">Développement</span><span class="sep">/</span> Opinion</p><div class="proj-hero-meta"><span class="proj-meta-tag type">Application</span><span class="proj-meta-tag year">2025</span></div><div class="page-big-title">Opinion<br><span class="a">App.</span></div><div class="accent-bar"></div><p class="page-sub">Un réseau social privé pour collecter, stocker et échanger ses opinions, souhaits et prochaines sorties.</p></section>
+    <div class="inner-content">
+      <div class="cards2">
+        <div class="cblock accent reveal"><h3>Le concept</h3><p>Opinion permet aux utilisateurs de gérer leurs préférences sous forme de top 3. On peut aussi gérer une liste de souhaits que ses amis peuvent voir et exaucer. Plus de problèmes de cadeaux ou de manque d'infos sur les goûts de vos proches.</p></div>
+        <div class="cblock reveal"><h3>Pourquoi ce projet ?</h3><p>Né des conversations "quel est ton top 3 de couleurs préférées ?", on s'est rendu compte du besoin de stocker ces avis et de les faire évoluer avec ses amis, ainsi que de mieux communiquer ses envies.</p></div>
+        <div class="cblock reveal"><h3>Stack technique</h3><p>Entièrement développé sur <strong>Flutter</strong> avec Dart. Création de l'interface utilisateur, gestion de la logique d'application et de la base de données Firebase.</p></div>
+        <div class="cblock reveal"><h3>Ce que j'ai appris</h3><p>Le développement d'une application mobile complète : conception UI, gestion de la base de données et intégration de fonctionnalités sociales. J'ai adoré interroger mon entourage pour comprendre leurs besoins.</p></div>
+      </div>
+      <div class="section-head" style="margin-bottom:24px;"><span class="s-num">Galerie</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Screenshots</h2></div>
+      <div class="proj-screens reveal" style="grid-template-columns:repeat(3,1fr); gap:24px; align-items:start;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;"><div style="width:100%;max-width:240px;aspect-ratio:9/19.5;border-radius:28px;overflow:hidden;border:6px solid var(--dark);box-shadow:0 24px 52px rgba(0,0,0,.18);position:relative;"><img src="Images/DEV/Opinion/Tops.jpeg" alt="Opinion tops" style="width:100%;height:100%;object-fit:cover;display:block;"></div><p style="font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">Catégories</p></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;"><div style="width:100%;max-width:240px;aspect-ratio:9/19.5;border-radius:28px;overflow:hidden;border:6px solid var(--dark);box-shadow:0 24px 52px rgba(0,0,0,.18);position:relative;"><img src="Images/DEV/Opinion/Animaux.jpeg" alt="Opinion animaux" style="width:100%;height:100%;object-fit:cover;display:block;"></div><p style="font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">Top 3</p></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;"><div style="width:100%;max-width:240px;aspect-ratio:9/19.5;border-radius:28px;overflow:hidden;border:6px solid var(--dark);box-shadow:0 24px 52px rgba(0,0,0,.18);position:relative;"><img src="Images/DEV/Opinion/Wishes.jpeg" alt="Opinion Wishes" style="width:100%;height:100%;object-fit:cover;display:block;"></div><p style="font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">Liste de souhaits</p></div>
+      </div>
+      <div style="margin-top:40px;" class="reveal"><span class="back-btn" onclick="go('dev')">← Retour aux projets</span></div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <!-- ════ ONU ════ -->
+  <div class="page" id="page-onu" data-accent="onu">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span> Nations Unies</p><div class="page-big-title">Nations<br><span class="a">Unies.</span></div><div class="accent-bar"></div><p class="page-sub">Orateur et représentant de la jeunesse aux Nations Unies. Porter les enjeux de ma génération face aux décideurs du monde entier.</p></section>
+    <div class="inner-content">
+      <div class="cards2">
+        <div class="cblock accent reveal"><h3>Mon rôle</h3><p>Représentant de la jeunesse auprès des Nations Unies, j'interviens en tant qu'orateur pour défendre les positions et préoccupations de la jeune génération sur des enjeux globaux : climat, éducation, inégalités, diplomatie internationale.</p></div>
+        <div class="cblock reveal"><h3>Pourquoi l'ONU ?</h3><p>Je crois que la jeunesse n'a pas à attendre 40 ans pour avoir une voix. L'ONU est l'une des scènes où cette voix peut résonner au niveau mondial. C'est une responsabilité que je prends très au sérieux.</p></div>
+        <div class="cblock span2 reveal"><h3>Parcours &amp; engagements</h3><div class="timeline" style="margin-top:20px;">
+          <div class="tl-item"><p class="tl-date">Avril 2026</p><p class="tl-title">Journée internationale de la conscience et de la paix</p><p class="tl-desc">Membre du comité de pilotage. Préparation et délivrance d'un discours sur les thèmes de la paix et de l'art. Représentation de la voix des jeunes face aux instances décisionnaires.</p><br><p class="tl-title">Remise des prix du Rotary</p><p class="tl-desc">Lauréat du "Prix Coup De Cœur Pour La Paix" décerné par le jury Rotary. Préparation et délivrance d'un discours sur les thèmes de la paix et de l'art.</p></div>
+          <div class="tl-item"><p class="tl-date">Avril 2025</p><p class="tl-title">Journée internationale de la conscience et de la paix</p><p class="tl-desc">Préparation et délivrance d'un discours sur les thèmes de la paix, de l'humanisme et des médias.</p></div>
+        </div></div>
+      </div>
+      <div class="section-head" style="margin-top:60px; margin-bottom:8px;"><span class="s-num">Galerie</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Photos</h2></div>
+      <div class="onu-gallery reveal">
+        <div class="onu-photo span-col"><img src="Images/ONU/2026_3.jpeg" alt="Prise de parole ONU" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><div class="onu-photo-overlay"></div></div>
+        <div class="onu-photo top-r1"><img src="Images/ONU/2026_1.jpeg" alt="Délégation ONU" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><div class="onu-photo-overlay"></div></div>
+        <div class="onu-photo top-r2"><img src="Images/ONU/2026_21.jpeg" alt="Coulisses ONU" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><div class="onu-photo-overlay"></div></div>
+        <div class="onu-photo bot-r1"><img src="Images/ONU/2026_41.jpeg" alt="Résolutions ONU" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><div class="onu-photo-overlay"></div></div>
+        <div class="onu-photo bot-r2"><img src="Images/ONU/CostumeVert.jpeg" alt="ONU" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><div class="onu-photo-overlay"></div></div>
+      </div>
+      <div class="section-head" style="margin-top:72px; margin-bottom:8px;"><span class="s-num">Écrits</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Mes textes</h2></div>
+      <div class="textes-list reveal">
+        <div class="texte-item" onclick="go('texte-Art')">
+          <div class="texte-item-num">01</div>
+          <div class="texte-item-info"><h4>Vingt-quatre Fois la Vérité par Seconde</h4><p>Prononcé au Palais des Nations Unies de Genève lors de la Journée Internationale de la Conscience 2026, ce texte décrit un monde assombri par la haine, mais qui pourrait être illuminé par l'Art. Récompensé par une standing ovation.</p></div>
+          <div class="texte-item-date">2 Avril 2026</div>
+          <span class="texte-item-arrow">→</span>
+        </div>
+        <div class="texte-item" onclick="go('texte-Femme')">
+          <div class="texte-item-num">02</div>
+          <div class="texte-item-info"><h4>Le Strapontin de l'Histoire</h4><p>Les oubliées, les silencieuses, les invisibles. Le féminisme mal compris, les agressions trop peu punies, la femme comme objet, son absence dans la préoccupation scientifique.</p></div>
+          <div class="texte-item-date">30 Octobre 2025</div>
+          <span class="texte-item-arrow">→</span>
+        </div>
+        <div class="texte-item" onclick="go('texte-Guerre')">
+          <div class="texte-item-num">03</div>
+          <div class="texte-item-info"><h4>Un Souffle dans l'Abyssale Indifférence</h4><p>L'égalité est une dette, la paix est un combat vivant. Ce discours au ton satirique milite contre la fausse conscience et la hiérarchie des conflits. Standing ovation au Palais des Nations Unies.</p></div>
+          <div class="texte-item-date">4 Avril 2025</div>
+          <span class="texte-item-arrow">→</span>
+        </div>
+      </div>
+      <div class="section-head" style="margin-top:12px; margin-bottom:10px;"><span class="s-num">Récompenses</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Prix et Distinctions</h2></div>
+      <div class="onu-award-wrap reveal">
+        <div
+          class="onu-award-card"
+          onclick="openAwardLightbox(this)"
+          data-award-img="Images/ONU/Prix/Rotary2026.png"
+          data-award-title="Prix Coup de Coeur pour la Paix"
+          data-award-meta="Rotary · Avril 2026"
+          data-award-text="Cette distinction m'a été remise lors de la cérémonie de remise des prix du Rotary 2026. Pour mes plaidoyers en faveur de l'Art comme chemin vers la paix et pour mes projets d'utiliser des oeuvres cinématographiques comme amorces de dialogues favorisant l'esprit de compréhension entre les êtres. C'est une récompense qui montre la capacité à faire entendre la voix de la jeunesse au sein d'un cadre international. Ce prix prouve que ce combat pour l'Art comme outil d'éducation et de dialogue est légitime et mérite amplement d'être poursuivi."
+        >
+          <div class="onu-award-image-wrap">
+            <img class="onu-award-image" src="Images/ONU/Prix/Rotary2026.png" alt="Prix Coup de Coeur pour la Paix">
+            <div class="onu-award-image-overlay"></div>
+            <span class="onu-award-zoom-hint">Cliquer pour agrandir</span>
+          </div>
+          <div class="onu-award-caption">
+            <strong>Prix Coup de Coeur pour la Paix</strong>
+            <span>Rotary · Avril 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <!-- ════ TEXTE 1 — VINGT-QUATRE FOIS ════ -->
+  <div class="page" id="page-texte-Art" data-accent="texte">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span><span onclick="go('onu')">ONU</span><span class="sep">/</span> Texte</p><div class="proj-hero-meta"><span class="proj-meta-tag type">Discours ONU</span><span class="proj-meta-tag year">2 Avril 2026</span></div><div class="page-big-title" style="font-size:clamp(36px,5.5vw,82px);">Vingt-quatre Fois<br><span class="a">la Vérité par Seconde.</span></div><div class="accent-bar"></div><div class="texte-sub">Le texte écrit au complet est disponible ci-dessous.<br>N'hésitez pas à cliquer sur les paragraphes pour découvrir mon analyse linéaire de ce texte.<div class="texte-sub-video-wrap"><iframe class="texte-sub-video" width="560" height="315" src="https://www.youtube.com/watch?v=sBgQnjDUbrI?rel=0&modestbranding=1" title="Discours ONU - Vingt-quatre Fois la Vérité par Seconde" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="width:min(100%,780px);height:auto;aspect-ratio:16/9;border:0;border-radius:14px;"></iframe></div></div></section>
+    <div class="inner-content">
+      <div class="texte-page-layout">
+        <div class="texte-body-col">
+          <div class="texte-body reveal">
+            <p class="annotable" onclick="annotate(this,'art','p1')" data-key="p1">Je me tiens aujourd'hui devant vous,<br>Non pas comme un savant, un chef ou même un fou.<br>Je ne suis ni l'ingénieur, ni le politique en scène,<br>Juste une voix qui crie, une conscience sereine,<br>Un gardien du bon sens, un rempart contre l'oubli.<br>Pour que l'évidence vive, au moins ici.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p2')" data-key="p2">En 2025, le nombre de conflits armés actifs dans le monde a atteint son plus haut niveau depuis la Seconde Guerre Mondiale, touchant plus de 2 milliards de personnes.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p3')" data-key="p3">Les dépenses militaires mondiales ont franchi le seuil de deux-mille-cinq-cents milliards de dollars l'année dernière, alors que la faim et la détresse progressent à nouveau.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p4')" data-key="p4">La haine est un commerce, la peur un gagne-pain,<br>On vend des munitions pour le repas de demain,<br>Le ciel se fait de plomb sous la fumée des usines,<br>Et la mort se propage dans nos eaux cristallines.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p5')" data-key="p5">Le silence est un crime quand le canon résonne,<br>Quand la botte du fort sur le faible s'adonne,<br>On s'habitue au pire, au spectacle des décombres,<br>Devenant des spectateurs perdus parmi les ombres.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p6')" data-key="p6">Le rire des enfants s'éteint sous les gravats,<br>Victimes désignées de nos tristes combats.<br>On dessine des frontières au scalpel sur la peau,<br>En oubliant qu'on porte le même drapeau.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p7')" data-key="p7">Chaque jour, 15 000 enfants de moins de 5 ans meurent de causes qui pourraient être évitées ou soignées.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p8')" data-key="p8">L'indifférence est l'arme la plus sûre du bourreau,<br>Elle polit les chaînes et prépare le couteau.<br>On regarde l'abîme en pensant qu'on est loin,<br>Mais le gouffre se creuse au creux de notre main.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p9')" data-key="p9">Le temps n'est plus au doute, ni aux vains protocoles,<br>Quand la vie s'évapore et que l'espoir s'envole.<br>Nous marchons en aveugles au bord du précipice,<br>En laissant choisir qui sera le sacrifice.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p10')" data-key="p10">Regardez ce crâne qui craque sous le cuir des rangers,<br>La carcasse s'écorche, dévorée par les cratères de fer.<br>Arrachez les rimes, regardez le rat qui ronge le visage,<br>Le ventre s'ouvre, déversant ses entrailles sur le carrelage.<br>Un père s'effondre, la gorge tranchée par la rumeur,<br>Laissant un trou béant que nul traité ne pourra réparer.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p11')" data-key="p11">Le souffle s'est tu dans un sursaut de silence,<br>Une source s'épuise, laissant seule l'absence.<br>Ses yeux se sont clos sous un ciel de poussière,<br>Une âme qui s'efface, sans laisser de lumière.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p12')" data-key="p12">Rien n'est plus froid que le rictus de la mort qui s'incruste,<br>La chair s'arrache, s'écorche, se farde de poussière injuste.<br>Ils crèvent par grappes dans le fracas des chars en marche,<br>Et nous marchons, hagards, sur les débris de leurs arches.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p13')" data-key="p13">Les médias sont des vitrines aux vitres bien trop lisses,<br>Où l'on maquille en paix nos plus sombres vices.<br>On se croirait en 1984, dans ce règne du flou,<br>Où le mensonge est roi et nous rend tous fous.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p14')" data-key="p14">They want to keep your eyes wide shut, far from the pain,<br>Turning every tragedy into a financial gain.<br>They want us to believe army is the path of glory,<br>But there is no honor in a bloody, hollow story.<br>We can say that this is the time for the apocalypse now,<br>Watching the innocent bleed and the guilty bow.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p15')" data-key="p15">Évidemment que ce n'est pas le meilleur des mondes,<br>Quand la haine en chaque seconde nous inonde.<br>On envoie le fahrenheit 451 sur les témoignages,<br>Pour brûler la mémoire et censurer les images.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p16')" data-key="p16">Mais l'art reste un phare, un moyen de s'instruire,<br>Quand tout le reste ne cherche qu'à nous détruire.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p17')" data-key="p17">Art is the last bastion of the spirit, deep and true,<br>The only thing that belongs strictly to me and you.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p18')" data-key="p18">To understand it, just come and see the raw scars,<br>People who die while looking at the stars,<br>The rockets and the full metal jackets.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p19')" data-key="p19">Si l'on retire les drapeaux, les discours et les médailles,<br>Derrière le bruit des clairons et le fracas des batailles,<br>Il ne reste que des gamins de vingt ans envoyés mourir,<br>Pour des hommes en costumes qui n'enverront jamais leur fils périr.<br>C'est la vérité crue que l'art refuse de taire,<br>Le sacrifice des innocents pour une gloire de poussière.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p20')" data-key="p20">Et si parmi les 12 hommes en colère, par hasard,<br>On était le 13ème homme à porter le regard ?<br>Celui qui refuse l'évidence et le verdict trop rapide,<br>Dans ce tribunal du monde au jugement insipide.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p21')" data-key="p21">Car la condition humaine peut faire faire beaucoup de choses,<br>Comme transformer nos jardins en des fosses moroses.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p22')" data-key="p22">Et comme d'habitude, à l'ouest rien de nouveau,<br>L'innocence s'évapore sous un ciel de caveau.<br>C'est le tombeau des lucioles, là où les lumières tombent,<br>Et l'on ne voit plus que le tracé des froides tombes.<br>Car c'est ici que s'arrête la zone d'intérêt,<br>Là où l'indifférence devient un sombre décret.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p23')" data-key="p23">On nous pousse vers l'Alphaville et on s'y égare,<br>Dans cette ville de vide où s'éteint le regard.<br>Où le petit soldat, piégé par l'engrenage,<br>Laisse son futur au milieu du passage.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p24')" data-key="p24">La photographie c'est la vérité et le cinéma,<br>C'est 24 fois la vérité par seconde dans ce schéma.<br>C'est notre manière d'être, notre musique, ces champ contrechamp,<br>C'est une âme qui s'écoute et qui va en marchant.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p25')" data-key="p25">L'histoire est un scénario écrit par ceux qui ont survécu,<br>Mais l'art est le pouls de ceux que l'on a dépourvus.<br>Hier, nous luttions pour obtenir une conversation juste,<br>Aujourd'hui, nous en sommes réduits, dans cette nation,<br>À quémander, pour survivre, juste une conversation.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p26')" data-key="p26">La charité est une œuvre, un acte de splendeur,<br>Plus grande que la liste de Schindler en sa grandeur.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p27')" data-key="p27">Ces gens-là, les leaders, ce sont de vrais lions,<br>Ils sont les rois de la jungle, et tout comme les lions,<br>Ils ne vivent même pas dans la jungle.<br>Ces lions préfèrent la cage dorée de leurs propres ambitions.<br>Ils riraient avec Docteur Folamour devant le déclin,<br>Pendant que Le Dictateur prépare son vil dessein.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p28')" data-key="p28">Mais la vie est belle si l'on garde le courage,<br>De créer de la beauté au milieu de l'orage.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p29')" data-key="p29">Je me tiens devant vous, citoyen de la science et du rêve,<br>Pour que cette prise de conscience ne soit pas qu'une trêve.<br>En tant qu'étudiant, j'ai vu la beauté des nombres et des lois,<br>Mais j'ai appris que l'humain est le seul vrai choix.<br>L'ONU est notre cadre, fragile mais nécessaire,<br>L'art est notre souffle, puissant et millénaire.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p30')" data-key="p30">Ne laissez pas les lions de salon dicter votre futur,<br>Ni les écrans lisses masquer la moindre déchirure.<br>Éduquez-vous par l'image, par le livre et le chant,<br>Car c'est là que bat le cœur, vibrant et attachant.<br>Maintenez le dialogue, même au bord du néant,<br>Pour que l'homme de demain reste un être géant.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'art','p31')" data-key="p31">Et souvenez-vous,<br>Tuer un homme pour défendre une idée,<br>Ce n'est pas défendre une idée,<br>C'est tuer un homme.</p>
+          </div>
+          <div style="margin-top:48px;" class="reveal"><span class="back-btn" onclick="go('onu')">← Retour aux textes</span></div>
+        </div>
+        <div class="texte-panel-col">
+          <div class="texte-panel" id="panel-art">
+            <div class="texte-panel-hint"><div class="hint-ico">💬</div><p>Clique sur un paragraphe pour afficher son annotation.</p></div>
+            <div class="texte-panel-inner">
+              <p class="texte-panel-label">Annotation</p>
+              <img class="texte-panel-img" id="panel-art-img" src="" alt="">
+              <div id="panel-art-content"></div>   <!-- ← remplace les deux anciens éléments -->
+              <span class="texte-panel-close" onclick="closePanel('art')">✕ Fermer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <!-- ════ TEXTE 2 — STRAPONTIN ════ -->
+  <div class="page" id="page-texte-Femme" data-accent="texte">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span><span onclick="go('onu')">ONU</span><span class="sep">/</span> Texte</p><div class="proj-hero-meta"><span class="proj-meta-tag type">Discours</span><span class="proj-meta-tag year">30 Octobre 2025</span></div><div class="page-big-title" style="font-size:clamp(40px,6vw,90px);">Le Strapontin<br><span class="a">de l'Histoire.</span></div><div class="accent-bar"></div><p class="texte-sub">Le texte écrit au complet est disponible ci-dessous.<br>N'hésitez pas à cliquer sur les paragraphes pour découvrir mon analyse linéaire de ce texte.<br></p></section>
+    <div class="inner-content">
+      <div class="texte-page-layout">
+        <div class="texte-body-col">
+          <div class="texte-body reveal">
+            <p class="annotable" onclick="annotate(this,'femme','p1')" data-key="p1">Messieurs... Bonjour,<br>Bienvenue dans ce grand spectacle annuel : <br>‘La condition de la femme’.<br>Installez-vous confortablement,<br>Éteignez vos consciences,<br>Et applaudissez bien fort,<br>Car ce soir, on va parler d’égalité...<br>Mais rassurez-vous : pas trop longtemps,<br>Faudrait quand même pas déranger l’ordre naturel des choses.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p2')" data-key="p2">Parce que oui, tout va très bien.<br>Les femmes ont déjà le droit de voter,<br>Elles peuvent même travailler,<br>Incroyable progrès !<br>Alors, de quoi se plaignent-elles encore ?<br>On leur a donné un strapontin dans le train de l’Histoire,<br>Et voilà qu’elles réclament une vraie place assise.<br>Quelle ingratitude.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p3')" data-key="p3">Le féminisme... Ce mot terroriste.<br>Prononcez-le à voix haute,<br>Et regardez trembler vos biceps tatoués.<br>Le féminisme, voyons...<br>Comme si hommes et femmes devaient être égaux !</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p4')" data-key="p4">Mais que deviendrait l’humanité,<br>Si un père changeait autant de couches qu’une mère ?<br>Si un PDG s’appelait Sophie plutôt que Jean-Pierre ?<br>Un cataclysme !</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p6')" data-key="p6">Les traditions s’effondreraient,<br>Les barbecues seraient menacés,<br>Et pire encore...<br>Il faudrait admettre que l’égalité n’est pas un cadeau,<br>Mais un droit.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p7')" data-key="p7">Rassurez-vous, on a trouvé la solution : <br>On offre des roses le 8 mars.<br>Une fleur pour chaque injustice,<br>Et hop, problème réglé.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p8')" data-key="p8">Et puis, il y a le viol.<br>Ah, ce mot qui gêne, qui gratte, qui dérange.<br>Mais heureusement, on a toujours une excuse sous la main.<br>‘Elle portait une jupe trop courte.’</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p9')" data-key="p9">Bien sûr ! Le tissu est coupable, pas l’agresseur.<br>‘Elle avait bu.’<br>Logique : un verre de vin efface la notion de consentement.<br>‘Elle n’a pas dit non assez fort.’<br>Évidemment, dès maintenant, un cri doit être validé par un huissier pour compter.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p10')" data-key="p10">Soyons sérieux deux secondes :<br>Un viol reste un crime. Point.<br>Un viol est un meurtre,<br>À la seule différence qu’il laisse la victime en vie,</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p11')" data-key="p11">Mais la société préfère toujours interroger la vicme,<br>Jamais le bourreau.<br>Parce que c’est plus confortable d’accuser une robe,<br>Que d’accuser un homme.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p12')" data-key="p12">Mais attention, ne soyons pas injustes :<br>La femme a quand même une place importante dans notre société...<br>Dans les publicités pour parfums, par exemple. <br>En arrière-plan d’un clip de rap,<br>Ou comme trophée qu’on affiche fièrement,<br>Jusqu’à ce qu’elle ait une ride de trop.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p13')" data-key="p13">Oui, la femme est essentielle :<br>Pour décorer les panneaux,<br>Pour remplir les magazines,<br>Pour faire joli sur la photo de famille.<br>Mais réfléchir ? Décider ? Diriger ?<br>Oulah, minute papillon.<br>On l’écoute... Tant qu’elle ne parle pas trop fort.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p14')" data-key="p14">Et la science ? Ah, la grande, la noble science,<br>Neutre, rigoureuse, impartiale...<br>Enfin, neutre... tant que neutre signifie ‘centré sur l’homme’.<br>Car depuis toujours, les cobayes idéaux s’appellent ‘Monsieur’.<br>Résultat : les femmes encaissent 90% d’effets secondaires en plus.<br>Mais chut, ce n’est pas grave,<br>Elles sont habituées à souffrir, paraît-il.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p15')" data-key="p15">Et puis, quelle ironie délicieuse :<br>Le mot hystérie nous vient de ‘utérus’.<br>Comme si l’utérus gouvernait les nerfs.<br>Comme les émotions d’une femme ne sont qu’un spasme gynécologique.<br>L’hyperémèse gravidique ?<br>Ces nausées extrêmes de grossesse ?<br>Invisibles.<br>De toute façon, ce n’est pas assez glamour pour mériter un budget de recherche.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p16')" data-key="p16">Bref, la science est universelle,<br>Mais son univers commence et finit avec le chromosome Y. </p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p17')" data-key="p17">Alors voilà, Messieurs :<br>La femme a déjà tant obtenu,<br>Elle devrait presque nous dire merci.<br>Merci d’avoir le droit d’exister,<br>Merci d’être tolérée dans ce monde d’hommes.<br>Et surtout, merci de lui laisser le temps de sourire.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p18')" data-key="p18">Mais non,<br>La vérité, c’est que nous ne lui avons rien donné,<br>Nous avons juste rendu, lentement ce qui lui appartenait déjà.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p19')" data-key="p19">Alors, je vous pose la question :<br>Voulez-vous continuer à distribuer des fleurs en plastique,<br>À coller des hashtags sur vos profils numériques,<br>Et à applaudir des discours creux une fois par an ?<br>Ou bien voulez-vous, enfin,<br>Construire un monde où la condition de la femme<br>Ne sera plus un sujet de débat,<br>Mais une évidence gravée dans le réel,<br>Comme la gravité ou le besoin d’oxygène ?</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p20')" data-key="p20">Parce que l’égalité, ce n’est pas une option.<br>C’est une dette.<br>Et il est grand temps de payer la facture.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p21')" data-key="p21">Messieurs, merci.</p>
+            <br>
+          </div>
+          <div style="margin-top:48px;" class="reveal"><span class="back-btn" onclick="go('onu')">← Retour aux textes</span></div>
+        </div>
+        <div class="texte-panel-col">
+          <div class="texte-panel" id="panel-femme">
+            <div class="texte-panel-hint"><div class="hint-ico">💬</div><p>Clique sur un paragraphe pour afficher son annotation.</p></div>
+            <div class="texte-panel-inner">
+              <p class="texte-panel-label">Annotation</p>
+              <img class="texte-panel-img" id="panel-femme-img" src="" alt="">
+              <div id="panel-femme-content"></div>
+              <span class="texte-panel-close" onclick="closePanel('femme')">✕ Fermer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <!-- ════ TEXTE 3 — SOUFFLE ════ -->
+  <div class="page" id="page-texte-Guerre" data-accent="texte">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span><span onclick="go('onu')">ONU</span><span class="sep">/</span> Texte</p><div class="proj-hero-meta"><span class="proj-meta-tag type">Discours ONU</span><span class="proj-meta-tag year">4 Avril 2025</span></div><div class="page-big-title" style="font-size:clamp(32px,4.5vw,72px);">Un Souffle dans<br><span class="a">l'Abyssale Indifférence.</span></div><div class="accent-bar"></div><div class="texte-sub">Le texte écrit au complet est disponible ci-dessous.<br>N'hésitez pas à cliquer sur les paragraphes pour découvrir mon analyse linéaire de ce texte.<br><div class="texte-sub-video-wrap"><iframe class="texte-sub-video" width="560" height="315" src="https://www.youtube.com/watch?v=Ti36pBfItC0?rel=0&modestbranding=1" title="Discours ONU - Un Souffle dans l'Abyssale Indifférence." loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="width:min(100%,780px);height:auto;aspect-ratio:16/9;border:0;border-radius:14px;"></iframe></div></div></section>
+    <div class="inner-content">
+      <div class="texte-page-layout">
+        <div class="texte-body-col">
+          <div class="texte-body reveal">
+            <p class="annotable" onclick="annotate(this,'guerre','p1')" data-key="p1">Mesdames et Messieurs,<br>Honorables consciences bien installées,<br>Merci de me prêter une oreille attentive,<br>Même si, soyons honnêtes, elle restera peut-être sélective.<br>Après tout, ce n’est qu’un discours de plus,<br>Un parmi tant d’autres, un souffle dans l’abyssale indifférence,<br>Mais qu’importe : on est là pour la Journée de la Conscience</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p2')" data-key="p2">Ah, la conscience… cette flamme qu’on rallume une fois par an,<br>Comme un vieux cierge d’église qu’on allume en tremblotant.<br>Un jour pour se donner bonne mine,<br>Un jour pour s’indigner, se sentir concerné,<br>Un jour pour dire "ça suffit", avant d’oublier demain midi.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p3')" data-key="p3">Un jour, c’est pratique :<br>Ça permet d’avoir l’air révolté, sans trop se fatiguer.<br>Comme un badge qu’on accroche sur le col,<br>Qui dit "Regardez, j’ai fait ma part !"<br>Puis on le range, bien à l’abri, jusqu’à l’année prochaine.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p4')" data-key="p4">Mais heureusement, la nouvelle révolution est là !<br>On la porte dans nos poches, elle scintille à nos doigts,<br>Un appareil magique, un miroir aux alouettes,<br>Où l'on scande la paix... du bout des pouces.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p5')" data-key="p5">Aujourd’hui, mes amis, on ne se bat plus avec des armes,<br>On se bat avec des hashtags.<br>On ne manifeste plus dans la rue,<br>On le fait dans nos stories, assis sur notre canapé.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p6')" data-key="p6">Les guerres explosent, mais nous, on répond :<br>"Soutien total" ,"C'est horrible", "Pray for peace"</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p7')" data-key="p7">Un enfant meurt sous une bombe ?<br>Vite, une réaction en emoji.<br>Un peuple entier disparaît sous les ruines ?<br>Partageons une infographie mal recadrée.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p8')" data-key="p8">Les morts s’empilent, les drames se succèdent,<br>Mais tant qu’on met un filtre et un #NeverAgain,<br>Tout ira bien, n’est-ce pas ?</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p9')" data-key="p9">On veut changer le monde ? Très bien.<br>Mais pas depuis notre écran OLED.<br>L'indignation numérique, c'est joli,<br>Mais tant qu’elle ne sort pas du digital,<br>Elle reste une illusion, un effet de mode.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p10')" data-key="p10">La guerre parfois c'est comme un produit en vitrine<br>Un conflit bien marketé, bien emballé<br>Avec une couverture médiatique calibrée,<br>Des images chocs et des larmes a l'heure du dîner.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p11')" data-key="p11">Un conflit pour exister, doit savoir captiver.<br>S'il est trop vieux il devient un détail de l'histoire,<br>S'il est trop lointain. Il devient un écho sans mémoire<br>Alors on trie, on sélectionne<br>On décide qui mérite l'indignation<br>Et qui restera dans l'ombre du silence.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p12')" data-key="p12">Mais dites-moi. L'odeur du sang change telle selon la latitude ?<br>Les bombes ont-elles une préférence de longitude ?<br>Les guerres ont elles une hiérarchie,<br>Où est-ce simplement une question de géographie ?</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p13')" data-key="p13">Car voyez-vous, certaines guerres remplissent les places,<br>Elles s’habillent de drapeaux, elles résonnent dans les rues,<br>Elles deviennent des slogans, des symboles,<br>Elles ont droit aux projecteurs, aux discours, aux minutes de silence.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p14')" data-key="p14">Mais d’autres n’ont pas cette chance.<br>Elles meurent dans un murmure,<br>Leurs victimes n’ont pas d’hashtag,<br>Leurs cadavres n’intéressent pas les caméras.<br>Les pleurs y sont étouffés,<br>Les massacres, classés sans suite.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p15')" data-key="p15">Un enfant qui pleure sous une bombe,<br>Quelle que soit la terre sous ses pieds,<br>Pleure avec les mêmes larmes,<br>Hurle avec la même douleur,<br>Mais certains cris traversent les frontières,<br>Tandis que d’autres restent enfermés dans l’oubli.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p16')" data-key="p16">Peut-être que la douleur a un drapeau,<br>Peut-être que la guerre a une hiérarchie,<br>Peut-être que certaines balles valent plus que d’autres.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p17')" data-key="p17">Ou peut-être que la vérité, c’est que l’humanité a ses favoris.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p18')" data-key="p18">Alors que faire ?<br>Critiquer, c'est bien, mais agir, c'est mieux.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p19')" data-key="p19">Si la conscience est un muscle, il faut l’entraîner.<br>Pas juste l’exhiber une fois par an, comme un trophée en papier mâché.<br>Il faut l’exercer, la forger, la faire transpirer.<br>Car une conscience en bonne santé, ça ne reste pas assis,<br>Ça se lève, ça marche, ça bouge, ca agi.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p20')" data-key="p20">Alors on peut :</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p21')" data-key="p21">Donner<br>Pas des likes, mais du temps,<br>Pas des mots, mais des gestes.<br>Parce qu’un ventre vide ne se nourrit pas d’indignation,<br>Parce qu’un cri de douleur ne se soigne pas avec un post engagé.<br>Donner, c’est être le bras tendu, pas l’œil attendri.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p22')" data-key="p22">Éduquer<br>Pas avec des punchlines, mais des faits.<br>Parce que la vérité ne tient pas en 280 caractères,<br>Parce que comprendre, c’est déjà résister.<br>Un peuple qui sait,<br>Est un peuple qu’on ne manipule plus.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p23')" data-key="p23">S’unir<br>Pas en silhouttes éparpillées, mais en force rassemblée.<br>Pas par habitude, mais par nécessité.<br>Car seul, on s’épuise, on murmure, on subit.<br>Mais ensemble, on résiste, on crie, on agit.<br>La paix ne vient pas d’une prière,<br>Ni d’un espoir lancé en l’air.<br>Elle naît des mains qui se serrent,<br>Des peuples qui refusent de se taire.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p24')" data-key="p24">Et si vraiment on veut marquer l’Histoire,<br>Que notre passage ici laisse une empreinte,<br>Il ne faut pas juste être un spectateur de la paix,<br>Mais un acteur, un architecte, un bâtisseur.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p25')" data-key="p25">Car au fond, la vraie question est simple :<br>Veut-on une conscience de façade,<br>Ou une paix véritable, durable, et incarnée ?</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p26')" data-key="p26">Parce que si la paix est un idéal, la conscience, elle, est un choix.<br>Un choix que nous devons faire dès aujourd’hui.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p27')" data-key="p27">Alors oui, levons nos voix, mais surtout nos corps.<br>Que nos idées quittent l’écran,<br>Qu'elles s'ancrent en actes, en élans,<br>Qu'elles brûlent d'ardeur, qu'elles tracent un sillon,<br>Et que la paix soit plus qu’un décor,<br>Mais un combat, vivant et vibrant.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p28')" data-key="p28">Merci.</p>
+            <br>
+            </div>
+          <div style="margin-top:48px;" class="reveal"><span class="back-btn" onclick="go('onu')">← Retour aux textes</span></div>
+        </div>
+        <div class="texte-panel-col">
+          <div class="texte-panel" id="panel-guerre">
+            <div class="texte-panel-hint"><div class="hint-ico">💬</div><p>Clique sur un paragraphe pour afficher son annotation.</p></div>
+            <div class="texte-panel-inner">
+              <p class="texte-panel-label">Annotation</p>
+              <img class="texte-panel-img" id="panel-guerre-img" src="" alt="">
+              <div id="panel-guerre-content"></div>
+              <span class="texte-panel-close" onclick="closePanel('guerre')">✕ Fermer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <script>
+    const dot  = document.getElementById('cDot');
+    const ring = document.getElementById('cRing');
+
+    function isTouchLike() {
+      return window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches;
+    }
+
+    /* CURSOR (desktop only) */
+    (function initCursor(){
+      if (isTouchLike()) return;
+      let mx=0,my=0,rx=0,ry=0;
+      document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+      (function lerp(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(lerp);})();
+      document.querySelectorAll('[onclick],a,button').forEach(el=>{
+        el.addEventListener('mouseenter',()=>{dot.style.transform='translate(-50%,-50%) scale(2.2)';ring.style.transform='translate(-50%,-50%) scale(1.5)';ring.style.borderColor='var(--current)';});
+        el.addEventListener('mouseleave',()=>{dot.style.transform='translate(-50%,-50%) scale(1)';ring.style.transform='translate(-50%,-50%) scale(1)';ring.style.borderColor='var(--cursor-col)';});
+      });
+    })();
+
+    /* Pages textes ONU */
+    const TEXTE_PAGES = new Set(['texte-Art','texte-Femme','texte-Guerre']);
+
+    /* COLORS & NAV — tous les IDs réels */
+    const COLORS = {
+      home:'#FF4535', ingenieur:'#FF4535', cinema:'#F5A300', dev:'#00C875', onu:'#0055B3',
+      'proj-hopaway':'#00C875', 'proj-opinion':'#00C875',
+      'texte-Art':'#0055B3', 'texte-Femme':'#0055B3', 'texte-Guerre':'#0055B3'
+    };
+    const NAV_MAP = {
+      home:'home', ingenieur:'ing', cinema:'cin', dev:'dev', onu:'onu',
+      'proj-hopaway':'dev', 'proj-opinion':'dev',
+      'texte-Art':'onu', 'texte-Femme':'onu', 'texte-Guerre':'onu'
+    };
+
+    function safeScrollTop() {
+      try {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      } catch (e) {
+        // Fallback for older browsers that don't support scroll options objects.
+        window.scrollTo(0, 0);
+      }
+    }
+
+    /* ROUTER */
+    function go(id) {
+      closeAllPanels();
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+      var pg=document.getElementById('page-'+id);
+      if(pg){pg.classList.add('active');safeScrollTop();}
+      var nl=document.getElementById('nl-'+(NAV_MAP[id]||id));
+      if(nl)nl.classList.add('active');
+
+      document.body.dataset.page = id;
+
+      var c = COLORS[id] || '#FF4535';
+      document.getElementById('navDot').style.background = c;
+      document.documentElement.style.setProperty('--current', c);
+
+      /* Couleur du curseur : bleue sur pages textes ONU, sombre ailleurs */
+      var cursorCol = TEXTE_PAGES.has(id) ? '#0055B3' : '#0E0E1A';
+      document.documentElement.style.setProperty('--cursor-col', cursorCol);
+      if (!isTouchLike()) {
+        dot.style.background   = cursorCol;
+        ring.style.borderColor = cursorCol;
+      }
+
+      setTimeout(runReveal, 80);
+    }
+
+    function toggleDrawer(){document.getElementById('mDrawer').classList.toggle('open');}
+
+    /* SCROLL REVEAL */
+    function runReveal(){
+      var io=new IntersectionObserver(function(entries){
+        entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
+      },{threshold:0.1});
+      document.querySelectorAll('.page.active .reveal:not(.visible)').forEach(function(el){io.observe(el);});
+    }
+
+    /* ═══ ANNOTATIONS ══════════════════════════════════ */
+    const ANNOTATIONS = {
+      art: {
+        p1: {sections: [{ subtitle: 'Introduction', text: 'Ce texte commence par une négative de définition. Prononcé après des éloges faites par les autres intervenants, ce passage stipule que ce que j\'ai pu dire auparavant n\'a pas d\'importance, c\'est le présent qui compte.' },{ subtitle: 'Citoyen ordinaire', text: 'Présenté comme un futur ingénieur et comme un orateur, j\'appuie ici sur le fait que je ne suis qu\'un citoyen ordinaire qui choisit de se lever face aux injustices. ' },{ subtitle: 'Au moins ici', text: '"Pour que l\'évidence vive" signifie que tout le monde sait pertinemment que l\'injustice et la guerre sont présentes mais la plupart des gens ne font jamais vivre ce combat, "au moins ici" est un rappel à mon texte de l\'année dernière qui parlait de la conscience de facade, on veut qu\'aujourd\'hui ces valeurs et ces idées vivent réellement et sincérement dans chacun de nous.' }],image: 'Images/ONU/2026_3.jpeg'},
+        p2: {sections: [{ subtitle: 'L\'état actuel du monde', text: 'Cette phrase constitue un constat factuel qui ancre le discours dans la réalité actuelle, on compare le présent à la Seconde Guerre Mondiale suggérant que l\'humanité est en train de se détruire, atteingnant un niveau d\'horreur sans précédent.' },{ subtitle: 'Un chiffre colossal', text: '2 milliards de personnes touchées c\'est un quart de la population mondiale. Voilà une statistique colossale que l\'on entend que trop peu servant de fondation logique au "silence criminel" des prochaines lignes.' },{ subtitle: 'L\'abscence de lyrisme', text: 'On oublie les rimes et le lyrisme pour mettre en valeur la statistique et casser le ton général du texte afin de créer cette fondation logique.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/guerre_carte.jpg'},
+        p3: {sections: [{ subtitle: 'Contraste', text: 'Cette phrase repose sur une antithèse qui met en lumière le paradoxe moral et économique d\'une humanité en pleine dérive. En citant le montant astronomique de 2500 milliards de dollars consacrés aux dépenses militaires l\'année dernière, on utilise une donnée chiffrée pour matérialiser l\'ampleur des ressources détournées vers la destruction. L\'articulation de la phrase, utilisant le connecteur \'alors que\', crée un choc frontal avec la réalité de la faim et de la détresse qui \'progressent à nouveau\'. Cette structure dénonce une hiérarchie des valeurs inversée : elle suggère que le monde choisit de financer la mort plutôt que de préserver la vie, transformant ainsi la haine en un véritable commerce. En somme, cette phrase ne se contente pas de dresser un constat comptable, elle pose la question de l\'indécence d\'un luxe militaire qui prospère sur le terreau de la misère humaine.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/argent_sang.jpg'},
+        p4: {sections: [{ subtitle: 'La haine est un commerce, la peur un gagne-pain', text: 'Le premier vers fait référence aux médias, la haine et la peur génèrent énormément de clics et donc les médias ont tendances à secrètement aimer les conflits et autres malheurs du monde à cause de l\'apport financier que cela représente pour eux. La peur et la haine de l\'autre sont alors surreprésentées dans les médias, alimentant ainsi ce cycle.' },{ subtitle: 'On vend des munitions pour le repas de demain', text: 'Le second vers décrit la présence nette de la guerre dans nos quotidiens, la munition devenant notre repas symbolise que la guerre est omniprésente, aussi passive soit-elle. La rime avec le vers du dessus qui relie le pain et le repas permet également de relier la peur (de l\'autre en l\'occurence) et la fabriquation d\'armement, symbolisant que plutôt que de chercher à vaincre cette peur et aller vers la paix, on se tourne vers l\'armement.' },{ subtitle: 'Le ciel se fait de plomb sous la fumée des usines et la mort se propage dans nos eaux cristallines', text: 'Les deux derniers vers se suivent de près. Le ciel qui dispose d\'une surface infinie est rempli de plomb, il est en même constitué. Le plomb provient des usines et de la fumée de celles-ci, ces usines produisent tellement de munitions (faites de plomb et faisant référence au vers 2) que la fumée rempli complètement ce ciel infini. Dans le dernier vers, la mort est relative aux munitions et elle se propage dans les eaux (on peut y voir une référence au cycle de l\'eau entre le ciel et la terre).' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/fumee.jpg'},
+        p5: {sections: [{ subtitle: 'Le silence est un crime quand le canon résonne', text: 'Ce premier vers pose un impératif moral immédiat. L\'utilisation d\'une métaphore juridique en qualifiant le "silence" de "crime" renverse la culpabilité : celui qui ne dit rien devient complice de celui qui tire. L\'antithèse entre le silence (l\'inaction) et le bruit du canon (la violence brute) souligne l\'absurdité de rester passif face au chaos.' },{ subtitle: 'Quand la botte du fort sur le faible s\'adonne', text: 'Le deuxième vers illustre l\'asymétrie de la guerre : la "botte" représente l\'ensemble de la puissance militaire et de l\'oppression. Le verbe "s\'adonne" est particulièrement fort ; il suggère une forme de complaisance, voire de plaisir cruel, dans l\'exercice de la domination du puissant sur le vulnérable.' },{ subtitle: 'On s\'habitue au pire, au spectacle des décombres', text: 'Ici, on dénonce la désensibilisation. Le mot "spectacle" est crucial : il suggère que la tragédie humaine est devenue une simple image de consommation médiatique, un décor quotidien que l\'on regarde sans plus rien ressentir. L\'habitude est présentée comme une érosion de l\'empathie.' }, { subtitle: 'Devenant des spectateurs perdus parmis les ombres', text: 'La conclusion de ce quatrain marque une perte d\'identité et d\'humanité. En restant "spectateurs", les êtres humains cessent d\'être des acteurs de leur propre histoire. Les "ombres" symbolisent à la fois les victimes oubliées et l\'effacement progressif de la conscience des vivants, qui errent sans boussole morale dans un monde dévasté.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/silence.jpg'},
+        p6: {sections: [{ subtitle: 'Le rire des enfants s\'éteint sous les gravats', text: 'Ce vers repose sur un contraste sensoriel et symbolique déchirant. Le "rire", manifestation ultime de la vie, de la spontanéité et de l\'espoir, est brutalement interrompu par la lourdeur minérale et mortifère des "gravats". L\'usage du verbe "s\'éteindre" suggère une fin progressive et étouffante, transformant une image de vitalité en un silence définitif. Symboliquement, la guerre ne détruit pas seulement des infrastructures, mais elle assassine l\'avenir même de l\'humanité en s\'attaquant à sa jeunesse.' },{ subtitle: 'Victimes désignées de nos tristes combats', text: 'Ici, on dénonce le caractère presque inévitable et systématique du sacrifice des innocents. L\'adjectif "désignées" est lourd de sens : il suggère que, malgré les discours sur la précision des frappes, les enfants sont les cibles réelles, bien que collatérales, de la violence. En utilisant le possessif "nos", j\'implique une responsabilité collective, refusant de rejeter la faute sur un seul camp. "Tristes" dépouille la guerre de toute sa prétendu gloire héroïque pour n\'en laisser que la dimension pathétique et vaine.' },{ subtitle: 'On dessine des frontières au scalpel sur la peau', text: 'Ce vers déplace le concept de frontière de la géographie vers l\'anatomie, rendant la séparation physique et douloureuse. L\'usage du "scalpel" évoque une opération chirurgicale froide et précise, mais ici appliquée pour mutiler plutôt que pour soigner. La "peau" représente notre humanité commune, notre surface la plus sensible ; suggérer que l\'on y trace des limites souligne que les divisions idéologiques ou nationales s\'inscrivent directement dans la chair des individus, provoquant des cicatrices indélébiles.' },{subtitle: 'En oubliant qu\'on porte le même drapeau', text: 'Ce passage est conclu par une pointe d\'ironie amère sur l\'unité fondamentale de l\'espèce humaine. Le "même drapeau" ne fait pas référence à une nation spécifique, mais à la condition humaine universelle ou à l\'appartenance à une seule et même planète. Ce vers souligne l\'amnésie tragique des peuples en conflit qui, focalisés sur leurs différences superficielles, perdent de vue leur identité commune. C\'est un appel à reconnaître l\'altérité comme un miroir de soi-même plutôt que comme un ennemi à abattre.'}],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/enfant_prison.jpg'},
+        p7: {sections: [{ subtitle: 'Le chiffre', text: 'Cette phrase marque une rupture brutale dans le discours en substituant la métaphore poétique par une statistique clinique et accablante. En précisant que "15 000 enfants de moins de 5 ans" meurent chaque jour, on cible la fraction la plus vulnérable de l\'humanité, rendant l\'inaction globale moralement indéfendable.' },{ subtitle: 'Les causes', text: 'L\'aspect le plus tragique de ce constat réside dans la précision des causes : elles pourraient être "évitées ou soignées", ce qui transforme ces décès en une faillite systémique et politique plutôt qu\'en une fatalité biologique. Ce chiffre agit comme un électrochoc destiné à souligner l\'absurdité des priorités mondiales, mettant en relief le contraste frappant avec les dépenses militaires colossales (2 500 milliards de dollars) évoquées plus tôt dans le texte.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/enfant_mort.jpg'},
+        p8: {sections: [{ subtitle: 'L\'indifférence est l\'arme la plus sûre du bourreau', text: 'Une personnalisation de l\'indifférence la transforme en un instrument de torture actif. En qualifiant l\'absence de sentiment d\'"arme la plus sûre", je suggère que le "bourreau" n\'a pas besoin de force physique pour agir si personne ne s\'y oppose. Ce vers souligne que la neutralité n\'est pas une absence d\'action, mais une validation tacite de la violence, faisant de celui qui se tait le collaborateur indispensable de l\'oppresseur.' },{ subtitle: 'Elle polit les chaînes et prépare le couteau', text: 'Ce vers prolonge la métaphore de l\'indifférence en lui attribuant des actions de maintenance et de préparation technique de la douleur. Le verbe "polir" évoque un soin méticuleux apporté à l\'asservissement (les chaînes), tandis que "préparer le couteau" suggère que l\'inaction collective facilite et aiguise le crime à venir. L\'image est particulièrement forte car elle transforme une attitude mentale passive en un geste artisanal et meurtrier.' },{ subtitle: 'On regarde l\'abîme en pensant qu\'on est loin', text: 'Je dénonce ici l\'illusion de sécurité et la distance factice que nous mettons entre nous et les tragédies du monde. L\'utilisation du "on" inclut l\'auditeur dans cette erreur de jugement universelle. "Regarder l\'abîme" renvoie à notre rôle de spectateurs (déjà évoqué précédemment) qui contemplent le malheur comme un événement extérieur et lointain, se croyant à l\'abri des conséquences de la chute.' }, {subtitle : 'Mais le gouffre se creuse au creux de notre main', text : 'Le quatrain se clôt sur une image paradoxale et terrifiante : le danger n\'est plus à l\'extérieur, il est en nous. L\'antithèse entre le "gouffre" (immensité vide) et le "creux de la main" (espace intime et réduit) symbolise la responsabilité individuelle immédiate. Cela signifie que par nos actions, nos achats ou nos silences, nous portons et creusons nous-mêmes la destruction que nous pensions observer de loin, faisant de nous les architectes de notre propre chute.'}],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/couteau.jpg'},
+        p9: {sections: [{ subtitle: 'Le temps n\'est plus au doute, ni aux vains protocoles', text: 'Je pose ici un constat d\'urgence absolue qui invalide les méthodes traditionnelles de résolution de conflits. En rejetant les "vains protocoles", on dénonce la lenteur et l\'hypocrisie des diplomaties de façade qui se perdent dans des formalités alors que la situation exige une action immédiate. Le "doute" est ici présenté comme un luxe que l\'humanité ne peut plus se permettre, car l\'hésitation devient synonyme de complicité avec le désastre en cours.' },{ subtitle: 'Quand la vie s\'évapore et que l\'espoir s\'envole.', text: 'Ce vers utilise deux métaphores de la légèreté : l\'évaporation et l\'envol. Pour décrire la perte tragique et immatérielle de l\'essence humaine. L\'utilisation du verbe "s\'évaporer" suggère que la vie disparaît sans laisser de trace, de manière presque invisible, tandis que l\'espoir qui "s\'envole" marque la fin de toute perspective d\'avenir. Ce parallélisme renforce l\'idée d\'un épuisement des ressources vitales et morales du monde, laissant derrière lui un vide insupportable.' },{ subtitle: 'Nous marchons en aveugles au bord du précipice', text: 'On revient à une dimension collective avec le pronom "nous", soulignant une inconscience partagée face au danger imminent. L\'image de l\'aveuglement au bord d\'un "précipice" symbolise une humanité privée de vision à long terme, avançant par inertie vers sa propre destruction. Ce vers traduit une perte de repères spatiaux et moraux, où le mouvement (marcher) ne mène plus au progrès, mais à une chute certaine.'},{subtitle : 'En laissant choisir qui sera le sacrifice.', text : 'Ce dernier vers dénonce la lâcheté de la délégation de responsabilité et l\'arbitraire de la violence. Le terme "sacrifice" renvoie à une dimension presque archaïque ou religieuse de la guerre, où des individus sont immolés pour des causes qui les dépassent. En précisant que nous "laissons choisir", je pointe du doigt notre démission morale : en refusant d\'agir, nous permettons à des forces obscures ou à des systèmes oppressifs de désigner arbitrairement les prochaines victimes.'}],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/aveugle.jpg'},
+        p10: {sections: [{ subtitle: 'Globalement', text: 'On remarque facilement une allitération en R dans la strophe. Le R est une lettre que j\'imagine comme crue, grasse et dégoutante. Dans les strophes précédentes, la mort était décrite en utilisant des mots adoucissants et symboliques mais la guerre est tout comme la lettre R, crue et dégoutante. On garde les rimes en fin de vers mais les mots utilisés sont beaucoup plus marquants par leur franchise et leur son en R. On trouvera également des allitérations en C qui seront décrites dans les prochaines parties. La combinaison du C et du R dans des mots comme "craque" est pour moi la meilleure image sonore de la violence de la guerre.' },{ subtitle: 'Regardez ce crâne qui craque sous le cuir des rangers', text: 'Ce vers impose une focalisation brutale sur la vulnérabilité de l\'anatomie humaine face à la force militaire. L\'allitération en C (crâne, craque, cuir) imite le bruit sec de la fracture, soulignant la violence mécanique de la botte du soldat. En désignant un objet précis ("ce crâne"), on transforme une idée abstraite en une image insoutenable de destruction immédiate.' },{ subtitle: 'La carcasse s\'écorche, dévorée par les cratères de fer.', text: 'L\'utilisation du mot "carcasse" déshumanise le corps pour ne plus montrer que la viande et l\'os, réduisant l\'être humain à un déchet organique. Les "cratères de fer" désignent les impacts d\'obus ou de balles, suggérant que le métal "dévore" littéralement la chair. Le verbe "s\'écorcher" accentue la sensation de douleur vive et de mise à nu brutale face à la technologie meurtrière.' }, {subtitle : 'Arrachez les rimes, regardez le rat qui ronge le visage', text : 'Par l\'impératif "Arrachez les rimes", je brise volontairement le confort de la poésie pour confronter le public à la laideur absolue. L\'image du "rat" qui se nourrit des cadavres est une référence classique à l\'horreur des tranchées, rappelant que la mort à la guerre est aussi une décomposition solitaire et sordide. C\'est un appel à cesser de maquiller la tragédie par de beaux mots pour enfin regarder la réalité en face.'}, {subtitle : 'Le ventre s\'ouvre, déversant ses entrailles sur le carrelage.', text:'Ce vers atteint le sommet de l\'horreur visuelle par une description chirurgicale de l\'éviscération. Le contraste entre l\'aspect organique des "entrailles" et la froideur domestique du "carrelage" suggère que la violence s\'est invitée dans l\'intimité des foyers. Il n\'y a plus de dignité dans cette mort, seulement une exposition crue de la fragilité biologique.'}, {subtitle : 'Un père s\'effondre, la gorge tranchée par la rumeur', text : 'On lie ici la violence physique à la violence sociale en utilisant la "rumeur" comme une arme tranchante. Cela suggère que les mots, les mensonges et la propagande tuent tout aussi sûrement que l\'acier. L\'effondrement du "père" symbolise la destruction de la cellule familiale et de la figure protectrice, laissant la société orpheline et déstructurée.'}, {subtitle : 'Laissant un trou béant que nul traité ne pourra réparer', text : 'Le "trou béant" est à la fois une blessure physique (la gorge tranchée) et un vide affectif et historique. Je dénonce ici l\'impuissance de la diplomatie ("nul traité") face au traumatisme irréparable de la perte humaine. Il souligne que si les frontières peuvent être renégociées, une vie éteinte reste une absence définitive que l\'encre des politiques ne pourra jamais combler.'}],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/crane.jpg'},
+        p11: {sections: [{ subtitle: 'Globalement', text: 'Le "père" est décédé dans la strophe précédente, sa mort était lourde de sens et très douloureuse. Maintenant, son salut sera doux et émotif, voilà pourquoi on trouve une allitération en S tout au long de la strophe. Le S me faisant penser à un envol calme et lent.' },{ subtitle: 'Le souffle s\'est tu dans un sursaut de silence', text: 'J\'utilise ici une oxymore avec le "sursaut de silence". Habituellement, un sursaut est bruyant ou agité, mais ici, il marque l\'instant précis et paradoxalement violent où la respiration s\'arrête définitivement. Le "souffle" qui se tait est l\'image du passage de la vie à l\'inertie, transformant le bruit de l\'existence en une absence sonore totale.' },{ subtitle: 'Une source s\'épuise, laissant seule l\'absence', text: 'La métaphore de la "source" désigne la vie comme un flux d\'énergie naturel et vital qui finit par se tarir, on peut également y voir une référence à la Fontaine de Jouvence (symbolisant la vie). L\'épuisement de cette source ne mène pas à un renouveau, mais à une "absence" personnifiée, qui devient la seule compagne de ceux qui restent. Ce vers souligne le vide ontologique que laisse chaque individu disparu, suggérant que la mort n\'est pas seulement une fin, mais une présence creuse.' },{ subtitle: 'Ses yeux se sont clos sous un ciel de poussière', text: 'Ce vers dépeint une fin de vie privée de clarté et de dignité, où l\'horizon est obstrué par les débris de la guerre. Le "ciel de poussière" évoque les retombées des explosions ou l\'effondrement des bâtiments, enfermant la victime dans un linceul gris et étouffant. La fermeture des yeux symbolise non seulement la mort physique, mais aussi l\'impossibilité de voir un avenir ou une issue à la violence environnante.' },{ subtitle: 'Une âme qui s\'efface, sans laisser de lumière.', text: 'Le quatrain s\'achève sur une note nihiliste, où la disparition de l\'être est totale. L\'utilisation du verbe "s\'effacer" suggère une dissolution lente et silencieuse, comme si l\'existence de la personne n\'avait jamais eu de poids face au chaos du monde. L\'absence de "lumière" finale renvoie à une mort sans espoir et sans postérité, illustrant la tragédie des victimes anonymes dont le sacrifice ne nourrit aucune gloire, mais seulement l\'oubli.'}],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/ame.jpg'},
+        p12: {sections: [{ subtitle: 'Globalement', text: 'Même si la strophe précédente est douce et émotive, la guerre continue toujours. On vient encore créer une rupture en repartant sur des allitérations en R. On s\'est focalisé sur le "père", maintenant on repart au niveau global.' },{ subtitle: 'Rien n\'est plus froid que le rictus de la mort qui s\'incruste', text: 'J\'utilise ici une hyperbole sensorielle pour décrire la rigidité cadavérique. Le "rictus" évoque une grimace figée, une parodie de sourire qui devient permanente en "s\'incrustant" dans les traits du défunt. Cette froideur n\'est pas seulement thermique, elle est métaphysique : elle symbolise l\'absence totale d\'humanité et le triomphe du néant sur la chaleur de la vie.' },{ subtitle: 'La chair s\'arrache, s\'écorche, se farde de poussière injuste', text: 'Ce vers emploie une accumulation de verbes passifs pour souligner que le corps n\'est plus qu\'une matière subissant des outrages extérieurs. L\'utilisation du verbe "se farder" est particulièrement ironique et macabre : au lieu d\'un maquillage de fête, la chair est recouverte d\'une "poussière injuste". L\'adjectif "injuste" personnifie cette poussière, suggérant que même les éléments naturels deviennent les complices d\'un déshonneur infligé aux victimes.' },{ subtitle: 'Ils crèvent par grappes dans le fracas des chars en marche', text: 'Ce vers choisit ici un vocabulaire volontairement trivial et brutal ("crèvent") pour rompre avec toute noblesse guerrière. L\'expression "par grappes" évoque une mort de masse, anonyme et dénuée de dignité, où les individus sont fauchés collectivement comme de simples fruits. Le "fracas des chars" représente la puissance industrielle et mécanique qui écrase l\'humain sans même ralentir sa course.' },{ subtitle: 'Et nous marchons, hagards, sur les débris de leurs arches', text: 'Le passage se conclut sur une image de déambulation traumatique. L\'adjectif "hagards" souligne l\'état de choc et de confusion des survivants ou des témoins. Les "arches" symbolisent les structures de vie, les foyers ou les civilisations que les victimes avaient bâtis. Marcher sur ces "débris" signifie que nous piétinons, par nécessité ou par hébétement, les restes de ce qui constituait autrefois la protection et la fierté de nos semblables. C\'est donc un rappel stipulant que nos sociétés ont été baties via la guerre, les conflits et les morts.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/debris.jpg'},
+        p13: {sections: [{ subtitle: 'Globalement', text: 'À partir de ce vers on commence une partie sur l\'importance de l\'Art. On retrouvera alors beaucoup de références artistiques tout au long.' },{ subtitle: 'Les médias sont des vitrines aux vitres bien trop lisses', text: 'On utilise ici une métaphore commerciale pour définir les médias comme des outils de mise en scène plutôt que d\'information. L\'adjectif "lisses" suggère une volonté d\'effacer toute aspérité, toute complexité ou toute vérité dérangeante pour offrir une image superficielle et parfaite. Cette vitrine agit comme une barrière invisible qui sépare le spectateur de la réalité brute, filtrant le monde pour le rendre esthétique et inoffensif.' },{ subtitle: 'Où l\'on maquille en paix nos plus sombres vices', text: 'Ce vers dénonce l\'hypocrisie d\'une société qui utilise la communication pour transformer ses horreurs en actes acceptables. Le verbe "maquiller" renforce l\'idée de déguisement et de tromperie visuelle, tandis que l\'expression "en paix" souligne le calme cynique avec lequel ces manipulations sont opérées. Ce vers pointe du doigt la capacité des institutions à normaliser le mal (nos "sombres vices") en le présentant sous un jour favorable ou nécessaire.' },{ subtitle: 'On se croirait en 1984, dans ce règne du flou', text: 'En faisant explicitement référence au roman "1984" de George Orwell (décrivant une dystopie dans laquelle la vérité est entièrement détenue et contrôlée par l\'État) j\'inscris le présent dans une dystopie totalitaire où la vérité est devenue malléable. Le "règne du flou" évoque la disparition des certitudes et la confusion délibérée entretenue par ceux qui contrôlent le récit. C\'est une critique de la post-vérité, où l\'imprécision des faits permet toutes les dérives autoritaires et toutes les réécritures de l\'histoire.' },{ subtitle: 'Où le mensonge est roi et nous rend tous fous', text: 'Le passage se clôt sur le couronnement de la fausseté, devenue le principe directeur de la société. La personnification du "mensonge" en monarque absolu souligne son emprise totale sur les esprits. La conséquence finale est la perte de la raison ("nous rend tous fous"), suggérant qu\'une humanité privée de vérité finit par s\'effondrer psychologiquement, incapable de distinguer le réel du simulacre.'}],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/1984.jpeg'},
+        p14: {sections: [{ subtitle: 'They want to keep your eyes wide shut, far from the pain', text: 'On utilise ici l\'anglais pour donner une portée internationale à l\'accusation contre l\'aveuglement volontaire. La référence au film "Eyes Wide Shut" de Stanley Kubrick est centrale : le titre lui-même est une antithèse signifiant "les yeux grandement fermés". Dans le film, le protagoniste évolue dans un monde de masques et de secrets dont il ne comprend pas les règles sombres. Ici, l\'expression souligne que les puissants maintiennent les citoyens dans un état d\'ignorance confortable, les empêchant de voir la réalité de la douleur mondiale pour mieux les manipuler. Le pronom "They" (Ils) indique à la fois les puissants et les médias, qui sont intrinsèquement liés.' },{ subtitle: 'Turning every tragedy into a financial gain', text: 'Ce vers dénonce le cynisme absolu du complexe militaro-industriel et du capitalisme de crise. Il fait écho à l\'idée développée plus haut dans le texte que "la haine est un commerce". L\'auteur souligne que là où la morale voit un drame humain irréparable, certains systèmes économiques ne voient qu\'une opportunité de profit, transformant les cadavres en dividendes. La rime avec le vers précédent lie directement l\'aveuglement des masses à l\'enrichissement de quelques-uns.' },{ subtitle: 'They want us to believe army is the path of glory', text: 'Ici, je m\'attaque au mythe du "héros de guerre" et à la glorification du métier des armes souvent mise en avant par la propagande. L\'utilisation du mot "glory" (gloire) renvoie à l\'esthétique des récits épiques et des médailles. Ce vers prépare la chute brutale du vers suivant en opposant le discours officiel héroïque à la réalité sordide du terrain. "Path of glory" est un film de Stanley Kubrick qui nous montre les grands militaires décorés comme attirés seulement par la médaille, la récompense et la gloire liée à la guerre. Ne tenant pas compte de l\'impact humain ou même de cet idéal d\'une nation puissante. Dans "Path of glory", on casse l\'image héroïque du soldat, ce qui fait sens avec le reste du vers.' },{ subtitle: 'But there is no honor in a bloody, hollow story', text: 'Ce vers agit comme un dégonflement du mythe militaire. L\'adjectif "hollow" (creux) suggère que derrière les uniformes et les fanfares, il n\'y a que le vide et l\'absence. L\'honneur est présenté comme une notion incompatible avec le carnage ("bloody"). C\'est une dénonciation de l\'absurdité des combats : il n\'y a aucune grandeur à mourir ou à tuer pour des causes qui, au final, ne laissent que des ruines et des récits sans âme.' },{ subtitle: 'We can say that this is the time for the apocalypse now', text: 'On retrouve ici une référence majeure du cinéma de guerre : "Apocalypse Now" de Francis Ford Coppola. Le film suit la descente aux enfers d\'un officier dans la jungle du Vietnam, illustrant la folie, la perte de repères moraux et l\'horreur pure de l\'impérialisme. En utilisant ce titre, on suggère que nous ne sommes plus dans une simple crise, mais dans un moment de fin du monde, une apocalypse présente et palpable où l\'inhumanité est devenue la norme.' },{ subtitle: 'Watching the innocent bleed and the guilty bow', text: 'L\'opposition entre le sang des innocents et la révérence ("bow") faite aux coupables dénonce l\'impunité des décideurs. Alors que les victimes paient de leur vie, ceux qui ont déclenché le chaos sont salués ou s\'inclinent hypocritement lors de cérémonies officielles. Ce vers souligne le dégoût face à une société qui honore ses bourreaux au lieu de protéger ses enfants.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/apocalypse.jpeg'},
+        p15: {sections: [{ subtitle: 'Évidemment que ce n\'est pas le meilleur des mondes', text: 'On retrouve ici une ironie amère en faisant référence au roman "Le Meilleur des mondes" d\'Aldous Huxley. Dans cette œuvre, la société est conditionnée biologiquement et psychologiquement pour être "heureuse" dans la servitude, anesthésiée par une drogue (le soma) et des plaisirs superficiels. En niant cette appellation, on souligne que notre réalité actuelle a perdu même ce semblant de confort ou de stabilité : nous ne sommes pas dans une utopie lissée, mais dans une déchéance brutale où la souffrance n\'est même plus masquée par le plaisir.'},{ subtitle: 'Quand la haine en chaque seconde nous inonde', text: 'Ce vers illustre la saturation de l\'espace public et mental par des sentiments destructeurs. Le verbe "inonder" suggère un mouvement incontrôlable et étouffant, une sorte de submersion permanente où l\'individu n\'a plus le temps de respirer ou de réfléchir. Cette haine n\'est pas ponctuelle, elle est rythmée par "chaque seconde", soulignant l\'aspect obsessionnel et technologique de la diffusion des colères modernes, notamment via les flux d\'informations continus.' },{ subtitle: 'On envoie le fahrenheit 451 sur les témoignages', text: 'J\'invoque ici "Fahrenheit 451" de Ray Bradbury, un roman où les pompiers n\'éteignent pas les feux mais brûlent les livres (451°F étant la température d\'auto-inflammation du papier) pour empêcher les citoyens de penser. Dans le contexte du discours, "envoyer le Fahrenheit 451" signifie appliquer une censure active et violente sur la parole des victimes. Les "témoignages" sont les preuves de la souffrance humaine, et les détruire revient à transformer des crimes réels en simples fictions ou en oublis volontaires.' },{ subtitle: 'Pour brûler la mémoire et censurer les images', text: 'Le quatrain s\'achève sur l\'objectif final de cette manipulation : l\'effacement du passé et de la preuve visuelle. "Brûler la mémoire", c\'est s\'assurer que les générations futures n\'auront aucun point de comparaison pour contester le présent. La "censure des images" fait écho aux "vitrines trop lisses" mentionnées plus tôt ; en contrôlant ce que l\'on voit, on contrôle ce que l\'on croit. C\'est une dénonciation de la réécriture de l\'histoire et de l\'iconoclasme moderne qui cherche à rendre le crime invisible pour le rendre impuni.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/fahrenheit.jpg'},
+        p16: {sections: [{ subtitle: 'Mais l\'art reste un phare, un moyen de s\'instruire', text: 'J\'utilise ici la conjonction de coordination "Mais" pour marquer une rupture nette avec le chaos décrit précédemment. La métaphore de l\'art comme un "phare" est puissante : dans la tempête de la guerre et l\'obscurité de l\'ignorance (on retrouve le champ lexical maritime avec "nous inonde" dit dans la strophe précédente), l\'art est le point de repère fixe qui guide et empêche le naufrage des consciences. Il n\'est pas présenté comme un simple divertissement, mais comme un outil pédagogique fondamental ("un moyen de s\'instruire"). L\'art devient la source de savoir qui permet de décoder le monde là où les discours officiels échouent.' },{ subtitle: 'Quand tout le reste ne cherche qu\'à nous détruire', text: 'Ce vers crée une antithèse entre la création (l\'art) et la destruction (la politique, l\'économie de guerre, la violence). L\'expression "tout le reste" englobe de manière pessimiste les institutions humaines, les technologies militaires et les rapports de force mentionnés plus haut."Tout le reste" renforce encore cette idée de l\'art comme "phare". On suggère que dans un système devenu intrinsèquement nihiliste et mortifère, seule l\'expression artistique conserve une intention bienveillante et constructive. C\'est un plaidoyer pour la survie de l\'esprit humain à travers la beauté et le récit, seuls remparts contre l\'anéantissement total.'}],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/phare.jpg'},
+        p17: {sections: [{ subtitle: 'Art is the last bas on of the spirit, deep and true', text: 'On utilise ici une métaphore militaire avec le "bastion" pour décrire l\'art. Un bastion est la partie d\'une forteresse la mieux défendue, celle qui résiste quand tout le reste est tombé. En qualifiant l\'art de "dernier bastion de l\'esprit", on suggère que dans un monde dévasté par la guerre, la propagande et le profit, seule la création artistique reste un espace inviolable et authentique ("deep and true"). C\'est là que l\'essence de l\'humanité peut encore s\'abriter et se conserver, loin de la corruption des discours officiels.' },{ subtitle: 'The only thing that belongs strictly to me and you', text: 'Ce vers met en avant la dimension intime et démocratique de l\'art. Contrairement aux ressources matérielles, aux territoires ou aux technologies qui sont accaparés par les puissants, l\'expérience esthétique et l\'émotion qu\'elle procure sont présentées comme une propriété commune et inaliénable. Le passage à l\'anglais et l\'usage des pronoms "me and you" créent un lien direct de complicité entre l\'orateur et son auditeur. L\'art devient alors un espace de liberté absolue que personne, pas même le "bourreau" ou les "lions" mentionnés plus loin, ne peut confisquer ou soumettre à un contrat.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/bastion.jpg'},
+        p18: {sections: [{ subtitle: 'To understand it, just come and see the raw scars', text: 'J\'invite ici à une confrontation directe avec la réalité physique, loin des discours théoriques. L\'utilisation de l\'anglais renforce l\'universalité de l\'appel. Les "raw scars" (cicatrices à vif) symbolisent les traces indélébiles, tant physiques que psychologiques, laissées par les conflits. Le mot "raw" (cru, à vif) suggère une douleur qui ne s\'est jamais refermée, une plaie ouverte que la société préfère ignorer mais que l\'on doit "voir" pour véritablement comprendre l\'horreur de la situation mondiale. On utilise le titre anglais du film, "Come and See", qui est lui-même une citation de l\'Apocalypse dans la Bible ("Viens et vois"). Le film est célèbre pour être l\'un des portraits les plus viscéraux, traumatisants et réalistes de la guerre, vu à travers les yeux d\'un adolescent biélorusse qui vieillit prématurément sous le choc des atrocités nazies. Intégrer cette référence suggère que pour comprendre la guerre, il ne faut pas lire des rapports froids, mais accepter de "venir et voir" l\'insoutenable, de la même manière que la caméra de Klimov force le spectateur à ne jamais détourner le regard. Les "raw scars" font écho au visage marqué et aux yeux exorbités du jeune protagoniste à la fin du film, symbolisant une humanité définitivement brisée par ce qu\'elle a vu.' },{ subtitle: 'People who die while looking at the stars', text: 'Ce vers est puissant de manière lyrique. Il crée un contraste tragique entre la noblesse de l\'aspiration humaine, "regarder les étoiles", symbole de rêve, d\'infini et d\'espoir et la finitude brutale de la mort. Cette image souligne l\'absurdité de la guerre qui fauche les êtres en plein élan de vie ou de contemplation. Elle rappelle que chaque victime est un individu doté d\'une vie intérieure, de désirs et d\'une conscience, et non une simple unité statistique dans un rapport de force.' },{ subtitle: 'The rockets and the full metal jackets', text: 'La strophe conclut par une énumération d\'objets de mort, incluant une référence cinématographique majeure. "Full Metal Jacket" est un film de Stanley Kubrick qui dépeint le processus de déshumanisation des soldats pendant la guerre du Vietnam, transformant des jeunes hommes en "machines à tuer" (les balles blindées à chemise métallique qui donnent leur titre au film). En juxtaposant les "rockets" (la puissance de destruction lointaine) et les "full metal jackets" (la précision létale du combat rapproché et l\'aliénation militaire), on dénonce une technologie entièrement dévouée à l\'anéantissement de ceux qui, un vers plus haut, ne faisaient que regarder les étoiles.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/comeandsee.jpg'},
+        p19: {sections: [{ subtitle: 'Si l\'on retire les drapeaux, les discours et les médailles', text: 'La strophe commence par une opération de déshabillage. Ce vers énumère les attributs du décorum guerrier : les "drapeaux" (le nationalisme), les "discours" (la rhétorique politique) et les "médailles" (la glorification du sacrifice). En proposant de les "retirer", j\'invite l\'auditeur à ignorer la mise en scène héroïque pour se concentrer sur l\'essence brute du conflit. C\'est une déconstruction de la "belle mort" au profit de la vérité nue.' },{ subtitle: 'Derrière le bruit des clairons et le fracas des batailles', text : 'Ce vers met en scène un contraste sonore puissant pour dénoncer la mise en scène de la guerre. Le clairon est un instrument à vent historiquement utilisé dans les armées pour transmettre des ordres (comme le réveil ou l\'assaut) ou pour ponctuer les cérémonies officielles. Ici, le "bruit des clairons" symbolise l\'apparat militaire, la parade et le prestige nationaliste qui cherchent à donner une allure ordonnée, presque noble, à l\'appel aux armes. On oppose cette mélodie réglementée au "fracas des batailles", qui représente la réalité acoustique brutale, chaotique et assourdissante du front. Le mot "derrière" suggère que ces instruments de musique servent de paravent sonore : on utilise le prestige du clairon pour masquer le vacarme destructeur et la boucherie réelle des combats, séduisant ainsi les consciences par le folklore pour mieux cacher l\'horreur.' },{ subtitle: 'Il ne reste que des gamins de vingt ans envoyés mourir', text: 'Le cœur émotionnel du passage. L\'utilisation du mot "gamins" au lieu de "soldats" ou "hommes" souligne la jeunesse et l\'immaturité des victimes (on peut rappeler la référence à "come and see"). En précisant "vingt ans", on rappelle que ce sont des vies à peine commencées qui sont brisées. Le verbe passif "envoyés" souligne leur absence de contrôle sur leur propre destin ; ils ne sont que des pions dans un jeu qui les dépasse.' },{ subtitle: 'Pour des hommes en costumes qui n\'enverront jamais leur fils périr', text: 'C\'est ici que l\'analyse devient une critique sociopolitique virulente. L\'antithèse est totale entre les "gamins" (sur le terrain) et les "hommes en costumes" (dans les bureaux). Je dénonce l\'asymétrie du sacrifice : ceux qui décident de la guerre sont ceux qui en sont le plus protégés. La mention des "fils" qui ne périront jamais souligne une forme de privilège de classe et d\'hypocrisie morale insupportable.' },{ subtitle: 'C\'est la vérité crue que l\'art refuse de taire', text: 'On réaffirme ici le rôle de l\'art comme témoin incorruptible. Contrairement aux médias ou à la propagande d\'État, l\'art a pour mission de montrer la "vérité crue", sans filtre et sans maquillage. Le verbe "refuser de taire" présente l\'art comme une force de résistance active, une voix qui continue de crier quand tout le monde s\'est habitué au silence, au mensonge et au "spectacle des décombres".' },{ subtitle: 'Le sacrifice des innocents pour une gloire de poussière', text: 'Le passage se clôt sur une image de vanité. Le "sacrifice des innocents" renvoie à une image quasi biblique de cruauté inutile. La "gloire" pour laquelle ils meurent est qualifiée de "poussière", soulignant son caractère éphémère, sans valeur et dérisoire. À la fin, il ne reste ni victoire ni honneur, seulement de la poussière, illustrant l\'absurdité finale de toute entreprise guerrière.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/guerre.jpg'},
+        p20: {sections: [{ subtitle: 'Et si parmi les 12 hommes en colère, par hasard', text: 'On remarque ici la référence évidente au chef-d\'œuvre de Sidney Lumet, "12 hommes en colère" (12 Angry Men). Dans ce huis clos judiciaire, douze jurés doivent décider du sort d\'un jeune homme accusé de meurtre. Initialement, onze d\'entre eux votent la culpabilité par préjugé ou paresse intellectuelle. En citant ce film, on rappelle que la justice est souvent une affaire de pression sociale et que la majorité n\'a pas toujours raison.' },{ subtitle: 'On était le 13ème homme à porter le regard ?', text: 'Ce vers propose une extension du film. Le "13ème homme" symbolise celui qui s\'extrait de la masse, le témoin ou l\'observateur (le public, vous, moi) qui refuse de se laisser emporter par le courant. "Porter le regard" n\'est pas ici un acte passif, mais une action de vigilance. C\'est la figure de celui qui décide de regarder là où les autres détournent les yeux ou jugent sans réfléchir.' },{ subtitle: 'Celui qui refuse l\'évidence et le verdict trop rapide', text: 'Ce vers fait écho au personnage de juré n°8 (joué par Henry Fonda dans "12 hommes en colère") qui, par son seul doute raisonnable, bloque une condamnation à mort hâtive. Refuser l\'"évidence" signifie ici remettre en question la propagande ou les vérités toutes faites servies par les médias ou les gouvernements. C\'est un éloge de l\'esprit critique contre la paresse morale qui consiste à accepter un verdict sans en questionner les fondements.' },{ subtitle: 'Dans ce tribunal du monde au jugement insipide', text: 'La métaphore judiciaire s\'élargit à l\'échelle planétaire. Le "tribunal du monde" désigne l\'opinion publique internationale, souvent prompte à condamner ou à ignorer des peuples entiers. L\'adjectif "insipide" suggère que ces jugements manquent de saveur humaine, de profondeur et d\'empathie ; ils sont devenus mécaniques, froids et dénués de sens moral véritable.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/12_angry_men.jpeg'},
+        p21: {sections: [{ subtitle: 'Car la condition humaine peut faire faire beaucoup de choses', text: 'Ce vers constitue une double référence littéraire et cinématographique majeure, jetant un pont entre deux visions de la tragédie universelle : il invoque d\'abord la trilogie monumentale de Masaki Kobayashi, "La Condition de l\'homme" (adaptée de Junpei Gomikawa), qui dépeint avec une cruauté clinique l\'effondrement moral d\'un individu broyé par la machine de guerre et la barbarie militaire en Mandchourie, illustrant comment les circonstances peuvent forcer l\'être le plus noble à devenir l\'instrument du mal. Parallèlement, il fait écho au roman d\'André Malraux, "La Condition humaine", qui explore la dimension métaphysique de nos actes et cette quête de dignité face à l\'absurdité de la mort, suggérant que l\'homme est une créature capable des plus grandes métamorphoses, pour le meilleur comme pour le pire. En unissant ces deux œuvres, on souligne que notre nature n\'est pas figée : elle est ce "territoire plastique" où la pression du monde peut transformer un protecteur en bourreau.' },{ subtitle: 'Comme transformer nos jardins en des fosses moroses', text: 'Voilà une image de dégradation domestique terrifiante. Le "jardin", symbole de paix, de culture et de vie familiale, est perverti pour devenir une "fosse". La fosse fait évidemment référence à une fosse commune qui désigne une cavité creusée dans le sol destinée à entasser plusieurs cadavres, souvent dans des contextes de catastrophe, de guerre ou d\'épidémie. Cette image renvoie directement aux massacres de masse où les lieux de vie deviennent des charniers. Le mot "morose" apporte une nuance de tristesse infinie, soulignant que cette transformation n\'est pas seulement une destruction physique, mais un deuil définitif de la beauté et de l\'harmonie.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/human_condition.jpg'},
+        p22: {sections: [{ subtitle: 'Et comme d\'habitude, à l\'ouest rien de nouveau', text: 'On utilise ici le titre du chef-d\'œuvre d\'Erich Maria Remarque, "À l\'Ouest, rien de nouveau" (All Quiet on the Western Front), adapté plusieurs fois au cinéma. Le récit suit de jeunes soldats allemands de la Première Guerre mondiale dont l\'enthousiasme initial se transforme en une agonie absurde et anonyme. L\'expression "comme d\'habitude" renforce l\'idée d\'une lassitude tragique : malgré les horreurs passées, le monde continue de fonctionner selon la même logique de guerre, et la mort de milliers de jeunes est devenue une information routinière, un non-événement pour ceux qui ne sont pas au front.' },{ subtitle: 'L\'innocence s\'évapore sous un ciel de caveau', text: 'Ce vers prolonge l\'idée de la perte de pureté. L\'image du "ciel de caveau" transforme l\'horizon, normalement symbole d\'ouverture, en un espace clos et mortifère. Le mot "caveau" suggère que le monde entier est devenu une tombe à ciel ouvert. L\'innocence ne meurt pas brutalement ici, elle "s\'évapore", ce qui évoque une disparition lente, silencieuse et irréversible de l\'espoir et de l\'humanité chez les victimes comme chez les témoins.' },{ subtitle: 'C\'est le tombeau des lucioles, là où les lumières tombent', text: 'On invoque explicitement le film d\'animation japonais "Le Tombeau des lucioles" d\'Isao Takahata. Ce film relate la survie désespérée d\'un frère et d\'une sœur dans le Japon de la Seconde Guerre mondiale. Les "lucioles", qui ne vivent qu\'une nuit, sont la métaphore des vies brèves des enfants fauchés par la guerre. Dire que "les lumières tombent" signifie que chaque mort est une extinction de l\'esprit et de la beauté. C\'est l\'une des références les plus émotionnelles du discours, visant à rappeler la vulnérabilité absolue des civils. Malgré que je n\'y avais pensé directement, on peut également voir "les lumières" comme synonyme de génie, rappelant que la guerre tue des "lumières" qui auraient peut-être eu le pouvoir de changer le monde vers une paix meilleure.' },{ subtitle: 'Et l\'on ne voit plus que le tracé des froides tombes', text: 'Ce vers laisse place à la réalité matérielle de la mort. Le "tracé" évoque une organisation géométrique et administrative du massacre (les cimetières militaires), tandis que l\'adjectif "froides" souligne l\'absence de vie et de chaleur humaine. On ne voit plus les individus, on ne voit plus les "lucioles", on ne voit plus que des lignes de sépultures anonymes qui saturent le paysage.' },{ subtitle: 'Car c\'est ici que s\'arrête la zone d\'intérêt', text: 'On fait ici référence au film "La Zone d\'intérêt" de Jonathan Glazer. Le film dépeint la vie domestique banale et luxueuse du commandant d\'Auschwitz et de sa famille, juste à côté du camp, dont on n\'entend que les bruits étouffés. La "zone d\'intérêt" était le terme technique nazi pour désigner le périmètre autour du camp. Dans le vers, cela dénonce notre capacité à délimiter notre empathie : nous nous préoccupons de notre confort (notre zone d\'intérêt) et nous décidons que ce qui se passe "derrière le mur" ou de l\'autre côté de la frontière ne nous concerne plus.' },{ subtitle: 'Là où l\'indifférence devient un sombre décret', text: 'Le quatrain se clôt sur une institutionnalisation de l\'insensibilité. L\'indifférence n\'est plus seulement un trait de caractère, elle est devenue un "décret", une règle de conduite quasi officielle. Ce vers suggère que la société a légiféré, de manière tacite, sur le droit de ne plus se sentir concerné par la souffrance d\'autrui dès lors qu\'elle sort de notre zone de confort visuelle ou économique. C\'est le stade ultime de la déshumanisation : le rejet conscient et systématique de l\'autre.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/fireflies.jpeg'},
+        p23: {sections: [{ subtitle: 'On nous pousse vers l\'Alphaville et on s\'y égare', text: 'Je fais ici référence au film de science-fiction noir "Alphaville, une étrange aventure de Lemmy Caution" de Jean-Luc Godard. Synopsis : Le film dépeint une cité futuriste régie par une intelligence artificielle, Alpha 60, qui a banni toute émotion, toute poésie et tout mot exprimant un sentiment (comme "amour" ou "pourquoi"). En disant qu’on nous "pousse" vers elle, on suggère alors que notre société moderne devient une technocratie froide où l’humain n\'est plus qu\'une donnée statistique, perdant son orientation morale dans ce labyrinthe de béton et de logique pure.' },{ subtitle: 'Dans cette ville de vide où s\'éteint le regard', text: 'Ce vers prolonge l\'ambiance godardienne en décrivant l\'effacement de l\'âme. Le "vide" n\'est pas l\'absence d\'objets, mais l\'absence de sens et de profondeur humaine. L\'extinction du "regard" symbolise la fin de la conscience critique et de la curiosité. Dans l\'univers d\'Alphaville, les habitants ont les yeux vides car ils ne peuvent plus rien ressentir ; ils sont devenus des automates biologiques, reflétant ainsi l\'indifférence des foules modernes face aux tragédies qui les entourent.' },{ subtitle: 'Où le petit soldat, piégé par l\'engrenage', text: 'On invoque une autre œuvre de Jean-Luc Godard, "Le Petit Soldat" (tourné en 1960, interdit jusqu\'en 1963). Synopsis : Le film traite de la guerre d\'Algérie à travers l\'histoire d\'un jeune homme qui tente d\'échapper à son engagement politique mais finit par être rattrapé par la torture et le dilemme moral. Le "petit soldat" n\'est pas un héros, c\'est un individu vulnérable, un rouage insignifiant capturé par l\'"engrenage" de l\'Histoire et de la violence d\'État. La référence souligne l\'impuissance de la jeunesse face aux machineries politiques qui les dépassent.' },{ subtitle: 'Laisse son futur au milieu du passage', text: 'Le quatrain se termine sur une image d\'abandon tragique. Le "futur" représente ici tout le potentiel d\'une vie : les rêves, les amours et les projets. En le laissant "au milieu du passage", l\'auteur suggère une vie interrompue ou sacrifiée prématurément, que ce soit par la mort physique ou par l\'aliénation mentale. C\'est le constat d\'un gâchis absolu où la jeunesse est consommée par le système (l\'engrenage) et laissée pour compte sur le chemin de fer d\'une société qui n\'a plus besoin d\'elle.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/alphaville.jpg'},
+        p24: {sections: [{ subtitle: 'Globalement', text: 'Ce quatrain est un hommage direct au cinéma de Jean-Luc Godard et plus particulièrement à son film Notre Musique (2004). Dans ce film divisé en trois royaumes (Enfer, Purgatoire et Paradis), Godard réfléchit sur la guerre, la mémoire et la capacité du cinéma à témoigner de l\'histoire. Je reprends ici la posture du cinéaste-philosophe pour affirmer que l\'image n\'est pas un simple divertissement, mais l\'outil ultime de la vérité humaine. Le texte utilise la grammaire cinématographique (la cadence des images, le montage, les plans) pour définir l\'existence humaine. Le cinéma y est présenté comme un miroir de la conscience : un flux constant de "vérités" qui, mises bout à bout, forment la "musique" de notre vie. C\'est un plaidoyer pour une vision du monde où l\'art et la vie ne font qu\'un, permettant de rester debout et "en marchant" malgré les tragédies évoquées précédemment dans le texte.' },{ subtitle: 'La photographie c’est la vérité et le cinéma, c’est 24 fois la vérité par seconde dans ce schéma', text: 'Ces deux vers sont une citation célèbre de Godard (apparue d\'abord dans Le Petit Soldat et réaffirmée dans Notre Musique). Dans "Notre Musique", Godard donne une conférence à Sarajevo (ville martyre) sur le montage et la réalité. Il explique que si une photo fige un instant de vérité, le cinéma, en projetant 24 images par seconde, démultiplie cette vérité pour créer un mouvement vivant. Je souligne que le cinéma ne peut pas mentir sur l\'essence des choses. Contrairement aux "médias aux vitres trop lisses", le dispositif technique du cinéma (le "schéma") capture la réalité dans sa continuité brutale. C\'est une manière de dire que l\'art cinématographique est le seul capable de rattraper la vitesse de la vie et de la mort.' },{ subtitle: 'C\'est notre manière d\'être, notre musique, ces champ contrechamp', text: 'Ce vers définit l\'identité humaine à travers une technique de montage fondamentale : le champ-contrechamp (procédé consistant à filmer alternativement deux personnes qui se font face, souvent lors d\'un dialogue). Dans "Notre Musique", Godard utilise le champ-contrechamp pour parler de l\'altérité. Il montre par exemple des images d\'Israéliens et de Palestiniens, expliquant que l\'un est le "champ" et l\'autre le "contrechamp" d\'une même réalité tragique en disant notamment "Les Israéliens rejoignent le documentaire, les Palestiniens rejoignent la fiction". Ici, le cinéma devient une "manière d\'être". Nous existons par le regard de l\'autre. Le "champ-contrechamp" symbolise la rencontre, le dialogue et la reconnaissance mutuelle tout en reliant cette idée du cinéma = vérité. C\'est notre "musique" intérieure (référence au nom du film): le rythme de nos échanges avec le monde.' },{ subtitle: 'C\'est une âme qui s\'écoute et qui va en marchant', text: 'Après avoir évoqué les "chars en marche" et les "débris", l\'auteur oppose ici une autre forme de marche : celle de l\'âme. "S\'écouter" signifie reprendre possession de son intériorité face au "fracas des batailles". Le cinéma, parce qu\'il est un art du temps et du mouvement, accompagne cette progression. C\'est l\'image de l\'homme qui, bien que "hagard", continue d\'avancer. La référence à "Notre Musique" suggère que même après avoir traversé l\'Enfer, l\'art permet de trouver un chemin (le "Paradis" à la fin du film de Godard) où l\'esprit reste libre et en mouvement.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/Notre_Musique.jpg'},
+        p25: {sections: [{ subtitle: 'L’histoire est un scénario écrit par ceux qui ont survécu', text: 'On reprend ici l\'expression "L\'histoire est écrite par les vainqueurs", mais en utilisant le terme "scénario". Cela renforce l\'idée de mise en scène développée tout au long du texte (référence aux médias comme "vitrines" ou aux "discours et médailles"). Le passé n\'est pas présenté comme une vérité immuable, mais comme une narration construite et parfois falsifiée par ceux qui sont restés debout, éliminant de fait la perspective de ceux qui ont disparu.' },{ subtitle: 'Mais l’art est le pouls de ceux que l’on a dépourvus.', text: 'Ce vers oppose la "froideur" de l\'histoire officielle à la "chaleur" organique de l\'art. Le "pouls" symbolise la vie qui bat encore, même de manière ténue, dans les œuvres. L\'art redonne une voix et une présence aux "dépourvus" (ceux qui ont tout perdu : leur vie, leur terre ou leur dignité). C\'est la fonction mémorielle de l\'art : il est le battement de cœur des victimes que le "scénario" officiel tente d\'effacer.' },{ subtitle: 'Hier, nous luttions pour obtenir une conversation juste', text: 'On évoque ici une époque (réelle ou idéalisée) où le combat portait sur l\'éthique et l\'équité. Une "conversation juste" suggère un dialogue d\'égal à égal, basé sur la vérité et le respect mutuel (le "champ-contrechamp" de Godard). C\'est le stade de la revendication intellectuelle et politique, où l\'on cherche à améliorer la structure de la société.' },{ subtitle: 'Aujourd\'hui, nous en sommes réduits, dans cette nation, à quémander, pour survivre, juste une conversation.', text: 'La chute est brutale et souligne une régression dramatique de la condition humaine. On est passé d\'une conversation juste à juste une conversation, ce parallèle illustre le glissement de "lutter" à "quémander" : on ne réclame plus un droit, on mendie une faveur. La survie n\'est plus seulement physique, elle est sociale. Dans un monde qui ressemble à Alphaville (technocratie froide) ou à 1984 (règne du flou), le lien humain a été rompu. La "conversation" devient l\'ultime ressource vitale. Sans dialogue, l\'individu est invisible, il n\'existe plus aux yeux de la "nation". L\'ironie tragique est finalement que dans une ère de communication de masse et de médias omniprésents, l\'individu est plus seul que jamais, réduit à mendier un simple échange pour ne pas sombrer dans l\'oubli total.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/art.jpg'},
+        p26: {sections: [{ subtitle: 'La charité est une œuvre, un acte de splendeur', text: 'On définit ici la charité non pas comme un simple sentiment, mais comme une "œuvre", c’est-à-dire une construction active, concrète et durable. L\'utilisation du mot "splendeur" confère à cet acte une dimension presque sacrée ou lumineuse, s\'opposant radicalement à l\'obscurité des "fosses moroses" et du "ciel de caveau" évoqués précédemment. La charité est présentée comme la manifestation la plus éclatante de la noblesse humaine.' },{ subtitle: 'Plus grande que la liste de Schindler en sa grandeur', text: 'On invoque ici explicitement une référence cinématographique et historique majeure : "La Liste de Schindler" de Steven Spielberg. Le film raconte l\'histoire vraie d\'Oskar Schindler, un industriel allemand, membre du parti nazi, qui réussit à sauver environ 1 200 Juifs de la mort en les employant dans ses usines, sacrifiant toute sa fortune personnelle pour "acheter" leur vie. La "liste" est le document administratif qui séparait la vie de la mort. En affirmant que la charité est "plus grande" que cette liste, je ne cherche pas à diminuer l\'acte de Schindler, mais à élever la charité au rang de principe universel. Alors que la liste de Schindler était une réponse d\'urgence à une horreur spécifique, la charité est une force permanente qui dépasse les cadres historiques. Le vers suggère que l\'acte de donner et de protéger l\'autre, sans attendre de "médaille" ou de "scénario", est l\'acte de splendeur ultime, celui qui peut véritablement s\'opposer au "rictus de la mort".' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/Schindler.jpg'},
+        p27: {sections: [{ subtitle: 'Ces gens-là, les leaders, ce sont de vrais lions, ils sont les rois de la jungle, et tout comme les lions, ils ne vivent même pas dans la jungle', text: 'Je détourne ici le cliché du "roi de la jungle" pour souligner une déconnexion totale. Si le lion est traditionnellement le symbole de la puissance et de l\'autorité, on pointe une ironie géographique et morale : les véritables lions ne vivent pas dans la jungle (mais dans la savane), de même que les dirigeants ne vivent pas la réalité de la "jungle" sociale ou du front qu\'ils dirigent. C\'est une critique de l\'absence de terrain : ils règnent sur un monde dont ils ignorent la boue, le fracas et la douleur.' },{ subtitle: 'Ces lions préfèrent la cage dorée de leurs propres ambitions', text: 'Le pouvoir est ici décrit comme une prison de luxe. La "cage dorée" symbolise le confort des palais, des bureaux et des privilèges qui, tout en isolant les leaders du danger, les enferment dans une vision narcissique. Leurs "ambitions" deviennent leurs propres barreaux, les empêchant de voir au-delà de leur intérêt personnel ou de leur maintien au pouvoir.' },{ subtitle: 'Ils riraient avec Docteur Folamour devant le déclin', text: 'On invoque ici le film de Stanley Kubrick, Docteur Folamour (Dr. Strangelove). Cette comédie noire traite de la paranoïa de la Guerre froide. Un général américain déclenche par erreur une attaque nucléaire sur l\'URSS, menant à l\'apocalypse. Le personnage du Docteur Folamour est un ancien scientifique nazi, fasciné par la destruction, qui finit par se lever de sa chaise roulante en criant "Mein Führer !"" alors que les bombes explosent. En associant les leaders actuels à Folamour, on dénonce leur cynisme et leur folie destructrice. Ils sont capables de rire ou de rester indifférents face au "déclin" de l\'humanité, tant qu\'ils se croient à l\'abri dans leur bunker intellectuel ou physique.' },{ subtitle: 'Pendant que Le Dictateur prépare son vil dessein', text: 'La référence finale est le film Le Dictateur de Charlie Chaplin. Chaplin y parodie Adolf Hitler à travers le personnage d\'Adenoid Hynkel. Une scène célèbre montre le dictateur jouant avec un globe terrestre gonflable, le faisant rebondir comme un ballon, illustrant son désir de posséder et de manipuler le monde comme un simple jouet. Le "vil dessein" renvoie à cette volonté de domination totale. On suggère que derrière le chaos apparent (le rire de Folamour), il y a une planification sombre et méthodique pour asservir les peuples. Ce vers clôt le passage sur une note d\'avertissement : la légèreté apparente des puissants cache souvent des ambitions tragiques pour le reste de l\'humanité.' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/Strangelove.jpg'},
+        p28: {sections: [{ subtitle: 'Mais la vie est belle si l\'on garde le courage', text: 'Je fais ici une référence explicite au film de Roberto Benigni, "La vie est belle" (La vita è bella). Dans le film, un père juif italien (Guido) utilise l\'humour, l\'imagination et le jeu pour protéger son jeune fils de l\'horreur des camps de concentration nazis. Il lui fait croire que tout ce qu\'ils vivent est un jeu géant pour gagner un char d\'assaut. L\'affirmation "la vie est belle" n\'est pas un déni de la réalité ou une forme de naïveté. C\'est un acte de courage suprême. C\'est choisir de préserver la dignité et l\'émerveillement alors même que tout autour pousse au désespoir. Le courage ici n\'est pas militaire, il est spirituel : c\'est la force de ne pas laisser l\'horreur dicter notre perception du monde.' },{ subtitle: 'De créer de la beauté au milieu de l\'orage', text: 'On retrouve le lien entre "l\'orage" et "innonder par la haine" qui symbolise que l\'art nous aide à vaincre cette haine qui nous touche tous. Ce vers final résume l\'idée centrale de tout le texte : la fonction de l\'art comme acte de survie. L\'orage : c\'est la métaphore de la guerre, de la violence des "lions" et de la froideur de l\'"Alphaville". L\'acte créateur : créer de la beauté (une poésie, un film ou une musique) est la seule réponse valable à la destruction. L\'art devient alors un bouclier. En terminant sur cette note, on suggère que si l\'histoire est un scénario écrit par les survivants, la vie, elle, est une œuvre que l\'on compose à chaque instant par notre capacité à rester humains, sensibles et créatifs, même dans les conditions les plus extrêmes. C\'est l\'ultime victoire de "l\'esprit" sur le "fracas des batailles".' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/vita.jpg'},
+        p29: {sections: [{ subtitle: 'Je me tiens devant vous, citoyen de la science et du rêve', text: 'On retrouve ici un parallèle avec la première phrase "Je me tiens aujourd\'hui devant vous, non pas comme un savant, un chef ou même un fou", au début, je disais ce que je ne suis pas pour terminer dans cette conclusion dans laquelle je décris qui je suis (audacieux car on se présente au début normalement). Je définis ici ma double identité. La "science" représente la rationalité, l\'analyse factuelle du monde et des conflits. Le "rêve" symbolise l\'aspiration à un futur meilleur, l\'imaginaire et la capacité de l\'art à transcender la réalité. Se dire "citoyen" de ces deux domaines suggère que le savoir n\'a de valeur que s\'il est au service d\'un idéal, et que le rêve ne peut être concret sans la méthode scientifique.' },{ subtitle: 'Pour que cette prise de conscience ne soit pas qu\'une trêve', text: 'Ce vers met en garde contre l\'émotion passagère. Dans le langage guerrier, une "trêve" est une suspension temporaire des hostilités qui ne résout rien. Je demande que le choc provoqué par son discours (et par les références aux horreurs de la guerre comme Come and See) se transforme en un changement durable et profond, et non en une brève parenthèse de compassion avant un retour à l\'indifférence.' },{ subtitle: 'En tant qu\'étudiant, j\'ai vu la beauté des nombres et des lois', text: 'Ici, je m\'exprime depuis ma position d\'étudiant en école d\'ingénieur. Je reconnaîs la perfection théorique de la science et des structures juridiques. C\'est l\'étudiant qui a étudié la physique des "rockets" ou les lois internationales. Cependant, cette beauté est décrite comme froide et insuffisante si elle reste purement abstraite.' },{ subtitle: 'Mais j\'ai appris que l\'humain est le seul vrai choix', text: 'C\'est le pivot moral du texte. Face à la complexité des systèmes (qu\'ils soient scientifiques, militaires ou politiques comme ceux d\'"Alphaville"), on affirme une priorité absolue : l\'humain. C\'est un écho direct à la leçon apprise dans "La Condition de l\'homme" de Kobayashi ou "12 hommes en colère" : au milieu des structures oppressantes, c\'est l\'empathie et la décision individuelle qui priment.' },{ subtitle: 'L\'ONU est notre cadre, fragile mais nécessaire', text: 'Le discours s\'ancre dans la réalité diplomatique. L\'ONU (Organisation des Nations Unies) représente l\'espoir d\'un ordre mondial fondé sur la "conversation juste" plutôt que sur la force des "lions". En la qualifiant de "fragile", on reconnaît ses échecs et ses limites, mais en la disant "nécessaire", on réaffirme l\'importance d\'un espace où le dialogue reste possible pour éviter le chaos.' },{ subtitle: 'L\'art est notre souffle, puissant et millénaire', text: 'Le texte se conclut sur une apothéose de l\'art. Si l\'ONU est la structure (le cadre), l\'art est l\'énergie vitale (le souffle). Contrairement aux nations qui s\'effondrent et aux idéologies qui passent, l\'art traverse les siècles ("millénaire"). Il est la force qui permet de rester vivant, de garder le "pouls" et de continuer à "marcher" malgré les orages.' }],image: 'Images/ONU/2026_3.jpeg'},
+        p30: {sections: [{ subtitle: 'Ne laissez pas les lions de salon dicter votre futur', text: 'On reprend la métaphore des "lions", mais leur retire ici tout vestige de noblesse en les qualifiant de "salon". Ce terme évoque l\'hypocrisie de ceux qui théorisent la guerre ou la misère depuis le confort de leurs appartements luxueux. C’est un avertissement contre la passivité : ne laissez pas ceux qui ne connaissent pas la réalité du terrain décider de votre destin.' },{ subtitle: 'Ni les écrans lisses masquer la moindre déchirure', text: 'Ce vers dénonce la désinformation et la superficialité de la consommation numérique. Les "écrans lisses" représentent la propagande, les réseaux sociaux ou les médias qui gomment la complexité et la souffrance du monde pour le rendre digeste et inoffensif. On appelle à chercher la "déchirure", c’est-à-dire la vérité brute et parfois douloureuse qui se cache derrière les images trop parfaites.' },{ subtitle: 'Éduquez-vous par l\'image, par le livre et le chant', text: 'C\'est le remède proposé par le texte : la culture comme outil d\'émancipation. L\'image : le cinéma (Godard, Kubrick, Spielberg) pour voir le monde. Le livre : la littérature (Malraux, Gomikawa) pour penser le monde. Le chant : la poésie et la musique pour ressentir le monde. L’éducation n’est pas présentée comme un carcan académique, mais comme une arme de défense contre la manipulation.' },{ subtitle: 'Car c\'est là que bat le cœur, vibrant et attachant', text: 'On réaffirme que l\'humanité ne se trouve pas dans les chiffres ou les statistiques, mais dans l\'expression artistique. L\'art est ce qui nous rend "attachants", c\'est-à-dire capables de créer des liens d\'empathie les uns avec les autres. C\'est le "pouls" mentionné plus haut, la preuve irréfutable de notre existence sensible.' },{ subtitle: 'Maintenez le dialogue, même au bord du néant', text: 'C\'est sans doute un des vers les plus cruciaux du discours. Le "néant" évoque la menace nucléaire (Folamour), l\'extinction de l\'âme (Alphaville) ou l\'horreur des camps (Come and See). Même quand tout semble perdu, on exhorte à ne jamais rompre la communication. Le dialogue est le dernier rempart contre la barbarie ; tant qu\'on parle, on ne tue pas. Chaque heure passée au pupitre est un canon qui se tait.' },{ subtitle: 'Pour que l\'Homme de demain reste un être géant', text: 'Le texte se clôt sur une vision d\'espoir et de grandeur morale. Le "géant" n\'est pas celui qui domine par la force ou la technologie, mais celui qui est capable de s\'élever au-dessus de sa condition par l\'esprit, la culture et l\'éthique. C’est l’homme qui, malgré ses "cicatrices", refuse de devenir un rouage de "l\'engrenage" et choisit de rester une "âme qui marche".' }],image: 'Images/ONU/Vingt-quatre_Fois_la_Verite/biblio.jpeg'},
+        p31: {sections: [{ subtitle: 'Globalement', text: 'Cette conclusion, d\'une sobriété tranchante, constitue le sommet éthique du discours en s\'appuyant sur une célèbre sentence attribuée à l\'humaniste du XVIème siècle Sébastien Castellion (écrite lors de son opposition à Calvin après l\'exécution de Michel Servet). Cette citation fut reprise par Jean-Luc Godard dans son film "Notre Musique". En affirmant que "tuer un homme pour défendre une idée, ce n\'est pas défendre une idée, c\'est tuer un homme", on opère une déconnexion radicale entre la valeur d\'une idéologie et la violence physique. Ce passage déconstruit la rhétorique guerrière et fanatique qui tente souvent de justifier l\'assassinat par la "noblesse" d\'une cause ou d\'une abstraction. Ici, l\'individu et son droit inaliénable à la vie sont réinsérés au centre du débat, balayant les "scénarios" et les "discours" mentionnés plus tôt. L\'idée est présentée comme une entité immatérielle qui perd toute sa validité dès lors qu\'elle nécessite du sang pour exister ; elle cesse alors d\'être une pensée pour devenir un crime. C\'est le rappel ultime du texte : aucune construction intellectuelle, aucune frontière et aucun "décret" ne possède une valeur supérieure à la vie d\'un seul être humain. En terminant ainsi, on replace la responsabilité individuelle au-dessus de la loyauté idéologique, faisant de la préservation de l\'autre le seul véritable socle d\'une civilisation digne de ce nom.' }],image: 'Images/ONU/2026_1.jpeg'},
+      },
+      femme: {
+        p1: { title:'Introduction', text:'Annotations indisponibles pour le moment.' },
+        p2: { title:'Introduction', text:'Annotations indisponibles pour le moment.' },
+        p3: { title:'Féminisme', text:'Annotations indisponibles pour le moment.' },
+        p4: { title:'Féminisme', text:'Annotations indisponibles pour le moment.' },
+        p5: { title:'Féminisme', text:'Annotations indisponibles pour le moment.' },
+        p6: { title:'Féminisme', text:'Annotations indisponibles pour le moment.' },
+        p7: { title:'Féminisme', text:'Annotations indisponibles pour le moment.' },
+        p8: { title:'Viol', text:'Annotations indisponibles pour le moment.' },
+        p9: { title:'Viol', text:'Annotations indisponibles pour le moment.' },
+        p10: { title:'Viol', text:'Annotations indisponibles pour le moment.' },
+        p11: { title:'Viol', text:'Annotations indisponibles pour le moment.' },
+        p12: { title:'La Femme comme décor', text:'Annotations indisponibles pour le moment.' },
+        p13: { title:'La Femme comme décor', text:'Annotations indisponibles pour le moment.' },
+        p14: { title:'La science', text:'Annotations indisponibles pour le moment.' },
+        p15: { title:'La science', text:'Annotations indisponibles pour le moment.' },
+        p16: { title:'La science', text:'Annotations indisponibles pour le moment.' },
+        p17: { title:'Conclusion', text:'Annotations indisponibles pour le moment.' },
+        p18: { title:'Conclusion', text:'Annotations indisponibles pour le moment.' },
+        p19: { title:'Conclusion', text:'Annotations indisponibles pour le moment.' },
+        p20: { title:'Conclusion', text:'Annotations indisponibles pour le moment.' },
+        p21: { title:'Conclusion', text:'Annotations indisponibles pour le moment.' }
+      },
+      guerre: {
+        p1: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p2: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p3: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p4: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p5: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p6: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p7: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p8: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p9: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p10: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p11: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p12: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p13: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p14: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p15: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p16: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p17: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p18: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p19: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p20: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p21: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p22: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p23: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p24: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p25: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p26: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p27: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p28: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'}
+      }
+    };
+
+    function closeAllPanels() {
+      ['art','femme','guerre'].forEach(function(id){
+        var panel = document.getElementById('panel-'+id);
+        if (panel) panel.classList.remove('open');
+      });
+      document.body.classList.remove('panel-open');
+      document.querySelectorAll('.page.active .annotable').forEach(a=>a.classList.remove('active'));
+      closeAwardLightbox();
+    }
+
+    function openAwardLightbox(card) {
+      if (!card) return;
+      var lightbox = document.getElementById('awardLightbox');
+      if (!lightbox) return;
+      var imgEl = document.getElementById('awardLightboxImg');
+      var titleEl = document.getElementById('awardLightboxTitle');
+      var metaEl = document.getElementById('awardLightboxMeta');
+      var textEl = document.getElementById('awardLightboxText');
+
+      if (imgEl) imgEl.src = card.dataset.awardImg || '';
+      if (titleEl) titleEl.textContent = card.dataset.awardTitle || 'Prix et Distinction';
+      if (metaEl) metaEl.textContent = card.dataset.awardMeta || '';
+      if (textEl) textEl.textContent = card.dataset.awardText || '';
+
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAwardLightbox() {
+      var lightbox = document.getElementById('awardLightbox');
+      if (!lightbox || !lightbox.classList.contains('open')) return;
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeAwardLightbox();
+    });
+
+    function annotate(el, textId, key) {
+  document.querySelectorAll('.page.active .annotable').forEach(a => a.classList.remove('active'));
+  el.classList.add('active');
+
+  var panel = document.getElementById('panel-' + textId);
+  var ann   = ANNOTATIONS[textId] && ANNOTATIONS[textId][key];
+  if (!panel) return;
+  if (!ann) ann = { title: 'Annotation', text: 'Annotations indisponibles pour le moment.' };
+
+  /* image optionnelle */
+  var imgEl = document.getElementById('panel-' + textId + '-img');
+  if (imgEl) {
+    if (ann.image) { imgEl.src = ann.image; imgEl.style.display = 'block'; }
+    else           { imgEl.style.display = 'none'; }
+  }
+
+  /* construction du contenu multi-sections */
+  var container = document.getElementById('panel-' + textId + '-content');
+  var sections = ann.sections;
+  if (!sections && (ann.title || ann.text)) {
+    sections = [{ subtitle: ann.title || 'Annotation', text: ann.text || '' }];
+  }
+
+  if (container && sections && sections.length) {
+    container.innerHTML = sections.map(function(s) {
+      return '<h4 class="texte-panel-title">' + s.subtitle + '</h4>'
+           + (s.text ? '<p class="texte-panel-text">' + s.text + '</p>' : '');
+    }).join('<div style="margin-top:18px; padding-top:18px; border-top:1px solid var(--border);"></div>');
+  } else if (container) {
+    container.innerHTML = '<h4 class="texte-panel-title">Annotation</h4><p class="texte-panel-text">Annotations indisponibles pour le moment.</p>';
+  }
+
+  panel.classList.add('open');
+  if (isTouchLike()) document.body.classList.add('panel-open');
+  panel.scrollTop = 0;
+}
+
+    function closePanel(textId) {
+      var panel = document.getElementById('panel-'+textId);
+      if (panel) panel.classList.remove('open');
+      document.querySelectorAll('.page.active .annotable').forEach(a=>a.classList.remove('active'));
+      document.body.classList.remove('panel-open');
+    }
+
+    /* INIT */
+    go('home');
+    setTimeout(function(){
+      document.querySelectorAll('.domains-grid .reveal').forEach(function(el,i){el.style.transitionDelay=(i*0.08)+'s';});
+      runReveal();
+    },300);
+  </script>
+</body>
+</html>
