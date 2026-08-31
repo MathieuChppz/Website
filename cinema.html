@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cinéma — Mathieu Chappaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-base.css">
+  <style>
+    :root { --current: #F5A300; }
+  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "url": "https://mathieuchappaz.com",
+      "logo": "https://mathieuchappaz.com/Images/logo.png"
+    }
+  </script>
+</head>
+<body>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
+
+  <nav>
+    <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')" id="nl-home">Accueil</a></li>
+      <li><a onclick="go('cinema')" id="nl-cin" class="active">Cinéma</a></li>
+      <li><a onclick="go('ingenieur')" id="nl-ing">Ingénieur</a></li>
+      <li><a onclick="go('dev')" id="nl-dev">Développement</a></li>
+      <li><a onclick="go('onu')" id="nl-onu">ONU</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+  </nav>
+  <div class="mobile-drawer" id="mDrawer">
+    <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
+    <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
+    <a onclick="go('dev');toggleDrawer()">Développement</a>
+    <a onclick="go('onu');toggleDrawer()">Nations Unies</a>
+  </div>
+
+  <div class="page" id="page-cinema" data-accent="cinema">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span> Cinéma &amp; Art</p><div class="page-big-title">7ème<br><span class="a">Art.</span></div><div class="accent-bar"></div><p class="page-sub">Le cinéma comme art total. Une chaîne YouTube dédiée à l'analyse, la critique et la passion du 7e art. Parce que les films méritent mieux que d'être un simple divertissement.</p></section>
+    <div class="inner-content">
+      <div class="cards2">
+        <div class="cblock accent reveal"><h3>La chaîne YouTube</h3><p>Ma chaîne est un espace de réflexion sur le cinéma : analyses de films, critiques approfondies, essais visuels. Un lieu où la passion rencontre la rigueur intellectuelle.</p></div>
+        <div class="cblock reveal"><h3>Ma vision du cinéma</h3><p>Le cinéma n'est pas qu'un divertissement, c'est un miroir de la société, un laboratoire d'émotions, un art qui synthétise tous les autres. C'est cette profondeur qui me fascine.</p></div>
+        <div class="cblock span2 reveal"><h3>Ce qui m'inspire</h3><div class="films-list" style="margin-top:20px;"><div class="film-row"><div class="film-thumb c1">🎞️</div><div class="film-info"><h4>Cinéma d'auteur</h4><p>Les films qui racontent quelque chose de vrai, avec une voix unique et un point de vue affirmé.</p></div></div><div class="film-row"><div class="film-thumb c2">🏆</div><div class="film-info"><h4>Grands classiques</h4><p>L'histoire du cinéma comme fondation indispensable. Comprendre d'où l'on vient pour mieux voir où l'on va.</p></div></div><div class="film-row"><div class="film-thumb c3">🌟</div><div class="film-info"><h4>Cinéma contemporain</h4><p>Suivre les nouvelles voix qui redéfinissent les codes et inventent le cinéma de demain.</p></div></div></div></div>
+      </div>
+      <div class="yt-channel-wrap reveal">
+        <a href="https://www.youtube.com/@mathieuchppz" target="_blank" rel="noopener" class="yt-channel-btn">
+          <div class="yt-icon-wrap"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div>
+          <div class="yt-channel-info"><p>Retrouve-moi sur</p><h3>Ma chaîne YouTube</h3><span class="yt-channel-sub">Analyses · Critiques · Essais cinématographiques</span></div>
+          <span class="yt-arrow">→</span>
+        </a>
+      </div>
+      <div class="yt-channel-wrap reveal" style="margin-top:0;">
+        <a href="https://letterboxd.com/Mathieuchppz/" target="_blank" rel="noopener" class="yt-channel-btn">
+          <div class="yt-icon-wrap" style="background:#00C030;"><img src="Images/CINEMA/Letterboxd_Logo.png" alt="Letterboxd" style="width:26px;height:26px;object-fit:contain;"></div>
+          <div class="yt-channel-info"><p>Rejoins-moi sur</p><h3>Mon compte Letterboxd</h3><span class="yt-channel-sub">Analyses · Critiques · Reviews</span></div>
+          <span class="yt-arrow">→</span>
+        </a>
+      </div>
+      <div class="section-head" style="margin-bottom:28px; margin-top:36px;"><span class="s-num">À la une</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Une vidéo phare</h2></div>
+      <div class="featured-video-wrap reveal">
+        <a class="video-thumbnail" href="https://youtu.be/2oAzwZr1Eak" target="_blank" rel="noopener">
+          <div class="thumb-bg" style="background-image:url('https://img.youtube.com/vi/2oAzwZr1Eak/maxresdefault.jpg'); background-size:cover; background-position:center;"></div>
+          <div class="thumb-overlay"></div>
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <span class="video-duration">11:39</span>
+        </a>
+        <div class="video-info">
+          <span class="video-tag"><span class="video-tag-dot"></span>Vidéo phare</span>
+          <h3 class="video-title">Le rôle du réalisateur</h3>
+          <p class="video-desc">Une analyse approfondie du rôle du réalisateur dans la création d'un film. En décortiquant les choix de mise en scène, de narration et de style, j'explore comment un réalisateur façonne l'expérience cinématographique.</p>
+          <a class="video-watch-btn" href="https://youtu.be/2oAzwZr1Eak" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Regarder la vidéo</a>
+        </div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <script src="script-base.js"></script>
+</body>
+</html>

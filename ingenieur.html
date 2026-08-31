@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingénieur — Mathieu Chappaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-base.css">
+  <style>
+    :root { --current: #8E4585; }
+  </style>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "url": "https://mathieuchappaz.com",
+      "logo": "https://mathieuchappaz.com/Images/logo.png"
+    }
+  </script>
+</head>
+<body>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
+
+  <nav>
+    <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')" id="nl-home">Accueil</a></li>
+      <li><a onclick="go('cinema')" id="nl-cin">Cinéma</a></li>
+      <li><a onclick="go('ingenieur')" id="nl-ing" class="active">Ingénieur</a></li>
+      <li><a onclick="go('dev')" id="nl-dev">Développement</a></li>
+      <li><a onclick="go('onu')" id="nl-onu">ONU</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+  </nav>
+  <div class="mobile-drawer" id="mDrawer">
+    <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
+    <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
+    <a onclick="go('dev');toggleDrawer()">Développement</a>
+    <a onclick="go('onu');toggleDrawer()">Nations Unies</a>
+  </div>
+
+  <div class="page" id="page-ingenieur" data-accent="ing">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span> Ingénierie</p><div class="page-big-title">École<br><span class="a">Ingénieur.</span></div><div class="accent-bar"></div><p class="page-sub">Étudiant en école d'ingénieur en informatique. Comprendre les systèmes complexes pour mieux les concevoir, les transformer et parfois les bousculer.</p></section>
+    <div class="inner-content">
+      <div class="cards2">
+        <div class="cblock reveal"><h3>La formation</h3><p>Le cursus ingénieur informatique me donne les bases solides pour comprendre les algorithmes, les architectures logicielles, les systèmes et les réseaux qui façonnent notre monde numérique.</p></div>
+        <div class="cblock accent reveal"><h3>Mon approche</h3><p>L'ingénierie pour moi n'est pas que technique, c'est une façon de penser. Décomposer les problèmes, trouver des solutions élégantes, itérer. Une philosophie que j'applique bien au-delà du code.</p></div>
+        <div class="cblock span2 reveal"><h3>Domaines d'intérêt</h3><div class="skills-row" style="margin-top:20px;"><div class="skill-tile"><div class="ico">💻</div><p>Dev logiciel</p></div><div class="skill-tile"><div class="ico">🤖</div><p>Intelligence artificielle</p></div><div class="skill-tile"><div class="ico">🌐</div><p>Systèmes &amp; réseaux</p></div><div class="skill-tile"><div class="ico">🔐</div><p>Cybersécurité</p></div><div class="skill-tile"><div class="ico">📐</div><p>Architecture logicielle</p></div><div class="skill-tile"><div class="ico">📊</div><p>Data &amp; algorithmique</p></div></div></div>
+      </div>
+      <div class="section-head" style="margin-top:56px;"><span class="s-num">Recherche</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Travaux de recherche</h2></div>
+      <a class="research-card reveal" href="https://deminetech.netlify.app/index.html" target="_blank" rel="noopener noreferrer">
+        <div class="research-visual"><span class="research-ico">💥</span></div>
+        <div class="research-body">
+          <span class="research-meta">Étude de cas · Avril 2025</span>
+          <h3>DemineTech — Les explosions contrôlées</h3>
+          <p>Plusieurs mois de recherche menés dans le cadre de mes études sur les explosions contrôlées comme solution de déminage de masse. Le site présente un état des lieux du sujet, explore différentes méthodes envisageables, et en pèse les avantages et les limites.</p>
+          <div class="research-tags"><span class="research-tag">État des lieux</span><span class="research-tag">Avantages / Inconvénients</span><span class="research-tag">Solutions explorées</span></div>
+          <span class="research-link">Consulter le site de recherche <span class="research-arrow">↗</span></span>
+        </div>
+      </a>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <script src="script-base.js"></script>
+</body>
+</html>

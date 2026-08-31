@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nations Unies — Mathieu Chappaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-base.css">
+  <style>
+    :root { --current: #0055B3; }
+  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "url": "https://mathieuchappaz.com",
+      "logo": "https://mathieuchappaz.com/Images/logo.png"
+    }
+  </script>
+</head>
+<body>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
+
+  <nav>
+    <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')" id="nl-home">Accueil</a></li>
+      <li><a onclick="go('cinema')" id="nl-cin">Cinéma</a></li>
+      <li><a onclick="go('ingenieur')" id="nl-ing">Ingénieur</a></li>
+      <li><a onclick="go('dev')" id="nl-dev">Développement</a></li>
+      <li><a onclick="go('onu')" id="nl-onu" class="active">ONU</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+  </nav>
+  <div class="mobile-drawer" id="mDrawer">
+    <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
+    <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
+    <a onclick="go('dev');toggleDrawer()">Développement</a>
+    <a onclick="go('onu');toggleDrawer()">Nations Unies</a>
+  </div>
+  <div class="award-lightbox" id="awardLightbox">
+    <div class="award-lightbox-backdrop" onclick="closeAwardLightbox()"></div>
+    <div class="award-lightbox-media">
+      <img id="awardLightboxImg" src="" alt="Diplome et distinction">
+    </div>
+    <aside class="award-lightbox-panel">
+      <button class="award-lightbox-close" type="button" onclick="closeAwardLightbox()" aria-label="Fermer">✕</button>
+      <p class="award-lightbox-label">Prix et distinctions</p>
+      <h3 class="award-lightbox-title" id="awardLightboxTitle">Prix Coup de Coeur pour la Paix</h3>
+      <p class="award-lightbox-meta" id="awardLightboxMeta">Rotary · Avril 2026 · Geneve</p>
+      <p class="award-lightbox-text" id="awardLightboxText">Cette distinction m'a ete remise pour mon discours prononce lors de la Journee internationale de la conscience et de la paix. Elle recompense la force du message porte par la jeunesse sur les enjeux de paix, d'humanisme et d'art comme langage commun.</p>
+    </aside>
+  </div>
+
+  <div class="page" id="page-onu" data-accent="onu">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span> Nations Unies</p><div class="page-big-title">Nations<br><span class="a">Unies.</span></div><div class="accent-bar"></div><p class="page-sub">Orateur et représentant de la jeunesse aux Nations Unies. Porter les enjeux de ma génération face aux décideurs du monde entier.</p></section>
+    <div class="inner-content">
+      <div class="cards2">
+        <div class="cblock accent reveal"><h3>Mon rôle</h3><p>Représentant de la jeunesse auprès des Nations Unies, j'interviens en tant qu'orateur pour défendre les positions et préoccupations de la jeune génération sur des enjeux globaux : climat, éducation, inégalités, diplomatie internationale.</p></div>
+        <div class="cblock reveal"><h3>Pourquoi l'ONU ?</h3><p>Je crois que la jeunesse n'a pas à attendre 40 ans pour avoir une voix. L'ONU est l'une des scènes où cette voix peut résonner au niveau mondial. C'est une responsabilité que je prends très au sérieux.</p></div>
+        <div class="cblock span2 reveal"><h3>Parcours &amp; engagements</h3><div class="timeline" style="margin-top:20px;">
+          <div class="tl-item"><p class="tl-date">Avril 2026</p><p class="tl-title">Journée internationale de la conscience et de la paix</p><p class="tl-desc">Membre du comité de pilotage. Préparation et délivrance d'un discours sur les thèmes de la paix et de l'art. Représentation de la voix des jeunes face aux instances décisionnaires.</p><br><p class="tl-title">Remise des prix du Rotary</p><p class="tl-desc">Lauréat du "Prix Coup De Cœur Pour La Paix" décerné par le jury Rotary. Préparation et délivrance d'un discours sur les thèmes de la paix et de l'art.</p></div>
+          <div class="tl-item"><p class="tl-date">Avril 2025</p><p class="tl-title">Journée internationale de la conscience et de la paix</p><p class="tl-desc">Préparation et délivrance d'un discours sur les thèmes de la paix, de l'humanisme et des médias.</p></div>
+        </div></div>
+      </div>
+      <div class="section-head" style="margin-top:60px; margin-bottom:8px;"><span class="s-num">Galerie</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Photos</h2></div>
+      <div class="onu-gallery reveal">
+        <div class="onu-photo span-col"><img src="Images/ONU/2026_3.jpeg" alt="Prise de parole ONU" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><div class="onu-photo-overlay"></div></div>
+        <div class="onu-photo top-r1"><img src="Images/ONU/2026_1.jpeg" alt="Délégation ONU" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><div class="onu-photo-overlay"></div></div>
+        <div class="onu-photo top-r2"><img src="Images/ONU/2026_21.jpeg" alt="Coulisses ONU" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><div class="onu-photo-overlay"></div></div>
+        <div class="onu-photo bot-r1"><img src="Images/ONU/2026_41.jpeg" alt="Résolutions ONU" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><div class="onu-photo-overlay"></div></div>
+        <div class="onu-photo bot-r2"><img src="Images/ONU/CostumeVert.jpeg" alt="ONU" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><div class="onu-photo-overlay"></div></div>
+      </div>
+      <div class="section-head" style="margin-top:72px; margin-bottom:8px;"><span class="s-num">Écrits</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Mes textes</h2></div>
+      <div class="textes-list reveal">
+        <div class="texte-item" onclick="go('texte-Art')">
+          <div class="texte-item-num">01</div>
+          <div class="texte-item-info"><h4>Vingt-quatre Fois la Vérité par Seconde</h4><p>Prononcé au Palais des Nations Unies de Genève lors de la Journée Internationale de la Conscience 2026, ce texte décrit un monde assombri par la haine, mais qui pourrait être illuminé par l'Art. Récompensé par une standing ovation.</p></div>
+          <div class="texte-item-date">2 Avril 2026</div>
+          <span class="texte-item-arrow">→</span>
+        </div>
+        <div class="texte-item" onclick="go('texte-Femme')">
+          <div class="texte-item-num">02</div>
+          <div class="texte-item-info"><h4>Le Strapontin de l'Histoire</h4><p>Les oubliées, les silencieuses, les invisibles. Le féminisme mal compris, les agressions trop peu punies, la femme comme objet, son absence dans la préoccupation scientifique.</p></div>
+          <div class="texte-item-date">30 Octobre 2025</div>
+          <span class="texte-item-arrow">→</span>
+        </div>
+        <div class="texte-item" onclick="go('texte-Guerre')">
+          <div class="texte-item-num">03</div>
+          <div class="texte-item-info"><h4>Un Souffle dans l'Abyssale Indifférence</h4><p>L'égalité est une dette, la paix est un combat vivant. Ce discours au ton satirique milite contre la fausse conscience et la hiérarchie des conflits. Standing ovation au Palais des Nations Unies.</p></div>
+          <div class="texte-item-date">4 Avril 2025</div>
+          <span class="texte-item-arrow">→</span>
+        </div>
+      </div>
+      <div class="section-head" style="margin-top:12px; margin-bottom:10px;"><span class="s-num">Récompenses</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Prix et Distinctions</h2></div>
+      <div class="onu-award-wrap reveal">
+        <div
+          class="onu-award-card"
+          onclick="openAwardLightbox(this)"
+          data-award-img="Images/ONU/Prix/Rotary2026.png"
+          data-award-title="Prix Coup de Coeur pour la Paix"
+          data-award-meta="Rotary · Avril 2026"
+          data-award-text="Cette distinction m'a été remise lors de la cérémonie de remise des prix du Rotary 2026. Pour mes plaidoyers en faveur de l'Art comme chemin vers la paix et pour mes projets d'utiliser des oeuvres cinématographiques comme amorces de dialogues favorisant l'esprit de compréhension entre les êtres. C'est une récompense qui montre la capacité à faire entendre la voix de la jeunesse au sein d'un cadre international. Ce prix prouve que ce combat pour l'Art comme outil d'éducation et de dialogue est légitime et mérite amplement d'être poursuivi."
+        >
+          <div class="onu-award-image-wrap">
+            <img class="onu-award-image" src="Images/ONU/Prix/Rotary2026.png" alt="Prix Coup de Coeur pour la Paix">
+            <div class="onu-award-image-overlay"></div>
+            <span class="onu-award-zoom-hint">Cliquer pour agrandir</span>
+          </div>
+          <div class="onu-award-caption">
+            <strong>Prix Coup de Coeur pour la Paix</strong>
+            <span>Rotary · Avril 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <script src="script-base.js"></script>
+</body>
+</html>

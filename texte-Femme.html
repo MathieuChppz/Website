@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Strapontin de l'Histoire — Mathieu Chappaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-base.css">
+  <style>
+    :root { --current: #0055B3; --cursor-col: #0055B3; }
+    nav { backdrop-filter:none; background:rgba(248,246,241,.96); }
+  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "url": "https://mathieuchappaz.com",
+      "logo": "https://mathieuchappaz.com/Images/logo.png"
+    }
+  </script>
+</head>
+<body>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
+
+  <nav>
+    <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')" id="nl-home">Accueil</a></li>
+      <li><a onclick="go('cinema')" id="nl-cin">Cinéma</a></li>
+      <li><a onclick="go('ingenieur')" id="nl-ing">Ingénieur</a></li>
+      <li><a onclick="go('dev')" id="nl-dev">Développement</a></li>
+      <li><a onclick="go('onu')" id="nl-onu" class="active">ONU</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+  </nav>
+  <div class="mobile-drawer" id="mDrawer">
+    <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
+    <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
+    <a onclick="go('dev');toggleDrawer()">Développement</a>
+    <a onclick="go('onu');toggleDrawer()">Nations Unies</a>
+  </div>
+  <div class="panel-overlay" id="panelOverlay" onclick="closeAllPanels()"></div>
+
+  <div class="page" id="page-texte-Femme" data-accent="texte">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span><span onclick="go('onu')">ONU</span><span class="sep">/</span> Texte</p><div class="proj-hero-meta"><span class="proj-meta-tag type">Discours</span><span class="proj-meta-tag year">30 Octobre 2025</span></div><div class="page-big-title" style="font-size:clamp(40px,6vw,90px);">Le Strapontin<br><span class="a">de l'Histoire.</span></div><div class="accent-bar"></div><p class="texte-sub">Le texte écrit au complet est disponible ci-dessous.<br>N'hésitez pas à cliquer sur les paragraphes pour découvrir mon analyse linéaire de ce texte.<br></p></section>
+    <div class="inner-content">
+      <div class="texte-page-layout">
+        <div class="texte-body-col">
+          <div class="texte-body">
+            <p class="annotable" onclick="annotate(this,'femme','p1')" data-key="p1">Messieurs... Bonjour,<br>Bienvenue dans ce grand spectacle annuel : <br>‘La condition de la femme’.<br>Installez-vous confortablement,<br>Éteignez vos consciences,<br>Et applaudissez bien fort,<br>Car ce soir, on va parler d’égalité...<br>Mais rassurez-vous : pas trop longtemps,<br>Faudrait quand même pas déranger l’ordre naturel des choses.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p2')" data-key="p2">Parce que oui, tout va très bien.<br>Les femmes ont déjà le droit de voter,<br>Elles peuvent même travailler,<br>Incroyable progrès !<br>Alors, de quoi se plaignent-elles encore ?<br>On leur a donné un strapontin dans le train de l’Histoire,<br>Et voilà qu’elles réclament une vraie place assise.<br>Quelle ingratitude.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p3')" data-key="p3">Le féminisme... Ce mot terroriste.<br>Prononcez-le à voix haute,<br>Et regardez trembler vos biceps tatoués.<br>Le féminisme, voyons...<br>Comme si hommes et femmes devaient être égaux !</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p4')" data-key="p4">Mais que deviendrait l’humanité,<br>Si un père changeait autant de couches qu’une mère ?<br>Si un PDG s’appelait Sophie plutôt que Jean-Pierre ?<br>Un cataclysme !</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p6')" data-key="p6">Les traditions s’effondreraient,<br>Les barbecues seraient menacés,<br>Et pire encore...<br>Il faudrait admettre que l’égalité n’est pas un cadeau,<br>Mais un droit.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p7')" data-key="p7">Rassurez-vous, on a trouvé la solution : <br>On offre des roses le 8 mars.<br>Une fleur pour chaque injustice,<br>Et hop, problème réglé.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p8')" data-key="p8">Et puis, il y a le viol.<br>Ah, ce mot qui gêne, qui gratte, qui dérange.<br>Mais heureusement, on a toujours une excuse sous la main.<br>‘Elle portait une jupe trop courte.’</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p9')" data-key="p9">Bien sûr ! Le tissu est coupable, pas l’agresseur.<br>‘Elle avait bu.’<br>Logique : un verre de vin efface la notion de consentement.<br>‘Elle n’a pas dit non assez fort.’<br>Évidemment, dès maintenant, un cri doit être validé par un huissier pour compter.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p10')" data-key="p10">Soyons sérieux deux secondes :<br>Un viol reste un crime. Point.<br>Un viol est un meurtre,<br>À la seule différence qu’il laisse la victime en vie,</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p11')" data-key="p11">Mais la société préfère toujours interroger la vicme,<br>Jamais le bourreau.<br>Parce que c’est plus confortable d’accuser une robe,<br>Que d’accuser un homme.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p12')" data-key="p12">Mais attention, ne soyons pas injustes :<br>La femme a quand même une place importante dans notre société...<br>Dans les publicités pour parfums, par exemple. <br>En arrière-plan d’un clip de rap,<br>Ou comme trophée qu’on affiche fièrement,<br>Jusqu’à ce qu’elle ait une ride de trop.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p13')" data-key="p13">Oui, la femme est essentielle :<br>Pour décorer les panneaux,<br>Pour remplir les magazines,<br>Pour faire joli sur la photo de famille.<br>Mais réfléchir ? Décider ? Diriger ?<br>Oulah, minute papillon.<br>On l’écoute... Tant qu’elle ne parle pas trop fort.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p14')" data-key="p14">Et la science ? Ah, la grande, la noble science,<br>Neutre, rigoureuse, impartiale...<br>Enfin, neutre... tant que neutre signifie ‘centré sur l’homme’.<br>Car depuis toujours, les cobayes idéaux s’appellent ‘Monsieur’.<br>Résultat : les femmes encaissent 90% d’effets secondaires en plus.<br>Mais chut, ce n’est pas grave,<br>Elles sont habituées à souffrir, paraît-il.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p15')" data-key="p15">Et puis, quelle ironie délicieuse :<br>Le mot hystérie nous vient de ‘utérus’.<br>Comme si l’utérus gouvernait les nerfs.<br>Comme les émotions d’une femme ne sont qu’un spasme gynécologique.<br>L’hyperémèse gravidique ?<br>Ces nausées extrêmes de grossesse ?<br>Invisibles.<br>De toute façon, ce n’est pas assez glamour pour mériter un budget de recherche.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p16')" data-key="p16">Bref, la science est universelle,<br>Mais son univers commence et finit avec le chromosome Y. </p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p17')" data-key="p17">Alors voilà, Messieurs :<br>La femme a déjà tant obtenu,<br>Elle devrait presque nous dire merci.<br>Merci d’avoir le droit d’exister,<br>Merci d’être tolérée dans ce monde d’hommes.<br>Et surtout, merci de lui laisser le temps de sourire.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p18')" data-key="p18">Mais non,<br>La vérité, c’est que nous ne lui avons rien donné,<br>Nous avons juste rendu, lentement ce qui lui appartenait déjà.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p19')" data-key="p19">Alors, je vous pose la question :<br>Voulez-vous continuer à distribuer des fleurs en plastique,<br>À coller des hashtags sur vos profils numériques,<br>Et à applaudir des discours creux une fois par an ?<br>Ou bien voulez-vous, enfin,<br>Construire un monde où la condition de la femme<br>Ne sera plus un sujet de débat,<br>Mais une évidence gravée dans le réel,<br>Comme la gravité ou le besoin d’oxygène ?</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p20')" data-key="p20">Parce que l’égalité, ce n’est pas une option.<br>C’est une dette.<br>Et il est grand temps de payer la facture.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'femme','p21')" data-key="p21">Messieurs, merci.</p>
+            <br>
+          </div>
+          <div style="margin-top:48px;"><span class="back-btn" onclick="go('onu')">← Retour aux textes</span></div>
+        </div>
+        <div class="texte-panel-col">
+          <div class="texte-panel" id="panel-femme">
+            <div class="texte-panel-hint"><div class="hint-ico">💬</div><p>Clique sur un paragraphe pour afficher son annotation.</p></div>
+            <div class="texte-panel-inner">
+              <p class="texte-panel-label">Annotation</p>
+              <img class="texte-panel-img" id="panel-femme-img" src="" alt="">
+              <div id="panel-femme-content"></div>
+              <span class="texte-panel-close" onclick="closePanel('femme')">✕ Fermer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <script src="script-base.js"></script>
+  <script>
+    const ANNOTATIONS = {
+      femme: {
+        p1: { title:'Introduction', text:'Annotations indisponibles pour le moment.' },
+        p2: { title:'Introduction', text:'Annotations indisponibles pour le moment.' },
+        p3: { title:'Féminisme', text:'Annotations indisponibles pour le moment.' },
+        p4: { title:'Féminisme', text:'Annotations indisponibles pour le moment.' },
+        p5: { title:'Féminisme', text:'Annotations indisponibles pour le moment.' },
+        p6: { title:'Féminisme', text:'Annotations indisponibles pour le moment.' },
+        p7: { title:'Féminisme', text:'Annotations indisponibles pour le moment.' },
+        p8: { title:'Viol', text:'Annotations indisponibles pour le moment.' },
+        p9: { title:'Viol', text:'Annotations indisponibles pour le moment.' },
+        p10: { title:'Viol', text:'Annotations indisponibles pour le moment.' },
+        p11: { title:'Viol', text:'Annotations indisponibles pour le moment.' },
+        p12: { title:'La Femme comme décor', text:'Annotations indisponibles pour le moment.' },
+        p13: { title:'La Femme comme décor', text:'Annotations indisponibles pour le moment.' },
+        p14: { title:'La science', text:'Annotations indisponibles pour le moment.' },
+        p15: { title:'La science', text:'Annotations indisponibles pour le moment.' },
+        p16: { title:'La science', text:'Annotations indisponibles pour le moment.' },
+        p17: { title:'Conclusion', text:'Annotations indisponibles pour le moment.' },
+        p18: { title:'Conclusion', text:'Annotations indisponibles pour le moment.' },
+        p19: { title:'Conclusion', text:'Annotations indisponibles pour le moment.' },
+        p20: { title:'Conclusion', text:'Annotations indisponibles pour le moment.' },
+        p21: { title:'Conclusion', text:'Annotations indisponibles pour le moment.' }
+      }
+    };
+  </script>
+</body>
+</html>

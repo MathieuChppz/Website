@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Un Souffle dans l'Abyssale Indifférence — Mathieu Chappaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-base.css">
+  <style>
+    :root { --current: #0055B3; --cursor-col: #0055B3; }
+    nav { backdrop-filter:none; background:rgba(248,246,241,.96); }
+  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "url": "https://mathieuchappaz.com",
+      "logo": "https://mathieuchappaz.com/Images/logo.png"
+    }
+  </script>
+</head>
+<body>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
+
+  <nav>
+    <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')" id="nl-home">Accueil</a></li>
+      <li><a onclick="go('cinema')" id="nl-cin">Cinéma</a></li>
+      <li><a onclick="go('ingenieur')" id="nl-ing">Ingénieur</a></li>
+      <li><a onclick="go('dev')" id="nl-dev">Développement</a></li>
+      <li><a onclick="go('onu')" id="nl-onu" class="active">ONU</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+  </nav>
+  <div class="mobile-drawer" id="mDrawer">
+    <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
+    <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
+    <a onclick="go('dev');toggleDrawer()">Développement</a>
+    <a onclick="go('onu');toggleDrawer()">Nations Unies</a>
+  </div>
+  <div class="panel-overlay" id="panelOverlay" onclick="closeAllPanels()"></div>
+
+  <div class="page" id="page-texte-Guerre" data-accent="texte">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span><span onclick="go('onu')">ONU</span><span class="sep">/</span> Texte</p><div class="proj-hero-meta"><span class="proj-meta-tag type">Discours ONU</span><span class="proj-meta-tag year">4 Avril 2025</span></div><div class="page-big-title" style="font-size:clamp(32px,4.5vw,72px);">Un Souffle dans<br><span class="a">l'Abyssale Indifférence.</span></div><div class="accent-bar"></div><div class="texte-sub">Le texte écrit au complet est disponible ci-dessous.<br>N'hésitez pas à cliquer sur les paragraphes pour découvrir mon analyse linéaire de ce texte.<br><div class="texte-sub-video-wrap">
+      <iframe class="texte-sub-video" width="560" height="315" src="https://www.youtube.com/embed/Ti36pBfItC0" title="Discours ONU - Un Souffle dans l'Abyssale Indifférence." loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="width:min(100%,780px); height:auto; aspect-ratio:16/9; border:0; border-radius:14px;">
+</iframe>
+    </div></div></section>
+    <div class="inner-content">
+      <div class="texte-page-layout">
+        <div class="texte-body-col">
+          <div class="texte-body">
+            <p class="annotable" onclick="annotate(this,'guerre','p1')" data-key="p1">Mesdames et Messieurs,<br>Honorables consciences bien installées,<br>Merci de me prêter une oreille attentive,<br>Même si, soyons honnêtes, elle restera peut-être sélective.<br>Après tout, ce n’est qu’un discours de plus,<br>Un parmi tant d’autres, un souffle dans l’abyssale indifférence,<br>Mais qu’importe : on est là pour la Journée de la Conscience</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p2')" data-key="p2">Ah, la conscience… cette flamme qu’on rallume une fois par an,<br>Comme un vieux cierge d’église qu’on allume en tremblotant.<br>Un jour pour se donner bonne mine,<br>Un jour pour s’indigner, se sentir concerné,<br>Un jour pour dire "ça suffit", avant d’oublier demain midi.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p3')" data-key="p3">Un jour, c’est pratique :<br>Ça permet d’avoir l’air révolté, sans trop se fatiguer.<br>Comme un badge qu’on accroche sur le col,<br>Qui dit "Regardez, j’ai fait ma part !"<br>Puis on le range, bien à l’abri, jusqu’à l’année prochaine.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p4')" data-key="p4">Mais heureusement, la nouvelle révolution est là !<br>On la porte dans nos poches, elle scintille à nos doigts,<br>Un appareil magique, un miroir aux alouettes,<br>Où l'on scande la paix... du bout des pouces.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p5')" data-key="p5">Aujourd’hui, mes amis, on ne se bat plus avec des armes,<br>On se bat avec des hashtags.<br>On ne manifeste plus dans la rue,<br>On le fait dans nos stories, assis sur notre canapé.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p6')" data-key="p6">Les guerres explosent, mais nous, on répond :<br>"Soutien total" ,"C'est horrible", "Pray for peace"</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p7')" data-key="p7">Un enfant meurt sous une bombe ?<br>Vite, une réaction en emoji.<br>Un peuple entier disparaît sous les ruines ?<br>Partageons une infographie mal recadrée.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p8')" data-key="p8">Les morts s’empilent, les drames se succèdent,<br>Mais tant qu’on met un filtre et un #NeverAgain,<br>Tout ira bien, n’est-ce pas ?</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p9')" data-key="p9">On veut changer le monde ? Très bien.<br>Mais pas depuis notre écran OLED.<br>L'indignation numérique, c'est joli,<br>Mais tant qu’elle ne sort pas du digital,<br>Elle reste une illusion, un effet de mode.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p10')" data-key="p10">La guerre parfois c'est comme un produit en vitrine<br>Un conflit bien marketé, bien emballé<br>Avec une couverture médiatique calibrée,<br>Des images chocs et des larmes a l'heure du dîner.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p11')" data-key="p11">Un conflit pour exister, doit savoir captiver.<br>S'il est trop vieux il devient un détail de l'histoire,<br>S'il est trop lointain. Il devient un écho sans mémoire<br>Alors on trie, on sélectionne<br>On décide qui mérite l'indignation<br>Et qui restera dans l'ombre du silence.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p12')" data-key="p12">Mais dites-moi. L'odeur du sang change telle selon la latitude ?<br>Les bombes ont-elles une préférence de longitude ?<br>Les guerres ont elles une hiérarchie,<br>Où est-ce simplement une question de géographie ?</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p13')" data-key="p13">Car voyez-vous, certaines guerres remplissent les places,<br>Elles s’habillent de drapeaux, elles résonnent dans les rues,<br>Elles deviennent des slogans, des symboles,<br>Elles ont droit aux projecteurs, aux discours, aux minutes de silence.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p14')" data-key="p14">Mais d’autres n’ont pas cette chance.<br>Elles meurent dans un murmure,<br>Leurs victimes n’ont pas d’hashtag,<br>Leurs cadavres n’intéressent pas les caméras.<br>Les pleurs y sont étouffés,<br>Les massacres, classés sans suite.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p15')" data-key="p15">Un enfant qui pleure sous une bombe,<br>Quelle que soit la terre sous ses pieds,<br>Pleure avec les mêmes larmes,<br>Hurle avec la même douleur,<br>Mais certains cris traversent les frontières,<br>Tandis que d’autres restent enfermés dans l’oubli.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p16')" data-key="p16">Peut-être que la douleur a un drapeau,<br>Peut-être que la guerre a une hiérarchie,<br>Peut-être que certaines balles valent plus que d’autres.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p17')" data-key="p17">Ou peut-être que la vérité, c’est que l’humanité a ses favoris.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p18')" data-key="p18">Alors que faire ?<br>Critiquer, c'est bien, mais agir, c'est mieux.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p19')" data-key="p19">Si la conscience est un muscle, il faut l’entraîner.<br>Pas juste l’exhiber une fois par an, comme un trophée en papier mâché.<br>Il faut l’exercer, la forger, la faire transpirer.<br>Car une conscience en bonne santé, ça ne reste pas assis,<br>Ça se lève, ça marche, ça bouge, ca agi.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p20')" data-key="p20">Alors on peut :</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p21')" data-key="p21">Donner<br>Pas des likes, mais du temps,<br>Pas des mots, mais des gestes.<br>Parce qu’un ventre vide ne se nourrit pas d’indignation,<br>Parce qu’un cri de douleur ne se soigne pas avec un post engagé.<br>Donner, c’est être le bras tendu, pas l’œil attendri.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p22')" data-key="p22">Éduquer<br>Pas avec des punchlines, mais des faits.<br>Parce que la vérité ne tient pas en 280 caractères,<br>Parce que comprendre, c’est déjà résister.<br>Un peuple qui sait,<br>Est un peuple qu’on ne manipule plus.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p23')" data-key="p23">S’unir<br>Pas en silhouttes éparpillées, mais en force rassemblée.<br>Pas par habitude, mais par nécessité.<br>Car seul, on s’épuise, on murmure, on subit.<br>Mais ensemble, on résiste, on crie, on agit.<br>La paix ne vient pas d’une prière,<br>Ni d’un espoir lancé en l’air.<br>Elle naît des mains qui se serrent,<br>Des peuples qui refusent de se taire.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p24')" data-key="p24">Et si vraiment on veut marquer l’Histoire,<br>Que notre passage ici laisse une empreinte,<br>Il ne faut pas juste être un spectateur de la paix,<br>Mais un acteur, un architecte, un bâtisseur.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p25')" data-key="p25">Car au fond, la vraie question est simple :<br>Veut-on une conscience de façade,<br>Ou une paix véritable, durable, et incarnée ?</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p26')" data-key="p26">Parce que si la paix est un idéal, la conscience, elle, est un choix.<br>Un choix que nous devons faire dès aujourd’hui.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p27')" data-key="p27">Alors oui, levons nos voix, mais surtout nos corps.<br>Que nos idées quittent l’écran,<br>Qu'elles s'ancrent en actes, en élans,<br>Qu'elles brûlent d'ardeur, qu'elles tracent un sillon,<br>Et que la paix soit plus qu’un décor,<br>Mais un combat, vivant et vibrant.</p>
+            <br>
+            <p class="annotable" onclick="annotate(this,'guerre','p28')" data-key="p28">Merci.</p>
+            <br>
+            </div>
+          <div style="margin-top:48px;"><span class="back-btn" onclick="go('onu')">← Retour aux textes</span></div>
+        </div>
+        <div class="texte-panel-col">
+          <div class="texte-panel" id="panel-guerre">
+            <div class="texte-panel-hint"><div class="hint-ico">💬</div><p>Clique sur un paragraphe pour afficher son annotation.</p></div>
+            <div class="texte-panel-inner">
+              <p class="texte-panel-label">Annotation</p>
+              <img class="texte-panel-img" id="panel-guerre-img" src="" alt="">
+              <div id="panel-guerre-content"></div>
+              <span class="texte-panel-close" onclick="closePanel('guerre')">✕ Fermer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <script src="script-base.js"></script>
+  <script>
+    const ANNOTATIONS = {
+      guerre: {
+        p1: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p2: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p3: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p4: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p5: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p6: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p7: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p8: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p9: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p10: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p11: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p12: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p13: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p14: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p15: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p16: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p17: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p18: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p19: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p20: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p21: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p22: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p23: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p24: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p25: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p26: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p27: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'},
+        p28: {sections: [{ subtitle: 'Un Souffle dans l\'Abyssale Indifférence.', text: 'Annotations indisponibles pour le moment.'}],image: 'Images/ONU/CostumeVert.jpeg'}
+      }
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hopaway Island — Mathieu Chappaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-base.css">
+  <style>
+    :root { --current: #00C875; }
+  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "url": "https://mathieuchappaz.com",
+      "logo": "https://mathieuchappaz.com/Images/logo.png"
+    }
+  </script>
+</head>
+<body>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
+
+  <nav>
+    <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')" id="nl-home">Accueil</a></li>
+      <li><a onclick="go('cinema')" id="nl-cin">Cinéma</a></li>
+      <li><a onclick="go('ingenieur')" id="nl-ing">Ingénieur</a></li>
+      <li><a onclick="go('dev')" id="nl-dev" class="active">Développement</a></li>
+      <li><a onclick="go('onu')" id="nl-onu">ONU</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+  </nav>
+  <div class="mobile-drawer" id="mDrawer">
+    <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
+    <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
+    <a onclick="go('dev');toggleDrawer()">Développement</a>
+    <a onclick="go('onu');toggleDrawer()">Nations Unies</a>
+  </div>
+
+  <div class="page" id="page-proj-hopaway" data-accent="hopaway">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span><span onclick="go('dev')">Développement</span><span class="sep">/</span> Hopaway Island</p><div class="proj-hero-meta"><span class="proj-meta-tag type">Jeu vidéo</span><span class="proj-meta-tag award">🏆 Trophées NSI 2024</span><span class="proj-meta-tag year">2024</span></div><div class="page-big-title">Hopaway<br><span class="a">Island.</span></div><div class="accent-bar"></div><p class="page-sub">Un jeu vidéo indépendant et éducatif entièrement conçu sur Godot. Premier de l'Académie de Grenoble au concours Les Trophées NSI 2024.</p></section>
+    <div class="inner-content">
+      <div class="proj-main-visual reveal"><img src="Images/DEV/Hopaway Island/Hopaway.gif" alt="Hopaway Island gameplay"></div>
+      <div class="award-banner reveal"><div class="award-ico">🏆</div><div class="award-text"><h4>1er de l'Académie de Grenoble</h4><p>Concours national Les Trophées NSI 2024 - catégorie Jeu vidéo éducatif</p></div><span class="award-badge">Prix National</span></div>
+      <div class="cards2">
+        <div class="cblock accent reveal"><h3>Le concept</h3><p>Hopaway Island est un jeu éducatif où le joueur doit résoudre des puzzles et relever des défis pour progresser sur l'île. L'objectif : rendre l'apprentissage accessible et fun à travers un univers coloré et intuitif.</p></div>
+        <div class="cblock reveal"><h3>Pourquoi ce projet ?</h3><p>Ce jeu est né d'une conviction : on apprend mieux en jouant. Conçu pour tous, enfants souhaitant apprendre en s'amusant ou adultes désireux de relever le challenge.</p></div>
+        <div class="cblock reveal"><h3>Stack technique</h3><p>Entièrement développé sur <strong>Godot Engine</strong> avec GDScript. Gestion des niveaux, système de score, animations et logique de puzzle codés from scratch en plusieurs mois.</p></div>
+        <div class="cblock reveal"><h3>Ce que j'ai appris</h3><p>Game design, architecture de code, gestion de projet et présentation devant un jury national. Un projet qui m'a autant appris techniquement qu'humainement.</p></div>
+      </div>
+      <div class="section-head" style="margin-bottom:24px;"><span class="s-num">Galerie</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Screenshots</h2></div>
+      <div class="proj-screens reveal">
+        <div class="proj-screen"><img src="Images/DEV/Hopaway Island/Level.png" alt="Level"></div>
+        <div class="proj-screen"><img src="Images/DEV/Hopaway Island/Map.png" alt="Map"></div>
+        <div class="proj-screen"><img src="Images/DEV/Hopaway Island/Success.png" alt="Success"></div>
+      </div>
+      <div class="yt-channel-wrap reveal">
+        <a href="https://mathieuchppz.itch.io/hopaway-island" target="_blank" rel="noopener" class="yt-channel-btn" style="background:linear-gradient(100deg,#0a1a0a,#0d2b0d);">
+          <div class="yt-icon-wrap" style="background:#9fb7ad;"><img src="Images/DEV/Itch.io_logo.png" alt="Itch.io" style="width:26px;height:26px;object-fit:contain;"></div>
+          <div class="yt-channel-info"><p>Hopaway Island est disponible sur</p><h3>Itch.io</h3><span class="yt-channel-sub">Mini-jeux · Éducatif · Aventure</span></div>
+          <span class="yt-arrow" style="color:#00C875;">→</span>
+        </a>
+      </div>
+      <div style="margin-top:16px;" class="reveal"><span class="back-btn" onclick="go('dev')">← Retour aux projets</span></div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <script src="script-base.js"></script>
+</body>
+</html>

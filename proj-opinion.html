@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opinion — Mathieu Chappaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-base.css">
+  <style>
+    :root { --current: #00C875; }
+  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "url": "https://mathieuchappaz.com",
+      "logo": "https://mathieuchappaz.com/Images/logo.png"
+    }
+  </script>
+</head>
+<body>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
+
+  <nav>
+    <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')" id="nl-home">Accueil</a></li>
+      <li><a onclick="go('cinema')" id="nl-cin">Cinéma</a></li>
+      <li><a onclick="go('ingenieur')" id="nl-ing">Ingénieur</a></li>
+      <li><a onclick="go('dev')" id="nl-dev" class="active">Développement</a></li>
+      <li><a onclick="go('onu')" id="nl-onu">ONU</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+  </nav>
+  <div class="mobile-drawer" id="mDrawer">
+    <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
+    <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
+    <a onclick="go('dev');toggleDrawer()">Développement</a>
+    <a onclick="go('onu');toggleDrawer()">Nations Unies</a>
+  </div>
+
+  <div class="page" id="page-proj-opinion" data-accent="opinion">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span><span onclick="go('dev')">Développement</span><span class="sep">/</span> Opinion</p><div class="proj-hero-meta"><span class="proj-meta-tag type">Application</span><span class="proj-meta-tag year">2025</span></div><div class="page-big-title">Opinion<br><span class="a">App.</span></div><div class="accent-bar"></div><p class="page-sub">Un réseau social privé pour collecter, stocker et échanger ses opinions, souhaits et prochaines sorties.</p></section>
+    <div class="inner-content">
+      <div class="cards2">
+        <div class="cblock accent reveal"><h3>Le concept</h3><p>Opinion permet aux utilisateurs de gérer leurs préférences sous forme de top 3. On peut aussi gérer une liste de souhaits que ses amis peuvent voir et exaucer. Plus de problèmes de cadeaux ou de manque d'infos sur les goûts de vos proches.</p></div>
+        <div class="cblock reveal"><h3>Pourquoi ce projet ?</h3><p>Né des conversations "quel est ton top 3 de couleurs préférées ?", on s'est rendu compte du besoin de stocker ces avis et de les faire évoluer avec ses amis, ainsi que de mieux communiquer ses envies.</p></div>
+        <div class="cblock reveal"><h3>Stack technique</h3><p>Entièrement développé sur <strong>Flutter</strong> avec Dart. Création de l'interface utilisateur, gestion de la logique d'application et de la base de données Firebase.</p></div>
+        <div class="cblock reveal"><h3>Ce que j'ai appris</h3><p>Le développement d'une application mobile complète : conception UI, gestion de la base de données et intégration de fonctionnalités sociales. J'ai adoré interroger mon entourage pour comprendre leurs besoins.</p></div>
+      </div>
+      <div class="section-head" style="margin-bottom:24px;"><span class="s-num">Galerie</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Screenshots</h2></div>
+      <div class="proj-screens reveal" style="grid-template-columns:repeat(3,1fr); gap:24px; align-items:start;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;"><div style="width:100%;max-width:240px;aspect-ratio:9/19.5;border-radius:28px;overflow:hidden;border:6px solid var(--dark);box-shadow:0 24px 52px rgba(0,0,0,.18);position:relative;"><img src="Images/DEV/Opinion/Tops.jpeg" alt="Opinion tops" style="width:100%;height:100%;object-fit:cover;display:block;"></div><p style="font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">Catégories</p></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;"><div style="width:100%;max-width:240px;aspect-ratio:9/19.5;border-radius:28px;overflow:hidden;border:6px solid var(--dark);box-shadow:0 24px 52px rgba(0,0,0,.18);position:relative;"><img src="Images/DEV/Opinion/Animaux.jpeg" alt="Opinion animaux" style="width:100%;height:100%;object-fit:cover;display:block;"></div><p style="font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">Top 3</p></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;"><div style="width:100%;max-width:240px;aspect-ratio:9/19.5;border-radius:28px;overflow:hidden;border:6px solid var(--dark);box-shadow:0 24px 52px rgba(0,0,0,.18);position:relative;"><img src="Images/DEV/Opinion/Wishes.jpeg" alt="Opinion Wishes" style="width:100%;height:100%;object-fit:cover;display:block;"></div><p style="font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">Liste de souhaits</p></div>
+      </div>
+      <div style="margin-top:40px;" class="reveal"><span class="back-btn" onclick="go('dev')">← Retour aux projets</span></div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <script src="script-base.js"></script>
+</body>
+</html>

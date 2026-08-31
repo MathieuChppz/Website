@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Développement — Mathieu Chappaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-base.css">
+  <style>
+    :root { --current: #00C875; }
+  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "url": "https://mathieuchappaz.com",
+      "logo": "https://mathieuchappaz.com/Images/logo.png"
+    }
+  </script>
+</head>
+<body>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
+
+  <nav>
+    <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')" id="nl-home">Accueil</a></li>
+      <li><a onclick="go('cinema')" id="nl-cin">Cinéma</a></li>
+      <li><a onclick="go('ingenieur')" id="nl-ing">Ingénieur</a></li>
+      <li><a onclick="go('dev')" id="nl-dev" class="active">Développement</a></li>
+      <li><a onclick="go('onu')" id="nl-onu">ONU</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+  </nav>
+  <div class="mobile-drawer" id="mDrawer">
+    <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
+    <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
+    <a onclick="go('dev');toggleDrawer()">Développement</a>
+    <a onclick="go('onu');toggleDrawer()">Nations Unies</a>
+  </div>
+
+  <div class="page" id="page-dev" data-accent="dev">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span> Développement</p><div class="page-big-title">Code &amp;<br><span class="a">Création.</span></div><div class="accent-bar"></div><p class="page-sub">Jeux vidéo, web, expérimentations. Coder c'est construire des mondes à partir de rien. Ça ne se résume pas à des lignes de code.</p></section>
+    <div class="inner-content">
+      <div class="section-head" style="margin-bottom:32px;"><span class="s-num">Projets</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Mes créations</h2></div>
+      <div class="projects-grid">
+        <div class="proj-card reveal" onclick="go('proj-hopaway')">
+          <div class="proj-visual"><img class="proj-img" src="Images/DEV/Hopaway Island/Hopaway.gif" alt="Hopaway Island"><span class="proj-badge award">🏆 1er de l'Académie de Grenoble</span></div>
+          <div class="proj-body"><span class="proj-num">Jeu vidéo · 2024</span><h3>Hopaway Island</h3><p>Jeu indépendant et éducatif entièrement créé sur Godot. Premier de l'Académie de Grenoble aux Trophées NSI 2024.</p><div class="proj-footer"><span class="proj-tag">Godot</span><span class="proj-arrow">→</span></div></div>
+        </div>
+        <div class="proj-card reveal" onclick="go('proj-opinion')">
+          <div class="proj-visual"><img class="proj-img" src="Images/DEV/Opinion/Opinion.jpeg" alt="Opinion" style="object-fit:contain; padding:20px; background:#f0f9f4;"></div>
+          <div class="proj-body"><span class="proj-num">Application · 2025</span><h3>Opinion</h3><p>Application mobile pour classer ses opinions via des top 3, avec liste de souhaits collaborative et section Évènements.</p><div class="proj-footer"><span class="proj-tag">Mobile · UI</span><span class="proj-arrow">→</span></div></div>
+        </div>
+        <div class="proj-card reveal" style="opacity:.6; cursor:default;">
+          <div class="proj-visual c-green"><div class="proj-visual-ico">🚀</div><span class="proj-badge">Bientôt</span></div>
+          <div class="proj-body"><span class="proj-num">Prochain projet</span><h3>En cours…</h3><p>Un nouveau projet arrive bientôt. Reste connecté pour découvrir la prochaine création.</p><div class="proj-footer"><span class="proj-tag">À venir</span><span class="proj-arrow">⏳</span></div></div>
+        </div>
+      </div>
+      <div class="cards2">
+        <div class="cblock accent reveal"><h3>Stack &amp; outils</h3><p>Des langages et frameworks qui servent les projets, pas l'inverse. Toujours en apprentissage, toujours en exploration de nouvelles technologies.</p></div>
+        <div class="cblock reveal"><h3>Philosophie de dev</h3><p>Coder pour moi c'est un acte créatif avant d'être technique. L'important c'est l'expérience finale, ce que ressent l'utilisateur quand il joue ou navigue.</p></div>
+      </div>
+    </div>
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <script src="script-base.js"></script>
+</body>
+</html>
