@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contre-Champ - Mathieu Chappaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-base.css">
+  <style>
+    :root { --current: #C10206; }
+    .cc-hero-logo-banner { display:flex; flex-direction:column; align-items:center; gap:16px; margin:0 0 52px; }
+    .cc-hero-logo-banner .badge { width:200px; height:200px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 22px 48px rgba(0,0,0,.16); border:3px solid var(--pa); }
+    .cc-hero-logo-banner img { display:block; max-width:58%; max-height:58%; width:auto; height:auto; object-fit:contain; }
+    .cc-hero-logo-caption { font-family:var(--ff-d); font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--pa); }
+    @media (max-width:860px) {
+      .cc-hero-logo-banner { margin:0 0 38px; gap:12px; }
+      .cc-hero-logo-banner .badge { width:150px; height:150px; border-width:2.5px; }
+    }
+  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "url": "https://mathieuchappaz.com",
+      "logo": "https://mathieuchappaz.com/Images/logo.png"
+    }
+  </script>
+</head>
+<body>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
+
+  <nav>
+    <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')" id="nl-home">Accueil</a></li>
+      <li><a onclick="go('contre-champ')" id="nl-cc" class="active">Contre-Champ</a></li>
+      <li><a onclick="go('cinema')" id="nl-cin">Cinéma</a></li>
+      <li><a onclick="go('ingenieur')" id="nl-ing">Ingénieur</a></li>
+      <li><a onclick="go('dev')" id="nl-dev">Développement</a></li>
+      <li><a onclick="go('onu')" id="nl-onu">ONU</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+  </nav>
+  <div class="mobile-drawer" id="mDrawer">
+    <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('contre-champ');toggleDrawer()">Contre-Champ</a>
+    <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
+    <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
+    <a onclick="go('dev');toggleDrawer()">Développement</a>
+    <a onclick="go('onu');toggleDrawer()">Nations Unies</a>
+  </div>
+
+  <div class="page" id="page-contre-champ" data-accent="cc">
+    <section class="inner-hero"><div class="inner-hero-deco"></div><p class="breadcrumb"><span onclick="go('home')">Accueil</span><span class="sep">/</span> Contre-Champ</p><div class="page-big-title">Contre<br><span class="a">Champ.</span></div><div class="accent-bar"></div><p class="page-sub">Président, Fondateur et Directeur éditorial d'un mouvement pour un cinéma qui dérange, qui éduque et qui rassemble. Accessible à tous, dans la région Auvergne-Rhône-Alpes.</p></section>
+
+    <div class="inner-content">
+      <div class="cc-hero-logo-banner reveal"><div class="badge"><img src="Images/CONTRECHAMP/logo_cc.jpeg" alt="Logo Contre-Champ"></div><span class="cc-hero-logo-caption">Logo du mouvement</span></div>
+
+      <div class="cards2">
+        <div class="cblock reveal"><h3>Notre constat</h3><p>Le cinéma est né pour montrer l'autre, son visage, sa douleur, son humanité. Réduit aujourd'hui à une industrie du box-office, il s'est refermé sur lui-même : films lissés pour ne déranger personne et places trop chères pour ceux qui en auraient le plus besoin. Le cinéma qui questionne est devenu confidentiel.</p></div>
+        <div class="cblock accent reveal"><h3>Notre conviction</h3><p>Un film qui dérange est un acte de formation humaine. Regarder vraiment l'autre, plutôt que le consommer, fabriquer moins de haine et plus de compréhension. Nous croyons que l'esprit critique se cultive par l'image, et que chaque regard élargi est une pierre posée vers un monde moins brutal.</p></div>
+        <div class="cblock span2 reveal"><h3>Mon rôle</h3><p>En tant que Président, Fondateur et Directeur éditorial de Contre-Champ, je porte la vision artistique et politique du mouvement : le choix des films programmés, l'écriture de nos prises de position, la coordination des projections à prix libre et des interventions auprès des plus jeunes. Une manière de mettre mon énergie au service d'un cinéma qui forme autant qu'il divertit.</p></div>
+      </div>
+
+      <div class="section-head" style="margin-top:8px;"><span class="s-num">Le mouvement</span><h2 class="s-title" style="font-size:clamp(22px,2.8vw,34px);">Le site de Contre-Champ</h2></div>
+      <a class="research-card reveal" href="https://contre-champ.org/" target="_blank" rel="noopener noreferrer">
+        <div class="research-visual research-visual--logo"><img class="research-logo" src="Images/CONTRECHAMP/logo_cc.jpeg" alt="Logo Contre-Champ"></div>
+        <div class="research-body">
+          <span class="research-meta">Site officiel · contre-champ.org</span>
+          <h3>Contre-Champ</h3>
+          <p>Programmation, projections à prix libre et prises de position du mouvement<br>À retrouver sur le site officiel de Contre-Champ.</p>
+          <span class="research-link">Visiter le site <span class="research-arrow">↗</span></span>
+        </div>
+      </a>
+
+      <div class="pull-quote reveal">
+        <p>Le contre-champ, c'est le plan que le cinéaste choisit de retourner vers ce qu'on ne voulait pas voir. C'est ce plan-là que nous choisissons.</p>
+        <cite>- Contre-Champ</cite>
+      </div>
+    </div>
+
+    <footer><p>© 2026 Mathieu Chappaz - Tous droits réservés</p></footer>
+  </div>
+
+  <script src="script-base.js"></script>
+</body>
+</html>

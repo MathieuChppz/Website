@@ -20,6 +20,7 @@ const dot  = document.getElementById('cDot');
     /* ROUTER — navigue vers de vrais fichiers HTML */
     const PAGE_FILES = {
       home: 'index.html',
+      'contre-champ': 'contre-champ.html',
       ingenieur: 'ingenieur.html',
       cinema: 'cinema.html',
       dev: 'dev.html',

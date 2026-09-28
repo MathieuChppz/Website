@@ -8,6 +8,7 @@
       --ing:       #8E4585;
       --cinema:    #F5A300;
       --dev:       #00C875;
+      --cc:        #C10206;
       --nav-h:     70px;
       --ff-d:      'Syne', sans-serif;
       --ff-b:      'Plus Jakarta Sans', sans-serif;
@@ -63,14 +64,15 @@
     .section-head { display:flex; align-items:baseline; gap:18px; margin-bottom:44px; }
     .s-num { font-family:var(--ff-d); font-size:12px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
     .s-title { font-family:var(--ff-d); font-size:clamp(28px,3.5vw,48px); font-weight:800; letter-spacing:-1.5px; color:var(--dark); }
-    .domains-grid { display:grid; grid-template-columns:1.35fr 1fr 1fr 1.35fr; grid-template-rows:370px 260px; gap:14px; }
+    .domains-grid { display:grid; grid-template-columns:1.35fr 1fr 1fr 1.35fr; grid-template-rows:260px 370px 260px; gap:14px; }
     .dcard { border-radius:22px; padding:32px 36px; overflow:hidden; position:relative; cursor:pointer; display:flex; flex-direction:column; transition:transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s; }
     .dcard:hover { transform:scale(.975) translateY(-6px); box-shadow:0 28px 60px rgba(0,0,0,.12); }
     .dcard::before { content:''; position:absolute; inset:0; background:linear-gradient(145deg, rgba(255,255,255,.18) 0%, transparent 55%); pointer-events:none; }
-    .dcard.ing { background:var(--ing); grid-column:2/4; grid-row:1; }
-    .dcard.cin { background:var(--cinema); grid-column:1; grid-row:1/3; }
-    .dcard.dev { background:var(--dev); grid-column:2/4; grid-row:2; }
-    .dcard.onu { background:var(--onu); grid-column:4; grid-row:1/3; }
+    .dcard.cc  { background:var(--cc); grid-column:1/5; grid-row:1; flex-direction:row; align-items:center; padding:26px 40px; }
+    .dcard.ing { background:var(--ing); grid-column:2/4; grid-row:2; }
+    .dcard.cin { background:var(--cinema); grid-column:1; grid-row:2/4; }
+    .dcard.dev { background:var(--dev); grid-column:2/4; grid-row:3; }
+    .dcard.onu { background:var(--onu); grid-column:4; grid-row:2/4; }
     .dcard-idx { font-family:var(--ff-d); font-size:11px; font-weight:700; letter-spacing:2px; color:rgba(255,255,255,.45); margin-bottom:auto; }
     .dcard-body { display:flex; flex-direction:column; }
     .dcard-ico { font-size:38px; line-height:1; margin-bottom:14px; }
@@ -78,6 +80,14 @@
     .dcard-desc { font-size:13.5px; line-height:1.65; color:rgba(255,255,255,.7); max-width:300px; margin-bottom:22px; }
     .dcard-cta { display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#fff; border-bottom:1.5px solid rgba(255,255,255,.35); padding-bottom:4px; transition:gap .25s; }
     .dcard:hover .dcard-cta { gap:16px; }
+    /* variante horizontale pleine largeur (Contre-Champ) */
+    .dcard.cc .dcard-idx { margin-bottom:0; margin-right:28px; flex-shrink:0; }
+    .dcard.cc .dcard-body { flex-direction:row; align-items:center; gap:24px; width:100%; }
+    .dcard.cc .dcard-ico { margin-bottom:0; font-size:40px; flex-shrink:0; }
+    .dcard.cc .dcard-text { flex:1; min-width:0; }
+    .dcard.cc .dcard-title { margin-bottom:6px; font-size:23px; }
+    .dcard.cc .dcard-desc { margin-bottom:0; max-width:560px; }
+    .dcard.cc .dcard-cta { flex-shrink:0; margin-left:16px; }
 
     /* ABOUT — photo agrandie */
     .section-about { padding:100px 52px; display:grid; grid-template-columns:auto 1.1fr; gap:72px; align-items:center; }
@@ -122,6 +132,7 @@
     /* INNER PAGES */
     [data-accent="onu"]     { --pa: var(--onu); }
     [data-accent="ing"]     { --pa: var(--ing); }
+    [data-accent="cc"]      { --pa: var(--cc); }
     [data-accent="cinema"]  { --pa: var(--cinema); }
     [data-accent="dev"]     { --pa: var(--dev); }
     [data-accent="hopaway"] { --pa: #00C875; }
@@ -215,12 +226,19 @@
     .proj-arrow { font-size:18px; color:var(--muted); transition:transform .3s, color .3s; font-family:var(--ff-d); font-weight:700; }
     .proj-card:hover .proj-arrow { color:var(--dark); }
 
+    /* PULL-QUOTE (citation mise en avant) */
+    .pull-quote { text-align:center; max-width:740px; margin:8px auto 56px; padding:12px 24px; }
+    .pull-quote p { font-family:var(--ff-d); font-size:clamp(20px,2.6vw,30px); font-weight:600; line-height:1.5; color:var(--dark); letter-spacing:-.4px; }
+    .pull-quote cite { display:block; margin-top:20px; font-style:normal; font-size:11px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--pa); }
+
     /* RESEARCH CARD (lien vers un travail de recherche externe) */
     .research-card { display:flex; align-items:stretch; background:#fff; border:1px solid var(--border); border-radius:24px; overflow:hidden; text-decoration:none; color:inherit; margin-bottom:48px; transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s; }
     .research-card:hover { transform:translateY(-8px); box-shadow:0 28px 60px rgba(0,0,0,.1); }
     .research-card:hover .research-arrow { transform:translate(3px,-3px); }
     .research-visual { flex:0 0 220px; display:flex; align-items:center; justify-content:center; background:linear-gradient(150deg, var(--pa), var(--dark)); }
     .research-ico { font-size:56px; }
+    .research-visual--logo { background:#fff; padding:28px; }
+    .research-logo { max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; }
     .research-body { flex:1; padding:32px 36px; display:flex; flex-direction:column; gap:12px; }
     .research-meta { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--pa); }
     .research-body h3 { font-family:var(--ff-d); font-size:22px; font-weight:800; color:var(--dark); letter-spacing:-.4px; line-height:1.2; }
@@ -480,6 +498,10 @@
       footer { padding:24px; flex-direction:column; gap:14px; text-align:center; }
       .domains-grid,.projects-grid { grid-template-columns:1fr; }
       .dcard.ing,.dcard.cin,.dcard.dev,.dcard.onu { grid-column:1; grid-row:auto; }
+      .dcard.cc { grid-column:1; grid-row:auto; flex-direction:column; align-items:flex-start; padding:32px 36px; }
+      .dcard.cc .dcard-idx { margin-right:0; margin-bottom:auto; }
+      .dcard.cc .dcard-body { flex-direction:column; align-items:flex-start; }
+      .dcard.cc .dcard-text { margin-bottom:22px; }
       .research-card { flex-direction:column; }
       .research-visual { flex:0 0 140px; width:100%; }
       .research-body { padding:26px 24px; }

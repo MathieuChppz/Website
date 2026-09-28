@@ -26,6 +26,7 @@
     <a class="nav-logo" onclick="go('home')">MC <div class="nav-logo-dot" id="navDot"></div></a>
     <ul class="nav-links">
       <li><a onclick="go('home')" id="nl-home" class="active">Accueil</a></li>
+      <li><a onclick="go('contre-champ')" id="nl-cc">Contre-Champ</a></li>
       <li><a onclick="go('cinema')" id="nl-cin">Cinéma</a></li>
       <li><a onclick="go('ingenieur')" id="nl-ing">Ingénieur</a></li>
       <li><a onclick="go('dev')" id="nl-dev">Développement</a></li>
@@ -35,6 +36,7 @@
   </nav>
   <div class="mobile-drawer" id="mDrawer">
     <a onclick="go('home');toggleDrawer()">Accueil</a>
+    <a onclick="go('contre-champ');toggleDrawer()">Contre-Champ</a>
     <a onclick="go('cinema');toggleDrawer()">Cinéma</a>
     <a onclick="go('ingenieur');toggleDrawer()">Ingénieur</a>
     <a onclick="go('dev');toggleDrawer()">Développement</a>
@@ -52,10 +54,11 @@
     <section class="section-domains">
       <div class="section-head"><h2 class="s-title">Mes grands axes</h2></div>
       <div class="domains-grid">
-        <div class="dcard cin reveal" onclick="go('cinema')"><span class="dcard-idx">01</span><div class="dcard-body"><div class="dcard-ico">🎬</div><h3 class="dcard-title">Cinéma &amp; Art</h3><p class="dcard-desc">Une chaîne YouTube dédiée à l'analyse cinématographique et à la passion du 7e art.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
-        <div class="dcard ing reveal" onclick="go('ingenieur')"><span class="dcard-idx">02</span><div class="dcard-body"><div class="dcard-ico">⚙️</div><h3 class="dcard-title">Ingénierie</h3><p class="dcard-desc">Étudiant en école d'ingénieur en informatique. Comprendre les systèmes pour mieux les transformer.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
-        <div class="dcard dev reveal" onclick="go('dev')"><span class="dcard-idx">03</span><div class="dcard-body"><div class="dcard-ico">🎮</div><h3 class="dcard-title">Développement</h3><p class="dcard-desc">Du code comme matière première. Jeux vidéo, web, et tout ce qu'on peut construire avec une idée et un clavier.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
-        <div class="dcard onu reveal" onclick="go('onu')"><span class="dcard-idx">04</span><div class="dcard-body"><div class="dcard-ico">🌍</div><h3 class="dcard-title">Nations Unies</h3><p class="dcard-desc">Orateur et représentant de la jeunesse à l'ONU. Porter la voix des nouvelles générations sur la scène internationale.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
+        <div class="dcard cc reveal" onclick="go('contre-champ')"><span class="dcard-idx">01</span><div class="dcard-body"><div class="dcard-ico">🎥</div><div class="dcard-text"><h3 class="dcard-title">Contre-Champ</h3><p class="dcard-desc">Président, fondateur et directeur éditorial d'un mouvement pour un cinéma qui dérange, qui éduque et qui rassemble. Accessible à tous.</p></div><span class="dcard-cta">Découvrir <span>→</span></span></div></div>
+        <div class="dcard cin reveal" onclick="go('cinema')"><span class="dcard-idx">02</span><div class="dcard-body"><div class="dcard-ico">🎬</div><h3 class="dcard-title">Cinéma &amp; Art</h3><p class="dcard-desc">Une chaîne YouTube dédiée à l'analyse cinématographique et à la passion du 7e art.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
+        <div class="dcard ing reveal" onclick="go('ingenieur')"><span class="dcard-idx">03</span><div class="dcard-body"><div class="dcard-ico">⚙️</div><h3 class="dcard-title">Ingénierie</h3><p class="dcard-desc">Étudiant en école d'ingénieur en informatique. Comprendre les systèmes pour mieux les transformer.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
+        <div class="dcard dev reveal" onclick="go('dev')"><span class="dcard-idx">04</span><div class="dcard-body"><div class="dcard-ico">🎮</div><h3 class="dcard-title">Développement</h3><p class="dcard-desc">Du code comme matière première. Jeux vidéo, web, et tout ce qu'on peut construire avec une idée et un clavier.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
+        <div class="dcard onu reveal" onclick="go('onu')"><span class="dcard-idx">05</span><div class="dcard-body"><div class="dcard-ico">🌍</div><h3 class="dcard-title">Nations Unies</h3><p class="dcard-desc">Orateur et représentant de la jeunesse à l'ONU. Porter la voix des nouvelles générations sur la scène internationale.</p><span class="dcard-cta">Explorer <span>→</span></span></div></div>
       </div>
     </section>
     <section class="section-about">
